@@ -1,0 +1,40 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: meabase
+  annotations:
+    description: ""
+    tags: metabase,java
+    iconClass: icon-java
+objects:
+ -  kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: metabase
+      annotations:
+        description: "Keeps track of changes in the application image"
+      labels:
+        app: metabase
+ -  kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: metabase
+    spec:
+      failedBuildsHistoryLimit: 2
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'metabase:latest'
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        dockerfile: "FROM openjdk:8-jdk-alpine\r\n\r\nWORKDIR /app\r\n\r\nENV FC_LANG en-US\r\nENV LC_CTYPE en_US.UTF-8\r\n\r\nRUN apk add --update bash git wget make gettext ttf-dejavu fontconfig java-cacerts\r\n\r\n# add Metabase jar\r\nRUN wget -q http://downloads.metabase.com/v0.33.6/metabase.jar\r\n\r\n# create the plugins directory, with writable permissions\r\nRUN chmod -R 777 /app\r\n\r\n# expose our default runtime port\r\nEXPOSE 3000\r\n\r\n# run it\r\nCMD [\"java\", \"-jar\", \"metabase.jar\"]"
+        type: Dockerfile
+      strategy:
+        dockerStrategy: {}
+        type: Docker
+      successfulBuildsHistoryLimit: 5
+      triggers:
+        - type: ConfigChange
