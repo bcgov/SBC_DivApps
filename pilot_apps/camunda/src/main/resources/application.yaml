@@ -1,0 +1,69 @@
+# Set variables
+
+keycloak.url: ${KEYCLOAK_URL:http://localhost:9000}
+keycloak.url.realm: ${KEYCLOAK_URL_REALM:master}
+keycloak.clientId: ${KEYCLOAK_CLIENTID:camunda-identity-service}
+keycloak.clientSecret: ${KEYCLOAK_CLIENTSECRET:7d3c845d-f652-4bed-9797-d6d20b7623da}
+
+spring.datasource:
+  url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE}
+  username: ${JDBC_USER:sa}
+  password: ${JDBC_PASSWORD:sa}
+#spring.h2.console.enabled: true
+
+spring:
+  jersey:
+    application-path: /engine-rest
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
+
+# Redis Session Cache not yet in use
+#  session:
+#    store-type: ${SESSION_STORE_TYPE:none}
+#    redis.flush-mode: immediate
+#  redis:
+#    host: ${REDIS_HOST:localhost}
+#    port: ${REDIS_PORT:6379}
+
+camunda.bpm:
+  history-level: audit
+  authorization:
+    enabled: true
+  filter:
+    create: All tasks
+
+server:
+  port: 8080
+  servlet.context-path: /camunda
+
+security:
+  oauth2:
+    client:
+      client-id: ${keycloak.clientId}
+      client-secret: ${keycloak.clientSecret}
+      accessTokenUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/token
+      userAuthorizationUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/auth
+      scope: openid profile email
+    resource:
+      userInfoUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/userinfo
+
+logging.level.org.springframework.security: DEBUG
+
+plugin.identity.keycloak.rest:
+  userNameClaim: preferred_username
+  authorityPrefix: "ROLE_"
+  authorityAttributeName: groupIds
+
+plugin.identity.keycloak:
+  keycloakIssuerUrl: ${keycloak.url}/auth/realms/${keycloak.url.realm}
+  keycloakAdminUrl: ${keycloak.url}/auth/admin/realms/${keycloak.url.realm}
+  clientId: ${keycloak.clientId}
+  clientSecret: ${keycloak.clientSecret}
+  useEmailAsCamundaUserId: false
+  useUsernameAsCamundaUserId: true
+  useGroupPathAsCamundaGroupId: true
+  administratorGroupName: camunda-admin
+  disableSSLCertificateValidation: true

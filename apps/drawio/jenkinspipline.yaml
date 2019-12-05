@@ -1,0 +1,27 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: drawio-pipeline
+    name: drawio-pipeline
+    template: python
+  name: drawio-pipeline
+  namespace: hdhclr-tools
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: {}
+  output: {}
+  postCommit: {}
+  resources: {}
+  runPolicy: Parallel
+  source:
+    git:
+      uri: 'https://github.com/gil0109/SBC_DivApps'
+    type: Git
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: apps/drawio/Jenkins_Drawio.groovy
+    type: JenkinsPipeline
+  successfulBuildsHistoryLimit: 5
+  triggers: []
+
