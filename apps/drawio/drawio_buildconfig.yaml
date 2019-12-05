@@ -1,0 +1,148 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: DrawIO
+  annotations:
+    description: ""
+    tags: DrawIO
+    iconClass: icon-python
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    displayName: Git Repository URL
+    description: The URL of the repository with your application source code.
+    value: https://github.com/gil0109/SBC_DivApps
+  - name: SOURCE_REPOSITORY_REF
+    displayName: Git Reference
+    description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
+  - name: SOURCE_CONTEXT_DIR
+    displayName: Git context directory
+    description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
+    value: /apps/drawio
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: drawio
+      annotations:
+        description: "Keeps track of changes in the application image"
+      labels:
+        app: drawio
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: drawio-build
+      annotations:
+        description: "Keeps track of changes in the application image"
+      labels:
+        app: drawio-build
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      labels:
+        app: drawio-build
+      name: drawio-build
+    spec:
+      failedBuildsHistoryLimit: 5
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'drawio-build:latest'
+      postCommit: {}
+      resources:
+        limits:
+          cpu: '1'
+          memory: 8Gi
+        requests:
+          cpu: '1'
+          memory: 4Gi
+      runPolicy: Serial
+      source:
+        dockerfile: >-
+          FROM frekele:ant:1.10.3-jdk8
+
+          USER root
+
+          RUN mkdir /usr/build
+
+          COPY src /usr/build/src
+
+          COPY etc /usr/build/etc
+
+          COPY VERSION /usr/build
+
+          ARG Var1="var params = window.location.search.slice(1).split('&');"
+
+          ARG Var2='var params = ["local=1"];'
+
+          RUN cat /usr/build/VERSION & sed -i
+          's/REPLACE_WITH_YOUR_IMAGE_SERVER/https:\/\/exp.draw.io\/ImageExport4\/export/g'
+          /usr/build/src/main/webapp/js/PreConfig.js && \
+              sed -i "s/$Var1/$Var2/g" /usr/build/src/main/webapp/index.html
+          RUN cd /usr/build/etc/build/ && ant war
+
+          USER 1001
+        git:
+          uri: 'https://github.com/jgraph/drawio.git'
+        type: Git
+      strategy:
+        dockerStrategy:
+          from:
+            kind: DockerImage
+            name: 'frekele/ant:1.10.3-jdk8'
+        type: Docker
+      successfulBuildsHistoryLimit: 5
+      triggers:
+        - type: ConfigChange
+
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      labels:
+        app: drawio-dc-template
+      name: drawio
+    spec:
+      failedBuildsHistoryLimit: 5
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: 'drawio:latest'
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        dockerfile: >-
+          FROM tomcat:9.0
+
+          COPY build/draw.war /usr/local/tomcat/webapps/ROOT.war
+
+          USER root
+
+          RUN rm -r /usr/local/tomcat/webapps/ROOT && chgrp -R 0
+          /usr/local/tomcat/webapps/ && chmod -R g+rwX /usr/local/tomcat/webapps/ &&
+          chgrp -R 0 /usr/local/tomcat/conf/ && chmod -R g+rw
+          /usr/local/tomcat/conf/
+
+          EXPOSE 8080
+
+          CMD ["catalina.sh", "run"]
+
+          USER 1001
+        images:
+          - as: null
+            from:
+              kind: ImageStreamTag
+              name: 'drawio-build:latest'
+            paths:
+              - destinationDir: ./
+                sourcePath: /usr/build/build
+        type: Dockerfile
+      strategy:
+        dockerStrategy:
+          from:
+            kind: DockerImage
+            name: 'tomcat:9.0'
+        type: Docker
+      successfulBuildsHistoryLimit: 5
+      triggers: []

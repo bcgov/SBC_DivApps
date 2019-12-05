@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: DrawIO
+metadata:
+  name: DrawIO
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: "${NAME}"
+      name: "${NAME}"
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: "${NAME}"
+  
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: "${NAME}"
+    spec:
+      host: "${APPLICATION_DOMAIN}"
+      port:
+        targetPort: 8080-tcp
+      to:
+        kind: Service
+        name: "${NAME}"
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+      labels:
+        app: "${NAME}"
+      name: "${NAME}"
+    spec:
+      replicas: 1
+      selector:
+        app: "${NAME}"
+        deploymentconfig: "${NAME}"
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: "${NAME}"
+            deploymentconfig: "${NAME}"
+        spec:
+          containers:
+            - env:
+              - name: local
+                value: '1'
+              - name: EXPORT_URL
+                value: /export
+              image: " "
+              imagePullPolicy: Always
+              name: "${NAME}"
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 500m
+                requests:
+                  cpu: 100m
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${NAME}"
+            from:
+              kind: ImageStreamTag
+              name: "drawio:${IMAGE_TAG}"
+              namespace: ${TOOLS_WORKSPACE}
+          type: ImageChange
+        - type: ConfigChange
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The suffix for all created objects
+    required: false
+    value: drawio
+  - name: APPLICATION_DOMAIN
+    description: "The exposed hostname that will route to the Vue application"
+  - name: IMAGE_TAG
+    description: The image tag to pull for the deployment.
+    required: true
+    value: dev
+  - name: TOOLS_WORKSPACE
+    description: The Location for your image streams (Tools Workspace)
+    required: true
