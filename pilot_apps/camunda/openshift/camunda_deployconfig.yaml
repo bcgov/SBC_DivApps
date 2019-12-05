@@ -1,0 +1,194 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: Camunda
+metadata:
+  name: Camunda
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: "${NAME}"
+      labels:
+        app: "${NAME}"
+    spec:
+      ports:
+        - name: web
+          port: 8080
+          targetPort: 8080
+      selector:
+        app: "${NAME}"
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: "${NAME}"
+    spec:
+      host: "${APPLICATION_DOMAIN}"
+      to:
+        kind: Service
+        name: "${NAME}"
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: camunda-mail-setup
+      labels:
+        app: "${NAME}"
+    data:
+      mail-config.properties: |
+        "# send mails via SMTP\r\nmail.transport.protocol=smtp\r\n\r\nmail.smtp.host=<enter host>\r\nmail.smtp.port=25\r\nmail.smtp.auth=false\r\nmail.smtp.ssl.enable=false\r\n#mail.smtp.socketFactory.port=465\r\n#mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory\r\n\r\n# poll mails via IMAPS\r\n# mail.store.protocol=imaps\r\n\r\n# mail.imaps.host=imap.gmail.com\r\n# mail.imaps.port=993\r\n# mail.imaps.timeout=10000\r\n\r\n# additional config\r\n# mail.poll.folder=INBOX\r\nmail.sender=<enter sender email>\r\nmail.sender.alias=DoNotReply\r\n\r\nmail.attachment.download=true\r\nmail.attachment.path=attachments\r\n\r\n# credentials\r\nmail.user=\r\nmail.password="
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+      labels:
+        app: "${NAME}"
+      name: "${NAME}"
+    spec:
+      replicas: 1
+      selector:
+        app: "${NAME}"
+        deploymentconfig: "${NAME}"
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: "${NAME}"
+            deploymentconfig: "${NAME}"
+        spec:
+          containers:
+            - env:
+                - name: DB_DRIVER
+                  value: ${DB_DRIVER}
+                - name: JDBC_URL
+                  value: 'jdbc:postgresql://${DATABASE_SERVICE_NAME}:5432/${DATABASE_NAME}'
+                - name: JDBC_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${DATABASE_DEPLOYMENT_NAME}"
+                      key: "${DATABASE_USER_KEY_NAME}"
+                - name: JDBC_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "${DATABASE_DEPLOYMENT_NAME}"
+                      key: "${DATABASE_PASSWORD_KEY_NAME}"
+                - name: WAIT_FOR
+                  value: ${DATABASE_DEPLOYMENT_NAME}:${DATABASE_PORT}
+                - name: KEYCLOAK_URL
+                  value: ${KEYCLOAK_URL}
+                - name: KEYCLOAK_URL_REALM
+                  value: ${KEYCLOAK_URL_REALM}
+                - name: KEYCLOAK_CLIENTID
+                  value: ${KEYCLOAK_CLIENTID}
+                - name: KEYCLOAK_CLIENTSECRET
+                  value: ${KEYCLOAK_CLIENTSECRET}
+                - name: DEBUG
+                  value: 'False'
+                - name: MAIL_CONFIG
+                  value: ${MAIL_CONFIG}
+              image: " "
+              imagePullPolicy: Always
+              name: "${NAME}"
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 2Gi
+                requests:
+                  cpu: 200m
+                  memory: 512Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /app/mail-config.properties
+                  name: camunda-mail-volume
+                  subPath: mail-config.properties
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                items:
+                  - key: mail-config.properties
+                    path: mail-config.properties
+                name: camunda-mail-setup
+              name: camunda-mail-volume
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: name
+                        operator: In
+                        values:
+                          - "${NAME}"
+                  topologyKey: kubernetes.io/hostname
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${NAME}"
+            from:
+              kind: ImageStreamTag
+              name: "${NAME}:${IMAGE_TAG}"
+              namespace: ${TOOLS_WORKSPACE}
+          type: ImageChange
+        - type: ConfigChange
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The suffix for all created objects
+    required: false
+    value: camunda
+  - name: APPLICATION_DOMAIN
+    description: "The exposed hostname that will route to the Vue application"
+  - name: IMAGE_TAG
+    description: The image tag to pull for the deployment.
+    required: true
+    value: dev
+  - name: TOOLS_WORKSPACE
+    description: The Location for your image streams (Tools Workspace)
+    required: true
+  - name: DB_DRIVER
+    value: org.postgresql.Driver
+  - name: DATABASE_SERVICE_NAME
+    value: postgresql
+  - name: DATABASE_NAME
+    value: camunda
+  - name: DATABASE_PORT
+    value: "5432"
+  - name: DATABASE_DEPLOYMENT_NAME
+    displayName: Database Deployment Name
+    description: The name associated to the database deployment resources.  In particular, this is used to wire up the credentials associated to the database.
+    required: true
+    value: postgresql
+  - name: DATABASE_USER_KEY_NAME
+    displayName: Database User Key Name
+    description: The datbase user key name stoed in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    required: true
+    value: database-user
+  - name: DATABASE_PASSWORD_KEY_NAME
+    displayName: Database Password Key Name
+    description: The datbase password key name stoed in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    required: true
+    value: database-password
+  - name: KEYCLOAK_URL
+  - name: KEYCLOAK_URL_REALM
+  - name: KEYCLOAK_CLIENTID
+  - name: KEYCLOAK_CLIENTSECRET
