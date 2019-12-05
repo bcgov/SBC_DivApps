@@ -1,0 +1,151 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: metabase
+metadata:
+  name: metabase  
+objects:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: "${NAME}"
+      labels:
+        app: "${NAME}"
+    spec:
+      ports:
+        - name: "${NAME}"
+          port: 3000
+          protocol: TCP
+          targetPort: 3000
+      selector:
+        app: "${NAME}"
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: "${NAME}"
+    spec:
+      host: "${APPLICATION_DOMAIN}"
+      to:
+        kind: Service
+        name: "${NAME}"
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+      labels:
+        app: "${NAME}"
+      name: "${NAME}"
+    spec:
+      replicas: 1
+      selector:
+        app: "${NAME}"
+        deploymentconfig: "${NAME}"
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: "${NAME}"
+            deploymentconfig: "${NAME}"
+        spec:
+          containers:
+            - env:
+              - name: MB_DB_TYPE
+                value: ${MB_DB_TYPE}
+              - name: MB_DB_HOST
+                value: ${MB_DB_HOST}
+              - name: MB_DB_PORT
+                value: ${MB_DB_PORT}
+              - name: MB_DB_DBNAME
+                value: ${MB_DB_DBNAME}
+              - name: MB_DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: ${DATABASE_USER_KEY_NAME}
+                    name: ${DATABASE_DEPLOYMENT_NAME}
+              - name: MB_DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    key: ${DATABASE_PASSWORD_KEY_NAME}
+                    name: ${DATABASE_DEPLOYMENT_NAME}
+              image: " "
+              imagePullPolicy: Always
+              name: "${NAME}"
+              ports:
+                - containerPort: 3000
+                  name: "${NAME}"
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: '1'
+                  memory: 2Gi
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - "${NAME}"
+            from:
+              kind: ImageStreamTag
+              name: "metabase:${IMAGE_TAG}"
+              namespace: ${TOOLS_WORKSPACE}
+          type: ImageChange
+        - type: ConfigChange
+parameters:
+  - name: NAME
+    displayName: Name
+    description: The suffix for all created objects
+    required: false
+    value: metabase
+  - name: APPLICATION_DOMAIN
+    description: "The exposed hostname that will route to the Vue application"
+  - name: IMAGE_TAG
+    description: The image tag to pull for the deployment.
+    required: true
+    value: dev
+  - name: TOOLS_WORKSPACE
+    description: The Location for your image streams (Tools Workspace)
+    required: true
+  - name: MB_DB_TYPE
+    value: postgres
+  - name: MB_DB_HOST
+    value: postgresql
+  - name: MB_DB_PORT
+    value: "5432"
+  - name: MB_DB_DBNAME
+    value: metabase
+  - name: DATABASE_DEPLOYMENT_NAME
+    displayName: Database Deployment Name
+    description: The name associated to the database deployment resources.  In particular, this is used to wire up the credentials associated to the database.
+    required: true
+    value: postgresql
+  - name: DATABASE_USER_KEY_NAME
+    displayName: Database User Key Name
+    description: The datbase user key name stoed in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    required: true
+    value: database-user
+  - name: DATABASE_PASSWORD_KEY_NAME
+    displayName: Database Password Key Name
+    description: The datbase password key name stoed in database deployment resources specified by DATABASE_DEPLOYMENT_NAME.
+    required: true
+    value: database-password
