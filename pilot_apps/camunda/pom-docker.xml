@@ -166,7 +166,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.4.190</version>
 		</dependency>
 
 		<dependency>
@@ -202,9 +201,9 @@
 		     See: https://docs.camunda.org/manual/7.11/user-guide/testing/#migration-from-community-versions
 		  -->
 		<dependency>
-			<groupId>org.camunda.bpm.extension</groupId>
+			<groupId>org.camunda.bpm.assert</groupId>
 			<artifactId>camunda-bpm-assert</artifactId>
-			<version>1.2</version>
+			<version>4.0.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
