@@ -6,3 +6,6 @@
 
 ## Deployment:
 * Please note that this config creates a configmap that needs to be updated with your own smtp server information
+
+Import the buildconfig into your tools workspace
+Import the deployconfig into your dev workspace
