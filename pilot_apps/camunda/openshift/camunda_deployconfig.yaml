@@ -24,6 +24,7 @@ objects:
       name: "${NAME}"
     spec:
       host: "${APPLICATION_DOMAIN}"
+      path: /camunda
       to:
         kind: Service
         name: "${NAME}"

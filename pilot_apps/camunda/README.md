@@ -10,6 +10,8 @@ This is a modified build of Camunda that includes:
 * Mail Core connector
 * HTTP, SOAP connectors
 
+For assistance in the keycloak client setup please see this site: https://github.com/camunda/camunda-bpm-identity-keycloak
+
 
 Thank you to others that helped with this configuration.  This configuration is based on the following repos:
 
