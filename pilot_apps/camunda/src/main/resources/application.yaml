@@ -11,6 +11,12 @@ spring.datasource:
   password: ${JDBC_PASSWORD:sa}
 #spring.h2.console.enabled: true
 
+analytics.datasource:
+  jdbc-url: ${ANALYTICS_DB_JDBCURL}
+  username: ${ANALYTICS_DB_USERNAME}
+  password: ${ANALYTICS_DB_PASSWORD}
+  driverClassName: ${ANALYTICS_DB_DRIVER}
+
 spring:
   jersey:
     application-path: /engine-rest
