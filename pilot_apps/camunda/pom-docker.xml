@@ -152,6 +152,27 @@
     		<version>1.7.29</version>
 		</dependency>
 
+		<!-- Freemarker Template Engine for mail connector -->
+		<dependency>
+			<groupId>org.camunda.template-engines</groupId>
+			<artifactId>camunda-template-engines-freemarker</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Freemarker Template Engine for java classes -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+
+		<!-- Apache Commons Email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
+		</dependency>
+
 		<!-- Database -->
 		<dependency>
 		  <groupId>org.springframework.boot</groupId>
@@ -160,7 +181,7 @@
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-			<version>9.3-1102-jdbc4</version>
+			<version>9.4-1205-jdbc41</version>
 		</dependency>
 
 		<dependency>
@@ -172,7 +193,6 @@
     		<groupId>com.microsoft.sqlserver</groupId>
     		<artifactId>mssql-jdbc</artifactId>
     		<version>7.4.1.jre11</version>
-    		<scope>test</scope>
 		</dependency>
 
 		<!-- Required to use Spin dataformat support -->
