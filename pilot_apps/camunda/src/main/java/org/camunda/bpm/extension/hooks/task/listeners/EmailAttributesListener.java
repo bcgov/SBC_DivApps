@@ -25,8 +25,8 @@ public class EmailAttributesListener implements ExecutionListener {
         String email_subject = String.valueOf(dmnMap.get("subject"));
         for(Map.Entry<String,Object> entry : execution.getVariables().entrySet()) {
             if(!"template".equals(entry.getKey())) {
-                email_body = StringUtils.replace(email_body,"@"+entry.getKey(), entry.getValue().toString());
-                email_subject = StringUtils.replace(email_subject,"@"+entry.getKey(), entry.getValue().toString());
+                email_body = StringUtils.replace(email_body,"@"+entry.getKey(), entry.getValue()+StringUtils.EMPTY);
+                email_subject = StringUtils.replace(email_subject,"@"+entry.getKey(), entry.getValue()+StringUtils.EMPTY);
             }
         }
         String email_to = dmnMap.containsKey("to") && dmnMap.get("to") != null &&
