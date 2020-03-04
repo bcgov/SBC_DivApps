@@ -117,12 +117,6 @@
 		</dependency>
 
 		<!-- Add Email Component -->
-		<!-- Add Freemarker Template Engine Dependency -->
-		<dependency>
-			<groupId>org.camunda.template-engines</groupId>
-			<artifactId>camunda-template-engines-freemarker</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
   			<groupId>org.camunda.connect</groupId>
@@ -156,6 +150,27 @@
     		<groupId>org.slf4j</groupId>
     		<artifactId>slf4j-api</artifactId>
     		<version>1.7.29</version>
+		</dependency>
+
+		<!-- Freemarker Template Engine for mail connector -->
+		<dependency>
+			<groupId>org.camunda.template-engines</groupId>
+			<artifactId>camunda-template-engines-freemarker</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Freemarker Template Engine for java classes -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.23</version>
+		</dependency>
+
+		<!-- Apache Commons Email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
 		</dependency>
 
 		<!-- Database -->

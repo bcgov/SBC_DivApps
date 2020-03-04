@@ -1,5 +1,8 @@
 package org.camunda.bpm.extension.hooks.task.listeners;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -8,6 +11,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.*;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
+import org.camunda.bpm.extension.hooks.services.IEmail;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 
 /**
@@ -15,7 +19,7 @@ import org.camunda.bpm.extension.hooks.services.IMessageEvent;
  *
  * @author yichun.zhao@aot-technologies.com
  */
-public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
+public class TimeoutNotifyListener implements TaskListener, IEmail {
 
     private Expression remind;
     private Expression escalate;
@@ -30,25 +34,37 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
      */
     public void notify(DelegateTask delegateTask) {
 
-        /*if (delegateTask.getVariable("assigned_date") != null) {
+        if (delegateTask.getVariable("assigned_date") != null) {
 
             int remindTime = Integer.parseInt((String) this.remind.getValue(delegateTask));
             int escalateTime = Integer.parseInt((String) this.escalate.getValue(delegateTask));
 
             Date currentDate = new Date();
-            Date assignedDate = (Date) delegateTask.getVariable("assigned_date");
+            Date assignedDate = null;
+            try {
+                assignedDate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse((String) delegateTask.getVariable("assigned_date"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             Date remindDate = this.addMins(assignedDate, remindTime); // To be changed to addDays
             Date escalateDate = this.addMins(assignedDate, escalateTime); // To be changed to addDays
             Date stopNotifyDate = this.addMins(escalateDate, 1); // To be changed to addDays
 
             // Check if escalate first because reminder date is before escalation date
             if ((currentDate.after(escalateDate) && currentDate.before(stopNotifyDate))) {
-                sendMessage(delegateTask,assignee,"activity_escalation");
+                try {
+                    sendEmail(delegateTask,"activity_escalation");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if ((currentDate.after(remindDate) && currentDate.before(stopNotifyDate))) {
-                sendMessage(delegateTask,assignee,"activity_reminder");
+                try {
+                    sendEmail(delegateTask,"activity_reminder");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }*/
-        sendMessage(delegateTask,"activity_reminder");
+        }
     }
 
     /**

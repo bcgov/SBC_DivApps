@@ -2,9 +2,12 @@ package org.camunda.bpm.extension.hooks.task.listeners;
 
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.extension.hooks.services.IEmail;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -12,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author yichun.zhao@aot-technologies.com
  */
-public class NotifyListener implements TaskListener, IMessageEvent {
+public class NotifyListener implements TaskListener, IEmail {
 
     private static final Logger log = Logger.getLogger(NotifyListener.class.getName());
 
@@ -27,8 +30,16 @@ public class NotifyListener implements TaskListener, IMessageEvent {
         String assignee = delegateTask.getAssignee();
 
         if (assignee != null) {
-             log.info("\n\nAssigned date is " + delegateTask.getVariable("assigned_date") + "\n\n");
-            sendMessage(delegateTask,"assignment_notification");
+            // Set assigned date
+            Date currentDate = new Date();
+            delegateTask.setVariable("assigned_date", currentDate.toString());
+            log.info("\n\nAssigned date is " + delegateTask.getVariable("assigned_date").toString() + "\n\n");
+
+            try {
+                sendEmail(delegateTask,"assignment_notification");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
