@@ -10,7 +10,9 @@ import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
+import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.FileValue;
+import org.camunda.bpm.engine.variable.value.StringValue;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.camunda.bpm.extension.hooks.services.analytics.IDataPipeline;
 import org.camunda.bpm.extension.hooks.services.analytics.SimpleDBDataPipeline;
@@ -115,18 +117,25 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
      * @return
      */
     private Map<String,Object> injectPrimaryKey(DelegateExecution execution,Map<String,Object> variables) {
-        variables.put("pid",execution.getId());
+        variables.put("pid",execution.getProcessInstanceId());
         return variables;
     }
 
     private void notifyForAttention(DelegateExecution execution,Map<String,Object> rspVariableMap){
             if(IDataPipeline.ResponseStatus.FAILURE.name().equals(rspVariableMap.get("code"))) {
+                Map<String,Object> exVarMap = new HashMap<>();
                 //Additional Response Fields - BEGIN
-                rspVariableMap.put("pid",execution.getId());
-                rspVariableMap.put("subject",(String.valueOf(rspVariableMap.get("message")).concat(" for ").concat(execution.getId())));
-                rspVariableMap.put("category","analytics_service_exception");
+                exVarMap.put("pid",execution.getId());
+                exVarMap.put("subject",(String.valueOf(rspVariableMap.get("message")).concat(" for ").concat(execution.getId())));
+                exVarMap.put("category","analytics_service_exception");
+                for(Map.Entry<String,Object> entry : rspVariableMap.entrySet()) {
+                    if(StringUtils.startsWith(entry.getKey(),"exception")) {
+                        StringValue exceptionDataValue = Variables.stringValue(String.valueOf(rspVariableMap.get("exception")),true);
+                        exVarMap.put(entry.getKey(),exceptionDataValue);
+                    }
+                }
                 //Additional Response Fields - END
-                sendMessage(execution,rspVariableMap);
+                sendMessage(execution,exVarMap);
                 LOGGER.info("\n\nMessage sent! " + "\n\n");
             }
         }

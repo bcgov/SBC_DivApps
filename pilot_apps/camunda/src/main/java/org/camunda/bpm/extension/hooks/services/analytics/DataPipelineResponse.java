@@ -1,6 +1,5 @@
 package org.camunda.bpm.extension.hooks.services.analytics;
 
-import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.internal.util.ExceptionUtils;
 
 public class DataPipelineResponse {
@@ -34,10 +33,6 @@ public class DataPipelineResponse {
     public void setStatus(IDataPipeline.ResponseStatus status, Throwable ex) {
         setStatus(status);
         this.stackTrace = ExceptionUtils.exceptionStackTraceAsString(ex);
-        if(StringUtils.isNotEmpty(ex.getMessage())) {
-            this.exception = ex.getMessage().length() < 4000 ? ex.getMessage() : StringUtils.substring(ex.getMessage(), 0,  4000);
-        } else {
-            this.exception = StringUtils.substring(getStackTrace(), 0,  4000);
-        }
+        this.exception = ExceptionUtils.exceptionStackTraceAsString(ex);
     }
 }

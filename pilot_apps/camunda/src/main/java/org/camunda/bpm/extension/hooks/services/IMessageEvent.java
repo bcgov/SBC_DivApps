@@ -6,7 +6,6 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,10 @@ public interface IMessageEvent {
 
     default void sendMessage(DelegateExecution execution, Map<String,Object> messageVariables){
         RuntimeService runtimeService = execution.getProcessEngineServices().getRuntimeService();
-        runtimeService.startProcessInstanceByMessage("Message_Email",messageVariables);
+        Map<String,Object> eMessageVariables = new HashMap<>();
+        eMessageVariables.putAll(messageVariables);
+        eMessageVariables.putAll(injectFormDataInLightMode(execution));
+        runtimeService.startProcessInstanceByMessage("Message_Email",eMessageVariables);
         log.info("\n\nMessage sent! " + "\n\n");
     }
 
@@ -33,15 +35,24 @@ public interface IMessageEvent {
         IdentityService identityService = task.getProcessEngineServices().getIdentityService();
         User user = identityService.createUserQuery().userId(task.getAssignee()).singleResult();
         Map<String,Object> messageVariables = new HashMap<>();
-        messageVariables.put("pid",task.getExecution().getId());
         messageVariables.put("taskid",task.getId());
         messageVariables.put("category",category);
       if (user != null && StringUtils.isNotEmpty(user.getEmail())) {
-            messageVariables.put("firstname",user.getFirstName());
-            messageVariables.put("lastname",user.getLastName());
-            messageVariables.put("to",user.getEmail());
-            sendMessage(task.getExecution(), messageVariables);
+          messageVariables.put("firstname",user.getFirstName());
+          messageVariables.put("lastname",user.getLastName());
+          messageVariables.put("to",user.getEmail());
+          sendMessage(task.getExecution(), messageVariables);
         }
-
     }
+
+    default Map<String,Object> injectFormDataInLightMode(DelegateExecution execution) {
+        Map<String,Object> formMap = new HashMap<>();
+        for(Map.Entry<String,Object> entry : execution.getVariables().entrySet()) {
+                if(!StringUtils.endsWithIgnoreCase(entry.getKey(),"_file")) {
+                    formMap.put(entry.getKey(),entry.getValue());
+                }
+        }
+        return formMap;
+    }
+
 }

@@ -117,12 +117,6 @@
 		</dependency>
 
 		<!-- Add Email Component -->
-		<!-- Add Freemarker Template Engine Dependency -->
-		<dependency>
-			<groupId>org.camunda.template-engines</groupId>
-			<artifactId>camunda-template-engines-freemarker</artifactId>
-			<scope>provided</scope>
-		</dependency>
 
 		<dependency>
   			<groupId>org.camunda.connect</groupId>

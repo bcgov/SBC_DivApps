@@ -1,14 +1,11 @@
 package org.camunda.bpm.extension.hooks.task.listeners;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.engine.RuntimeService;
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.*;
-import org.camunda.bpm.engine.task.Task;
-import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
+import org.joda.time.DateTime;
 
 /**
  * Timeout Task Listener to start a message event when the deadline is due
@@ -30,25 +27,21 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
      */
     public void notify(DelegateTask delegateTask) {
 
-        /*if (delegateTask.getVariable("assigned_date") != null) {
+        if (StringUtils.isNotEmpty(String.valueOf(delegateTask.getVariable("assigned_date")))) {
 
-            int remindTime = Integer.parseInt((String) this.remind.getValue(delegateTask));
-            int escalateTime = Integer.parseInt((String) this.escalate.getValue(delegateTask));
-
-            Date currentDate = new Date();
-            Date assignedDate = (Date) delegateTask.getVariable("assigned_date");
-            Date remindDate = this.addMins(assignedDate, remindTime); // To be changed to addDays
-            Date escalateDate = this.addMins(assignedDate, escalateTime); // To be changed to addDays
-            Date stopNotifyDate = this.addMins(escalateDate, 1); // To be changed to addDays
+            DateTime currentDate = new DateTime();
+            DateTime assignedDate = new DateTime(String.valueOf(delegateTask.getVariable("assigned_date")));
+            DateTime remindDate = getCalculatedDate(String.valueOf(this.remind.getValue(delegateTask)),assignedDate);
+            DateTime escalateDate = getCalculatedDate(String.valueOf(this.escalate.getValue(delegateTask)),assignedDate);
+            DateTime stopNotifyDate = getCalculatedDate("1m",escalateDate); this.addMins(escalateDate, 1);
 
             // Check if escalate first because reminder date is before escalation date
-            if ((currentDate.after(escalateDate) && currentDate.before(stopNotifyDate))) {
-                sendMessage(delegateTask,assignee,"activity_escalation");
-            } else if ((currentDate.after(remindDate) && currentDate.before(stopNotifyDate))) {
-                sendMessage(delegateTask,assignee,"activity_reminder");
+            if ((currentDate.isAfter(escalateDate) && currentDate.isBefore(stopNotifyDate))) {
+                sendMessage(delegateTask,"activity_escalation");
+            } else if ((currentDate.isAfter(remindDate) && currentDate.isBefore(stopNotifyDate))) {
+                sendMessage(delegateTask,"activity_reminder");
             }
-        }*/
-        sendMessage(delegateTask,"activity_reminder");
+        }
     }
 
     /**
@@ -57,19 +50,32 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
      * @param date: The date to be changed
      * @param days: The number of days to be added
      */
-    private Date addDays(Date date, int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DATE, days);
-        return calendar.getTime();
+    private DateTime addDays(DateTime date, int days) {
+        return date.plusDays(days);
     }
 
     // This is just for testing
-    private Date addMins(Date date, int mins) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.MINUTE, mins);
-        return calendar.getTime();
+    private DateTime addMins(DateTime date, int mins) {
+        return date.plusMinutes(mins);
+    }
+
+
+    private DateTime getCalculatedDate(String input, DateTime date) {
+        if(StringUtils.isNotEmpty(input)) {
+            String pattern = StringUtils.endsWithIgnoreCase(input, "m") ? "m" :
+                    StringUtils.endsWithIgnoreCase(input, "d") ? "d" :"x";
+            String numStr = StringUtils.endsWithIgnoreCase(input, "m") ? StringUtils.substringBefore(input.toLowerCase(), "m") :
+                    StringUtils.endsWithIgnoreCase(input, "d") ? StringUtils.substringBefore(input.toLowerCase(), "d") : null;
+            int value = StringUtils.isNotEmpty(numStr) ? Integer.parseInt(numStr) : 0;
+            if ("m".equals(pattern)) {
+                return this.addMins(date, value);
+            } else if ("d".equals(pattern)) {
+                return this.addDays(date, value);
+            } else {
+                log.info("Invalid input. Resending input");
+            }
+        }
+        return date;
     }
 
 }
