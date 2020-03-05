@@ -160,7 +160,7 @@
 		<dependency>
 		    <groupId>org.postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
-			<version>9.3-1102-jdbc4</version>
+			<version>9.4-1205-jdbc41</version>
 		</dependency>
 
 		<dependency>
@@ -172,7 +172,6 @@
     		<groupId>com.microsoft.sqlserver</groupId>
     		<artifactId>mssql-jdbc</artifactId>
     		<version>7.4.1.jre11</version>
-    		<scope>test</scope>
 		</dependency>
 
 		<!-- Required to use Spin dataformat support -->
