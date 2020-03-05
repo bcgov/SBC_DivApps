@@ -4,22 +4,14 @@ import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.camunda.bpm.spring.boot.starter.event.PostDeployEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
-import javax.sql.DataSource;
 
 /**
  * The Camunda Showcase Spring Boot application.
  */
-@SpringBootApplication(scanBasePackages = {"org.camunda.bpm.extension"})
+@SpringBootApplication
 @EnableProcessApplication("camunda.showcase")
 public class CamundaApplication {
 
@@ -44,39 +36,5 @@ public class CamundaApplication {
 	public static void main(String... args) {
 		SpringApplication.run(CamundaApplication.class, args);
 	}
-
-	/**
-	 * Primary datasource.
-	 * This is owned by Camunda.
-	 * Note: Bean name should not be changed.
-	 * @return
-	 */
-	@Bean(name="camundaBpmDataSource")
-	@ConfigurationProperties("spring.datasource")
-	@Primary
-	public DataSource camundaBpmDataSource(){
-		return DataSourceBuilder.create().build();
-	}
-
-	/**
-	 * Secondary datasource.
-	 * This is used only for publishing data to analytics.
-	 * @return
-	 */
-	@Bean("analyticsDS")
-	@ConfigurationProperties("analytics.datasource")
-	public DataSource analyticsDS(){
-		return DataSourceBuilder.create().build();
-	}
-
-	/**
-	 * JDBC template for analytics datasource interaction.
-	 * @param analyticsDS
-	 * @return
-	 */
-	@Bean("analyticsJdbcTemplate")
-	public NamedParameterJdbcTemplate analyticsJdbcTemplate(@Qualifier("analyticsDS") DataSource analyticsDS) {
-        return new NamedParameterJdbcTemplate(analyticsDS);
-    }
-
+	
 }
