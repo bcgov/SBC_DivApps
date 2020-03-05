@@ -6,17 +6,10 @@ keycloak.clientId: ${KEYCLOAK_CLIENTID:camunda-identity-service}
 keycloak.clientSecret: ${KEYCLOAK_CLIENTSECRET:7d3c845d-f652-4bed-9797-d6d20b7623da}
 
 spring.datasource:
-  jdbc-url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+  url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
   username: ${JDBC_USER:sa}
   password: ${JDBC_PASSWORD:sa}
-  driverClassName: ${JDBC_DRIVER:org.h2.Driver}
 #spring.h2.console.enabled: true
-
-analytics.datasource:
-  jdbc-url: ${ANALYTICS_DB_JDBCURL}
-  username: ${ANALYTICS_DB_USERNAME}
-  password: ${ANALYTICS_DB_PASSWORD}
-  driverClassName: ${ANALYTICS_DB_DRIVER}
 
 spring:
   jersey:
