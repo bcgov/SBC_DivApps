@@ -5,8 +5,8 @@ keycloak.url.realm: ${KEYCLOAK_URL_REALM:master}
 keycloak.clientId: ${KEYCLOAK_CLIENTID:camunda-identity-service}
 keycloak.clientSecret: ${KEYCLOAK_CLIENTSECRET:7d3c845d-f652-4bed-9797-d6d20b7623da}
 
-datapipeline.service.username: ${DATA_PIPELINE_SERVICE_NAME}
-datapipeline.service.password: ${DATA_PIPELINE_SERVICE_PASSWORD}
+formbuilder.pipeline.service.username: ${FORMBUILDER_PIPELINE_USERNAME}
+formbuilder.pipeline.service.password: ${FORMBUILDER_PIPELINE_PASSWORD}
 
 
 spring.datasource:
