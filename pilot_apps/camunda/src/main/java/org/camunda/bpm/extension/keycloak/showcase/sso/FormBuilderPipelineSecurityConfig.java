@@ -16,10 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class FormBuilderPipelineSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    @Value("${datapipeline.service.username}")
+    @Value("${formbuilder.pipeline.service.username}")
     private String  uname;
 
-    @Value("${datapipeline.service.password}")
+    @Value("${formbuilder.pipeline.service.password}")
     private String password;
 
 
