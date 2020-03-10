@@ -33,18 +33,18 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		.csrf().ignoringAntMatchers("/api/**", "/engine-rest/**", "/camunda/engine-rest/**","/camunda/form-adapter/**")
-		.and()
-		.antMatcher("/**")
-		.authorizeRequests()
-			.antMatchers("/app/**")
-			.authenticated()
-		.anyRequest()
-			.permitAll()
-		.and()
-			.logout()
-			.logoutRequestMatcher(new AntPathRequestMatcher("/app/**/logout"))
-			.logoutSuccessHandler(keycloakLogoutHandler)
+		.csrf().ignoringAntMatchers("/api/**", "/engine-rest/**", "/camunda/engine-rest/**","/camunda/form-builder/**")
+				.and()
+				.antMatcher("/**")
+				.authorizeRequests()
+				.antMatchers("/app/**")
+				.authenticated()
+				.anyRequest()
+				.permitAll()
+				.and()
+				.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/app/**/logout"))
+				.logoutSuccessHandler(keycloakLogoutHandler)
 		;
 	}
 
@@ -54,12 +54,14 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
 		filterRegistration.setFilter(new ContainerBasedAuthenticationFilter());
+
 		filterRegistration.setInitParameters(Collections.singletonMap("authentication-provider",
 				"org.camunda.bpm.extension.keycloak.showcase.sso.KeycloakAuthenticationProvider"));
 		filterRegistration.setOrder(101); // make sure the filter is registered after the Spring Security Filter Chain
 		filterRegistration.addUrlPatterns("/app/*");
 		return filterRegistration;
 	}
+
 
 	@Bean
 	@Order(0)
