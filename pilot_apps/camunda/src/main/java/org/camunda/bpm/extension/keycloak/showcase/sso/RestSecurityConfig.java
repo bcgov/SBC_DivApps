@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
+@Order(SecurityProperties.BASIC_AUTH_ORDER - 25)
 public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -28,7 +28,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-        http.requestMatchers().antMatchers("/engine-rest/**","/form-adapter/**").and().authorizeRequests().anyRequest().authenticated().and().csrf().disable()
+        http.requestMatchers().antMatchers("/engine-rest/**").and().authorizeRequests().anyRequest().authenticated().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().oauth2ResourceServer()
                 .jwt().jwtAuthenticationConverter(grantedAuthoritiesExtractor());
 
@@ -43,8 +43,8 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
     public FilterRegistrationBean kcStatelessUserAuthenticationFilter() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(statelessUserAuthenticationFilter);
-        filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
-        filterRegistration.addUrlPatterns("/engine-rest/*","/form-adapter/**");
+        filterRegistration.setOrder(103); // make sure the filter is registered after the Spring Security Filter Chain
+        filterRegistration.addUrlPatterns("/engine-rest/*");
         return filterRegistration;
     }
 
