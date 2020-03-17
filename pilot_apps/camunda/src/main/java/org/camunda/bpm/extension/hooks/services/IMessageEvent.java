@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author yichun.zhao@aot-technologies.com
  */
-public interface IMessageEvent {
+public interface IMessageEvent extends IUser{
 
     Logger log = Logger.getLogger(IMessageEvent.class.getName());
 
