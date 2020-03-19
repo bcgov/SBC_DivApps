@@ -1,12 +1,22 @@
 package org.camunda.bpm.extension.hooks.task.listeners;
 
+import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -24,14 +34,23 @@ public class NotifyListener implements TaskListener, IMessageEvent {
      * @param delegateTask: The task which sends the message
      */
     public void notify(DelegateTask delegateTask) {
-        log.info("\n\nNotify listener invoked! " + delegateTask.getId() + "\n\nAssigned Date set\n\n");
+        log.info("\n\nNotify listener invoked! " + delegateTask.getId());
+            sendEmailNotification(delegateTask.getExecution(), getEmailsOfUnassignedTask(delegateTask),delegateTask.getId());
+    }
 
-        String assignee = delegateTask.getAssignee();
-
-        if (assignee != null) {
-             delegateTask.setVariable("assigned_date",new DateTime().toString());
-             log.info("\n\nAssigned date is " + delegateTask.getVariable("assigned_date") + "\n\n");
-            sendMessage(delegateTask,"assignment_notification");
+    private void sendEmailNotification(DelegateExecution execution,List<String> toEmails,String taskId) {
+        String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
+        if(StringUtils.isNotEmpty(toAddress)) {
+            Map<String, Object> emailAttributes = new HashMap<>();
+            emailAttributes.put("to", toAddress);
+            emailAttributes.put("category", "assignment_notification");
+            emailAttributes.put("name",getDefaultAddresseName());
+            emailAttributes.put("taskid",taskId);
+            log.info("Inside notify attributes:" + emailAttributes);
+            if(StringUtils.isNotEmpty(toAddress)) {
+                sendMessage(execution, emailAttributes);
+            }
         }
     }
+
 }

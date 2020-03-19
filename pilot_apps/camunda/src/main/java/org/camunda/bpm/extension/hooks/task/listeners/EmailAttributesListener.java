@@ -31,10 +31,12 @@ public class EmailAttributesListener implements ExecutionListener {
         }
         String email_to = dmnMap.containsKey("to") && dmnMap.get("to") != null &&
                 StringUtils.isNotEmpty(String.valueOf(dmnMap.get("to"))) ? String.valueOf(dmnMap.get("to")) : String.valueOf(execution.getVariable("to"));
-       /*String email_cc = dmnMap.containsKey("cc") && dmnMap.get("cc") != null &&
-                StringUtils.isNotEmpty(String.valueOf(dmnMap.get("cc"))) ? String.valueOf(dmnMap.get("cc")) : String.valueOf(execution.getVariable("cc"));*/
+       String email_cc = dmnMap.containsKey("cc") && dmnMap.get("cc") != null &&
+                StringUtils.isNotEmpty(String.valueOf(dmnMap.get("cc"))) ? String.valueOf(dmnMap.get("cc")) : String.valueOf(execution.getVariable("cc"));
         execution.setVariable("email_to", email_to);
-        execution.setVariable("email_cc", StringUtils.EMPTY);
+        if(StringUtils.isNotEmpty(email_cc)) {
+            execution.setVariable("email_cc", email_cc);
+        }
         execution.setVariable("email_body", Variables.stringValue(email_body,true));
         execution.setVariable("email_subject", email_subject);
         LOGGER.info("EmailAttributesListener output: "+execution.getVariables());

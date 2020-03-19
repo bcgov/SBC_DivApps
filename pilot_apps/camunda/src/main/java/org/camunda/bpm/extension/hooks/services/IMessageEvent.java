@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.identity.User;
+import org.joda.time.DateTime;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,10 +28,11 @@ public interface IMessageEvent extends IUser{
         eMessageVariables.putAll(messageVariables);
         eMessageVariables.putAll(injectFormDataInLightMode(execution));
         runtimeService.startProcessInstanceByMessage("Message_Email",eMessageVariables);
-        log.info("\n\nMessage sent! " + "\n\n");
+        log.info("\n\nMessage sent! " + eMessageVariables+ "\n\n");
     }
 
-    default void sendMessage(DelegateTask task, String category){
+    /*
+    default void sendMessageForAssignee(DelegateTask task, String category){
         // Get user profile
         IdentityService identityService = task.getProcessEngineServices().getIdentityService();
         User user = identityService.createUserQuery().userId(task.getAssignee()).singleResult();
@@ -43,7 +45,7 @@ public interface IMessageEvent extends IUser{
           messageVariables.put("to",user.getEmail());
           sendMessage(task.getExecution(), messageVariables);
         }
-    }
+    }*/
 
     default Map<String,Object> injectFormDataInLightMode(DelegateExecution execution) {
         Map<String,Object> formMap = new HashMap<>();
@@ -54,5 +56,8 @@ public interface IMessageEvent extends IUser{
         }
         return formMap;
     }
+
+
+
 
 }
