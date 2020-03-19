@@ -86,7 +86,7 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
             emailAttributes.put("category", category);
             emailAttributes.put("taskid", taskId);
             log.info("Inside notify attributes:" + emailAttributes);
-            if(StringUtils.isNotEmpty(toAddress)) {
+            if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
                 sendMessage(execution, emailAttributes);
             }
         }
