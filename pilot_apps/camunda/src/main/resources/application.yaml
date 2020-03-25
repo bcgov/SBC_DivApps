@@ -7,7 +7,7 @@ keycloak.clientSecret: ${KEYCLOAK_CLIENTSECRET:7d3c845d-f652-4bed-9797-d6d20b762
 
 formbuilder.pipeline.service.username: ${FORMBUILDER_PIPELINE_USERNAME}
 formbuilder.pipeline.service.password: ${FORMBUILDER_PIPELINE_PASSWORD}
-
+formbuilder.pipeline.service.bpm-url: ${FORMBUILDER_PIPELINE_BPM_URL}
 
 spring.datasource:
   jdbc-url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
@@ -30,7 +30,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
-
+  main:
+    allow-bean-definition-overriding: true
 # Redis Session Cache not yet in use
 #  session:
 #    store-type: ${SESSION_STORE_TYPE:none}
@@ -58,6 +59,7 @@ security:
       accessTokenUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/token
       userAuthorizationUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/auth
       scope: openid profile email
+      grant-type: authorization_code implicit refresh_token password client_credentials
     resource:
       userInfoUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/userinfo
 

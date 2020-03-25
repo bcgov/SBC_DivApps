@@ -8,17 +8,24 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * The Camunda Showcase Spring Boot application.
  */
+@EnableOAuth2Client
+@EnableConfigurationProperties
+@PropertySource("application.yaml")
 @SpringBootApplication(scanBasePackages = {"org.camunda.bpm.extension"})
 @EnableProcessApplication("camunda.showcase")
 public class CamundaApplication {
@@ -78,5 +85,11 @@ public class CamundaApplication {
 	public NamedParameterJdbcTemplate analyticsJdbcTemplate(@Qualifier("analyticsDS") DataSource analyticsDS) {
         return new NamedParameterJdbcTemplate(analyticsDS);
     }
+
+	@Bean
+	@ConfigurationProperties(prefix = "security.oauth2.client")
+	public Properties clientCredentialProperties() {
+		return new Properties();
+	}
 
 }

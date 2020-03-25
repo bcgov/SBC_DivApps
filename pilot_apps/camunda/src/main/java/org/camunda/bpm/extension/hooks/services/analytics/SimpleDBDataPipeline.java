@@ -16,10 +16,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,21 +71,32 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
     public DataPipelineResponse publish(Map<String,Object> data) {
         DataPipelineResponse response = new DataPipelineResponse();
         Map<String,Object> nonLobMap = new HashMap<>();
-        Map<String,Object> lobMap = new HashMap<>();
+        Map<String,Map<String,Object>> lobMap = new HashMap<>();
         try {
             for(Map.Entry<String,Object> entry : data.entrySet()) {
                 if(StringUtils.endsWith(entry.getKey(),"_file")) {
-                    lobMap.put(entry.getKey(), entry.getValue());
+                    String fileNamePrefix = StringUtils.substringBefore(entry.getKey(),"_file");
+                    if(!lobMap.containsKey(entry.getKey())) {
+                        Map<String,Object> lobData = new HashMap<>();
+                        lobData.put("name",data.get(fileNamePrefix.concat("_name")));
+                        lobData.put("file_mimetype",data.get(fileNamePrefix.concat("_mimetype")));
+                        lobData.put("file_stream",entry.getValue());
+                        lobData.put("file_size",data.get(fileNamePrefix.concat("_size")));
+                        lobData.put("stream_id",data.get(fileNamePrefix.concat("_stream_id")));
+                        lobData.put("files_entity_key",data.get("files_entity_key"));
+                        nonLobMap.put(fileNamePrefix.concat("_file_id"), data.get(fileNamePrefix.concat("_stream_id")));
+                        lobMap.put(entry.getKey(),lobData);
+                    }
                 } else {
                     nonLobMap.put(entry.getKey(), entry.getValue());
                 }
             }
             //Non-lob objects block
-            String query = getQuery(String.valueOf(nonLobMap.get("entity_key")),nonLobMap);
+            String query = getQuery(String.valueOf(nonLobMap.get("entity_key")),nonLobMap,"pid",getIdentityKey(data));
             LOGGER.info("Non-lob query:"+ query);
             analyticsJdbcTemplate.update(query,nonLobMap);
             // Lob objects
-            handleFileObject(String.valueOf(data.get("entity_key")), getIdentityKey(data), lobMap);
+            handleFileObject(lobMap);
             response.setStatus(ResponseStatus.SUCCESS);
         } catch(Exception ex) {
             LOGGER.log(Level.SEVERE, "Exception occurred in publishing data for analytics system", ex);
@@ -117,29 +125,26 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
     /**
      * Method to handle updates of large objects as independent SQL statements.
      *
-     * @param entityKey
-     * @param id
      * @param lobMap
      * @throws SQLException
      */
-    private void handleFileObject(String entityKey, String id, Map<String,Object> lobMap) throws SQLException {
-        for(Map.Entry<String,Object> entry : lobMap.entrySet()) {
-            Map<String,Object> itrMap = new HashMap<>();
-            itrMap.put("pid", id);
-            itrMap.put(entry.getKey(), entry.getValue());
-            String query = getQuery(entityKey,itrMap);
+    private void handleFileObject(Map<String,Map<String,Object>> lobMap) throws SQLException {
+        for(Map.Entry<String,Map<String,Object>> entry : lobMap.entrySet()) {
+            String query = getQuery(String.valueOf(entry.getValue().get("files_entity_key")),entry.getValue(),"stream_id",String.valueOf(entry.getValue().get("stream_id")));
             LOGGER.info("lob query:"+ query);
-            analyticsJdbcTemplate.update(query,itrMap);
+            analyticsJdbcTemplate.update(query,entry.getValue());
         }
     }
 
     /**
-     *  Returns the query bound with key.
-     * @param key
+     * Returns the query bound with the table and criteria columns.
+     *
+     * @param tableName
+     * @param pkColums
      * @return
      */
-    private String getQuery(String key) {
-        return IQueryFactory.getValidationQuery(key);
+    private String getValidationQuery(String tableName,String... pkColums) {
+        return IQueryFactory.getValidationQuery(tableName,pkColums);
     }
 
     /**
@@ -149,8 +154,8 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
      * @return
      * @throws SQLException
      */
-    private String getQuery(String formKey, Map<String,Object> dataMap) throws SQLException {
-        Map<String,Object> cols = getColumns(formKey, getIdentityKey(dataMap));
+    private String getQuery(String formKey, Map<String,Object> dataMap,String pkname, String pkvalue) throws SQLException {
+        Map<String,Object> cols = getColumns(formKey, pkname,pkvalue);
         List<String> filteredCols = new ArrayList<>();
         LOGGER.info("Prepare query for columns:"+cols);
         for(Map.Entry<String,Object> entry : dataMap.entrySet()) {
@@ -159,21 +164,21 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
             }
         }
         LOGGER.info("Value of expression"+StringUtils.isEmpty(getIdentityKey(cols)));
-        return IQueryFactory.prepareQuery(formKey,filteredCols,StringUtils.isEmpty(getIdentityKey(cols))? Boolean.FALSE : Boolean.TRUE);
+        return IQueryFactory.prepareQuery(formKey,filteredCols,StringUtils.isEmpty(getIdentityKey(cols))? Boolean.FALSE : Boolean.TRUE,pkname);
     }
 
 
     /**
-     *  This method returns the column metadata for preparing dynamic queries.
-     *
+     * This method returns the column metadata for preparing dynamic queries.
      * @param formKey
-     * @param pid
+     * @param pkName
+     * @param pkValue
      * @return
      * @throws SQLException
      */
-    private Map<String,Object> getColumns(String formKey,String pid) throws SQLException {
-            SqlParameterSource namedParameters = new MapSqlParameterSource("pid", pid);
-                Map<String, Object> resp = analyticsJdbcTemplate.query(getQuery(formKey), namedParameters,new ResultSetExtractor<Map<String,Object>>(){
+    private Map<String,Object> getColumns(String formKey,String pkName, String pkValue) throws SQLException {
+            SqlParameterSource namedParameters = new MapSqlParameterSource(pkName, pkValue);
+                Map<String, Object> resp = analyticsJdbcTemplate.query(getValidationQuery(formKey,pkName), namedParameters,new ResultSetExtractor<Map<String,Object>>(){
                     @Override
                     public Map<String,Object> extractData(ResultSet rs) throws SQLException, DataAccessException {
                         Map<String,Object> dataMap=new HashMap<>();
@@ -196,5 +201,6 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                 });
         return resp;
     }
+
 
 }
