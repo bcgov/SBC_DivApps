@@ -14,10 +14,16 @@ public interface IQueryFactory {
      * @param tableName
      * @return
      */
-    static String getValidationQuery(String tableName) {
-        return new StringBuilder().append("SELECT * FROM ")
-                .append(tableName)
-                .append(" WHERE pid = :pid").toString();
+    static String getValidationQuery(String tableName,String... criteriaColumns) {
+        StringBuilder criteriaBinder = new StringBuilder();
+        StringBuilder query = new StringBuilder("SELECT * FROM ");
+            query.append(tableName);
+            query.append(" WHERE ");
+        for(String crtEntry : criteriaColumns) {
+            criteriaBinder.append(crtEntry +" = :"+crtEntry+" AND");
+        }
+        query.append(StringUtils.removeEnd(criteriaBinder.toString(),"AND"));
+        return query.toString();
     }
 
     /**
@@ -30,10 +36,11 @@ public interface IQueryFactory {
      * @param doesExists
      * @return
      */
-    static String prepareQuery(String tableName, List<String> columns, Boolean doesExists) {
+    static String prepareQuery(String tableName, List<String> columns, Boolean doesExists,String... criteriaColumns) {
         StringBuilder query = new StringBuilder();
         StringBuilder colBinder = new StringBuilder();
         StringBuilder valuesBinder = new StringBuilder();
+        StringBuilder criteriaBinder = new StringBuilder();
         for(String entry :columns) {
             if(!doesExists) {
                 colBinder.append(entry+ " ,");
@@ -51,7 +58,11 @@ public interface IQueryFactory {
         } else {
             query.append("UPDATE "+tableName+" SET ");
             query.append(StringUtils.removeEnd(colBinder.toString(),","));
-            query.append(" WHERE pid = :pid");
+            query.append(" WHERE ");
+            for(String crtEntry : criteriaColumns) {
+                criteriaBinder.append(crtEntry +" = :"+crtEntry+" AND");
+            }
+            query.append(StringUtils.removeEnd(criteriaBinder.toString(),"AND"));
         }
         return query.toString();
     }

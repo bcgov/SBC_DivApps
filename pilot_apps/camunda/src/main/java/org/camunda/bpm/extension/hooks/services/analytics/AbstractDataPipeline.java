@@ -46,7 +46,7 @@ public abstract class AbstractDataPipeline implements IDataPipeline {
     public abstract Map<String,Object> notificationMessage(DataPipelineResponse response) ;
 
     public String getIdentityKey(Map<String,Object> variables) {
-        return variables.containsKey("pid") && variables.get("pid") !=null ? String.valueOf(variables.get("pid")) : null;
+            return variables.containsKey("pid") && variables.get("pid") != null ? String.valueOf(variables.get("pid")) : null;
     }
 
 
