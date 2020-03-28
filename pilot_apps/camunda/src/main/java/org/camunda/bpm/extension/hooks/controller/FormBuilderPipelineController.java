@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.joda.time.DateTime;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -78,25 +78,25 @@ public class FormBuilderPipelineController {
     private void sendEmail(String formXML,String documentId, String exceptionTrace){
         Map<String,Object> variables = new HashMap<>();
         try {
-        HttpHeaders headers = new HttpHeaders();
-        ObjectMapper mapper = new ObjectMapper();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + getOAuth2RestTemplate().getAccessToken());
-        CreateProcessMessageRequest msgRequest = new CreateProcessMessageRequest();
-        variables.put("category", new VariableData("api_start_failure"));
-        variables.put("orbeon_document_id", new VariableData(documentId));
-        variables.put("formXML", new VariableData(formXML));
-        //Include exception if any
+            HttpHeaders headers = new HttpHeaders();
+            ObjectMapper mapper = new ObjectMapper();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Authorization", "Bearer " + getOAuth2RestTemplate().getAccessToken());
+            CreateProcessMessageRequest msgRequest = new CreateProcessMessageRequest();
+            variables.put("category", new VariableData("api_start_failure"));
+            variables.put("orbeon_document_id", new VariableData(documentId));
+            variables.put("formXML", new VariableData(formXML));
+            //Include exception if any
             if(StringUtils.isNotBlank(exceptionTrace)) {
                 StringValue exceptionDataValue = Variables.stringValue(exceptionTrace,true);
                 variables.put("exception", exceptionDataValue);
             }
-        msgRequest.setMessageName("Message_Email");
-        msgRequest.setProcessVariables(variables);
-        HttpEntity<String> msgReq = new HttpEntity<String>(mapper.writeValueAsString(msgRequest), headers);
-        ResponseEntity<String> msgResponse = getOAuth2RestTemplate().postForEntity(
-                appcontexturl + "/engine-rest/message", msgReq, String.class);
-        LOGGER.info("Message response code:"+msgResponse.getStatusCode());
+            msgRequest.setMessageName("Message_Email");
+            msgRequest.setProcessVariables(variables);
+            HttpEntity<String> msgReq = new HttpEntity<String>(mapper.writeValueAsString(msgRequest), headers);
+            ResponseEntity<String> msgResponse = getOAuth2RestTemplate().postForEntity(
+                    getAPIContextURL() + "/engine-rest/message", msgReq, String.class);
+            LOGGER.info("Message response code:"+msgResponse.getStatusCode());
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ExceptionUtils.exceptionStackTraceAsString(ex));
         }
@@ -114,7 +114,7 @@ public class FormBuilderPipelineController {
                 new HttpEntity<String>(mapper.writeValueAsString(procReq), headers);
 
         ResponseEntity<String> wrsp = getOAuth2RestTemplate().postForEntity(
-                appcontexturl + "/engine-rest/process-definition/key/CC_Process/start", prcReq, String.class);
+                getAPIContextURL() + "/engine-rest/process-definition/key/CC_Process/start", prcReq, String.class);
         Map<String, Object> responseMap = mapper.readValue(wrsp.getBody(), HashMap.class);
         LOGGER.info("Response Map post instance creation-------->" + responseMap);
         String instanceId = responseMap != null && responseMap.containsKey("id") ? String.valueOf(responseMap.get("id")) : null;
@@ -130,8 +130,8 @@ public class FormBuilderPipelineController {
         resourceDetails.setClientId(clientCredentialProperties.getProperty("client-id"));
         resourceDetails.setClientSecret(clientCredentialProperties.getProperty("client-secret"));
         resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("accessTokenUri"));
-        resourceDetails.setUsername("demo");
-        resourceDetails.setPassword("demo");
+        resourceDetails.setUsername(getAPIClientUsername());
+        resourceDetails.setPassword(getAPIClientPassword());
         resourceDetails.setGrantType("password");
         return new OAuth2RestTemplate(resourceDetails);
     }
@@ -139,10 +139,10 @@ public class FormBuilderPipelineController {
     private Map<String,Object> prepareRequestVariableMap(String formXML) throws IOException {
         Map<String,Object> variables = new HashMap<>();
         if(StringUtils.isNotBlank(formXML)) {
-        XmlMapper xmlMapper = new XmlMapper();
-        JsonNode node = xmlMapper.readTree(formXML.getBytes());
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> values = mapper.readValue(node.get("Main").toString(), HashMap.class);
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode node = xmlMapper.readTree(formXML.getBytes());
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String,Object> values = mapper.readValue(node.get("Main").toString(), HashMap.class);
             for(Map.Entry<String, Object> entry : values.entrySet()) {
                 variables.put(entry.getKey(),new VariableData(entry.getValue()));
             }
@@ -177,6 +177,18 @@ public class FormBuilderPipelineController {
         }
         public Object getValue() { return value; }
         public void setValue(Object value) { this.value = value; }
+    }
+
+    private String getAPIClientUsername() {
+        return StringUtils.substringBefore(StringUtils.substringBetween(appcontexturl,"://","@"),":");
+    }
+
+    private String getAPIClientPassword() {
+        return StringUtils.substringAfter(StringUtils.substringBetween(appcontexturl,"://","@"),":");
+    }
+
+    private String getAPIContextURL() {
+        return StringUtils.remove(StringUtils.remove(appcontexturl, StringUtils.substringBetween(appcontexturl,"://","@")),"@");
     }
 
 
