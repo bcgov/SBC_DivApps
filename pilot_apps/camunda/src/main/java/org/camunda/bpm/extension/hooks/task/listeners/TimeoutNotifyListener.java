@@ -12,17 +12,23 @@ import org.camunda.bpm.engine.delegate.*;
 import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Timeout Task Listener to start a message event when the deadline is due
  *
  * @author yichun.zhao@aot-technologies.com, sumathi.thirumani@aot-technologies.com
  */
+@Component
 public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
 
     private Expression escalationGroup;
     private Expression currentDate;
     private static final Logger log = Logger.getLogger(TimeoutNotifyListener.class.getName());
+
+    @Value("${formbuilder.pipeline.service.bpm-url}")
+    private String appcontexturl;
 
     /**
      * This calculates time logic
@@ -86,10 +92,15 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
             emailAttributes.put("category", category);
             emailAttributes.put("taskid", taskId);
             log.info("Inside notify attributes:" + emailAttributes);
+            execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/task/"+taskId);
             if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
                 sendMessage(execution, emailAttributes);
             }
         }
+    }
+
+    private String getAPIContextURL() {
+        return StringUtils.remove(StringUtils.remove(appcontexturl, StringUtils.substringBetween(appcontexturl,"://","@")),"@");
     }
 
 }
