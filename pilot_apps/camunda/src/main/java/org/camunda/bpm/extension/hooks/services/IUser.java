@@ -52,7 +52,7 @@ public interface IUser {
     }
 
     default List<String> getEmailsForGroup(DelegateExecution execution,String groupName) {
-        List<User> users =  execution.getProcessEngine().getIdentityService().createUserQuery().memberOfGroup(groupName).list();
+        List<User> users =  execution.getProcessEngine().getIdentityService().createUserQuery().memberOfGroup(StringUtils.trim(groupName)).list();
         List<String> emails = new ArrayList<>();
         for(User entry : users) {
             if(StringUtils.isNotEmpty(entry.getEmail())) {

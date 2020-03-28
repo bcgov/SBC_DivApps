@@ -51,19 +51,30 @@ public class GroupAttributesListener implements ExecutionListener, IUser, IMessa
     }
 
     private void populateGroups(DelegateExecution execution) {
-        String serviceChannel = execution.getVariable("service_channel") != null ? String.valueOf(execution.getVariable("service_channel")) : null;
-        String location = execution.getVariable("location") != null ? String.valueOf(execution.getVariable("location")) : null;
-        String region = execution.getVariable("region") != null ? String.valueOf(execution.getVariable("region")) : null;
+        String serviceChannel = execution.getVariable("service_channel") != null ? StringUtils.trim(String.valueOf(execution.getVariable("service_channel"))) : null;
+        String location = execution.getVariable("location") != null ? StringUtils.trim(String.valueOf(execution.getVariable("location"))) : null;
+        //Temp solution to trim location issue
+        execution.removeVariable("location");
+        execution.setVariable("location", StringUtils.trim(location));
         if(StringUtils.isNotEmpty(serviceChannel)) {
             Map<String,Object> variableMap = new HashMap<String,Object>();
             variableMap.put("service_channel",serviceChannel);
             DmnDecisionTableResult groupDecisionResult = getDmnDecisionTableResult("decide-groups", execution, variableMap);
-            String managerGroup = StringUtils.replace(groupDecisionResult.getSingleResult().getEntry("manager_group"),"$location",location);
-            String directorGroup = StringUtils.replace(groupDecisionResult.getSingleResult().getEntry("director_group"),"$region",region);
+            String managerGroup = groupDecisionResult.getSingleResult().getEntry("manager_group");
+            String directorGroup = groupDecisionResult.getSingleResult().getEntry("director_group");
             String edGroup = groupDecisionResult.getSingleResult().getEntry("ed_group");
-            execution.setVariable("manager_group", managerGroup);
-            execution.setVariable("director_group", directorGroup);
-            execution.setVariable("ed_group", edGroup);
+            if(StringUtils.isNotBlank(location)) {
+                variableMap = new HashMap<String,Object>();
+                variableMap.put("location",location);
+                DmnDecisionTableResult regionDecisionResult = getDmnDecisionTableResult("decide-region", execution, variableMap);
+                String region = regionDecisionResult.getFirstResult().getEntry("region");
+                managerGroup = StringUtils.replace(managerGroup,"$location",location);
+                directorGroup = StringUtils.replace(directorGroup,"$region",region);
+                execution.setVariable("region",region);
+            }
+            execution.setVariable("manager_group", StringUtils.trim(managerGroup));
+            execution.setVariable("director_group", StringUtils.trim(directorGroup));
+            execution.setVariable("ed_group", StringUtils.trim(edGroup));
         }
     }
 

@@ -350,6 +350,7 @@ body {
  font-weight: 500;
  font-size: 12px;
  padding-bottom: 10px;
+ white-space: pre-wrap;
  }
 .ui.form .inline.field > .selection.dropdown, .ui.form .inline.fields .field > .selection.dropdown {
     width: 100% !important;
@@ -430,3 +431,8 @@ position:relative;
    text-align: center;
    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
  }
+
+i.small.icon, i.small.icons {
+    line-height: 1;
+    font-size: 15px !important;
+}

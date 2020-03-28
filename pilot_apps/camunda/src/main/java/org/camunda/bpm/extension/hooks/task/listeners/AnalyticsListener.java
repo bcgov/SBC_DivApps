@@ -87,40 +87,43 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         Map<String,Object> prcMap = new HashMap<>();
         String pid = execution.getId();
         try {
-        // Handles file & authenticated user information.
-        for(Map.Entry<String,Object> entry : variables.entrySet()) {
-            if(StringUtils.endsWith(entry.getKey(),"_file")) {
-                if(!execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(),"_file").concat("_stream_id"))) {
-                    String filePrefix = StringUtils.substringBefore(entry.getKey(), "_file");
-                    FileValue retrievedTypedFileValue = execution.getProcessEngineServices().getRuntimeService().getVariableTyped(pid, entry.getKey());
-                    if (retrievedTypedFileValue != null && retrievedTypedFileValue.getValue() != null) {
-                        InputStream fileContent = retrievedTypedFileValue.getValue();
-                        String fileName = retrievedTypedFileValue.getFilename();
-                        String mimeType = retrievedTypedFileValue.getMimeType();
-                        byte[] fileBytes = IOUtils.toByteArray(fileContent);
-                        int fileSize = fileBytes.length;
-                        if (StringUtils.isNotEmpty(fileName) && fileSize > 0) {
-                            prcMap.put(filePrefix.concat("_name"), fileName);
-                            prcMap.put(filePrefix.concat("_mimetype"), mimeType);
-                            prcMap.put(entry.getKey(), fileBytes);
-                            prcMap.put(filePrefix.concat("_size"), fileSize);
-                            String fileId = getUniqueIdentifierForFile();
-                            prcMap.put(filePrefix.concat("_stream_id"), fileId);
-                            execution.setVariable(filePrefix.concat("_stream_id"), fileId);
+            // Handles file & authenticated user information.
+            for(Map.Entry<String,Object> entry : variables.entrySet()) {
+                if(StringUtils.endsWith(entry.getKey(),"_file")) {
+                    if(!execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(),"_file").concat("_stream_id"))) {
+                        String filePrefix = StringUtils.substringBefore(entry.getKey(), "_file");
+                        FileValue retrievedTypedFileValue = execution.getProcessEngineServices().getRuntimeService().getVariableTyped(pid, entry.getKey());
+                        if (retrievedTypedFileValue != null && retrievedTypedFileValue.getValue() != null) {
+                            InputStream fileContent = retrievedTypedFileValue.getValue();
+                            String fileName = retrievedTypedFileValue.getFilename();
+                            String mimeType = retrievedTypedFileValue.getMimeType();
+                            byte[] fileBytes = IOUtils.toByteArray(fileContent);
+                            int fileSize = fileBytes.length;
+                            if (StringUtils.isNotEmpty(fileName) && fileSize > 0) {
+                                prcMap.put(filePrefix.concat("_name"), fileName);
+                                prcMap.put(filePrefix.concat("_mimetype"), mimeType);
+                                prcMap.put(entry.getKey(), fileBytes);
+                                prcMap.put(filePrefix.concat("_size"), fileSize);
+                                String fileId = getUniqueIdentifierForFile();
+                                prcMap.put(filePrefix.concat("_stream_id"), fileId);
+                                execution.setVariable(filePrefix.concat("_stream_id"), fileId);
+                            }
                         }
                     }
+                } else if(entry.getKey().endsWith("_idir")) {
+                    String idir = entry.getValue() != null ? String.valueOf(entry.getValue()) : null;
+                    if (StringUtils.isNotEmpty(idir) &&
+                            !execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"))) {
+                        String idirName = getName(execution, idir);
+                        execution.setVariable(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"), idirName);
+                        prcMap.put(entry.getKey(),entry.getValue());
+                        prcMap.put(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"),idirName);
+                    }
+                } else {
+                    prcMap.put(entry.getKey(),entry.getValue());
                 }
-            } else if(entry.getKey().endsWith("_idir")) {
-                String idir = entry.getValue() != null ? String.valueOf(entry.getValue()) : null;
-                if (StringUtils.isNotEmpty(idir) &&
-                        !execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"))) {
-                    execution.setVariable(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"), getName(execution, idir));
-                }
-            } else {
-                prcMap.put(entry.getKey(),entry.getValue());
             }
-        }
-      } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return prcMap;
@@ -136,23 +139,23 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
     }
 
     private void notifyForAttention(DelegateExecution execution,Map<String,Object> rspVariableMap){
-            if(IDataPipeline.ResponseStatus.FAILURE.name().equals(rspVariableMap.get("code"))) {
-                Map<String,Object> exVarMap = new HashMap<>();
-                //Additional Response Fields - BEGIN
-                exVarMap.put("pid",execution.getId());
-                exVarMap.put("subject",(String.valueOf(rspVariableMap.get("message")).concat(" for ").concat(execution.getId())));
-                exVarMap.put("category","analytics_service_exception");
-                for(Map.Entry<String,Object> entry : rspVariableMap.entrySet()) {
-                    if(StringUtils.startsWith(entry.getKey(),"exception")) {
-                        StringValue exceptionDataValue = Variables.stringValue(String.valueOf(rspVariableMap.get("exception")),true);
-                        exVarMap.put(entry.getKey(),exceptionDataValue);
-                    }
+        if(IDataPipeline.ResponseStatus.FAILURE.name().equals(rspVariableMap.get("code"))) {
+            Map<String,Object> exVarMap = new HashMap<>();
+            //Additional Response Fields - BEGIN
+            exVarMap.put("pid",execution.getId());
+            exVarMap.put("subject",(String.valueOf(rspVariableMap.get("message")).concat(" for ").concat(execution.getId())));
+            exVarMap.put("category","analytics_service_exception");
+            for(Map.Entry<String,Object> entry : rspVariableMap.entrySet()) {
+                if(StringUtils.startsWith(entry.getKey(),"exception")) {
+                    StringValue exceptionDataValue = Variables.stringValue(String.valueOf(rspVariableMap.get("exception")),true);
+                    exVarMap.put(entry.getKey(),exceptionDataValue);
                 }
-                //Additional Response Fields - END
-                sendMessage(execution,exVarMap);
-                LOGGER.info("\n\nMessage sent! " + "\n\n");
             }
+            //Additional Response Fields - END
+            sendMessage(execution,exVarMap);
+            LOGGER.info("\n\nMessage sent! " + "\n\n");
         }
+    }
 
     private String getUniqueIdentifierForFile() {
         return UUID.randomUUID().toString();

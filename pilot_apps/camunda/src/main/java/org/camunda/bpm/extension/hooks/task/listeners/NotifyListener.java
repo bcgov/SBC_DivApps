@@ -4,19 +4,15 @@ import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
-import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -24,9 +20,13 @@ import java.util.logging.Logger;
  *
  * @author yichun.zhao@aot-technologies.com
  */
+@Component
 public class NotifyListener implements TaskListener, IMessageEvent {
 
     private static final Logger log = Logger.getLogger(NotifyListener.class.getName());
+
+    @Value("${formbuilder.pipeline.service.bpm-url}")
+    private String appcontexturl;
 
     /**
      * This provides the necessary information to send message.
@@ -47,10 +47,15 @@ public class NotifyListener implements TaskListener, IMessageEvent {
             emailAttributes.put("name",getDefaultAddresseName());
             emailAttributes.put("taskid",taskId);
             log.info("Inside notify attributes:" + emailAttributes);
+            execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/task/"+taskId);
             if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
                 sendMessage(execution, emailAttributes);
             }
         }
+    }
+
+    private String getAPIContextURL() {
+        return StringUtils.remove(StringUtils.remove(appcontexturl, StringUtils.substringBetween(appcontexturl,"://","@")),"@");
     }
 
 }
