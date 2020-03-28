@@ -8,5 +8,10 @@ window.camCockpitConf = {
     paths: {
       'custom-logout': 'custom/logout'
     }
+  },
+
+  app: {
+    name: 'Service Flow',
+    vendor: ' '
   }
 };

@@ -134,7 +134,7 @@ $('textarea').keyup(function() {
    var characterCount = $(this).val().length,
    current = $('#'+fieldName+'_count');
    current.text(characterCount+'/'+maxlen);
-   if($(this).val().length != 0) {
+    if($(this).val() && $(this).val().length != 0) {
         $('#'+fieldName+'_err').css("display", "none");
    }
  });
@@ -144,7 +144,7 @@ $('input').keyup(function() {
    var characterCount = $(this).val().length,
    current = $('#'+fieldName+'_count');
    current.text(characterCount+'/'+maxlen);
-   if($(this).val().length != 0) {
+    if($(this).val() && $(this).val().length != 0) {
      $('#'+fieldName+'_err').css("display", "none");
      if(fieldName == 'citizen_contact' || fieldName == 'citizen_email') {
         document.getElementById('citizen_contact_err').style.display = "none";
@@ -155,14 +155,20 @@ $('input').keyup(function() {
  });
  $('input').change(function() {
     var fieldName = $(this).attr('id');
-    if($(this).val().length != 0) {
+     if($(this).val() && $(this).val().length != 0) {
       $('#'+fieldName+'_err').css("display", "none");
     }
-
   });
+   $("select")
+   	   .change(function () {
+   	   var fieldName = $(this).attr('id');
+   	      if($(this).val() && $(this).val().length != 0) {
+   	         $('#'+fieldName+'_err').css("display", "none");
+   	       }
+   });
    $('input').blur(function() {
       var fieldName = $(this).attr('id');
-      if($(this).val().length != 0) {
+       if($(this).val() && $(this).val().length != 0) {
         $('#'+fieldName+'_err').css("display", "none");
       }
 
@@ -198,3 +204,8 @@ $('.cd-popup').on('click', function(event){
 			$(this).removeClass('is-visible');
 		}
 });
+$('.small.information.icon')
+  .popup({
+    hoverable: true,
+    position : 'right center',
+  });

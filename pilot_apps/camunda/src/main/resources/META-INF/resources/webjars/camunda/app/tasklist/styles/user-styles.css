@@ -38,7 +38,7 @@ fieldset[disabled] .btn-primary.active{
   background-repeat: no-repeat;
   background-position: center center;
   width: 200px;
-  margin: 3px 25px;
+  margin: 3px 2px;
 }
 
 [cam-widget-header] {
@@ -60,4 +60,13 @@ fieldset[disabled] .btn-primary.active{
 
 aside li.active>a {
   border-left-color: #003366;
+}
+
+.navbar-header:after {
+  content: "Service Flow";
+  display: inline-flex;
+  color: #fff;
+  font-size: 35px;
+  padding: 7px;
+  line-height: 36px;
 }
