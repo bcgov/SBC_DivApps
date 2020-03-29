@@ -99,7 +99,7 @@ $(document).ready(function() {
 	           content$.css("maxHeight", "0px");
 	         } else {
 	           //content$.css("maxHeight", content$.prop("scrollHeight")+"px");
-	           content$.css("maxHeight", "115px");
+	           content$.css("maxHeight", "118px");
 	         }
 	       });
 	    });
@@ -118,7 +118,7 @@ $(document).ready(function() {
 	         collapsible$.toggleClass("active");
 	         if (collapsible$.hasClass("active")) {
 	           //content$.css("maxHeight", content$.prop("scrollHeight")+"px");
-	           content$.css("maxHeight", "115px");
+	           content$.css("maxHeight", "118px");
 	         } else {
 	           content$.css("maxHeight", "0px");
 	         }
