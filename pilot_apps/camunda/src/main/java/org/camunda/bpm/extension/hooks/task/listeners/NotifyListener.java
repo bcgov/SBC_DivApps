@@ -47,7 +47,7 @@ public class NotifyListener implements TaskListener, IMessageEvent {
             emailAttributes.put("name",getDefaultAddresseName());
             emailAttributes.put("taskid",taskId);
             log.info("Inside notify attributes:" + emailAttributes);
-            execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/task/"+taskId);
+            execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/?task="+taskId);
             if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
                 sendMessage(execution, emailAttributes);
             }

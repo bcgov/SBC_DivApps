@@ -218,11 +218,6 @@ body {
      }
  }
 
- body {
-   background: url(https://subtlepatterns.com/patterns/symphony.png);
-   padding: 20px;
- }
-
  .container {
    display: inline-block;
    margin-left: 20px;
@@ -301,7 +296,7 @@ body {
    font-size: 15px;
    font-weight: bold;
    border-radius: .28571429rem .28571429rem 0 0;
-   max-height: 115px;
+   max-height: 118px;
  }
 
  .headercollapsible.active, .headercollapsible:hover {
@@ -331,7 +326,7 @@ body {
    overflow: hidden;
    transition: max-height 0.2s ease-out;
    background-color: #d4d4d5;
-   max-height: 115px;
+   max-height: 118px;
  }
  [cam-tasklist-task] .tab-content {
    padding-top : 10px !important;
@@ -422,10 +417,11 @@ position:relative;
  }
 
  .cd-popup-container {
+   position : relative;
    max-width: 260px;
    margin-left: auto;
    margin-right: auto;
-   margin-top: 35%;
+   top: 50%;
    background: #FFF;
    border-radius: .25em .25em .4em .4em;
    text-align: center;
@@ -435,4 +431,11 @@ position:relative;
 i.small.icon, i.small.icons {
     line-height: 1;
     font-size: 15px !important;
+}
+
+.custom-panel-scrollbar {
+    max-height: 600px;
+    overflow: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
 }
