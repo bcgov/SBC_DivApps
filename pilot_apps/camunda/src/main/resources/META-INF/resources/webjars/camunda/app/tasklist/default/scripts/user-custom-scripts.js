@@ -209,3 +209,7 @@ $('.small.information.icon')
     hoverable: true,
     position : 'right center',
   });
+
+function handleMultiselectValue(id) {
+  	document.getElementById(id+'_tmp').value= $('#'+id).dropdown('get value');
+}
