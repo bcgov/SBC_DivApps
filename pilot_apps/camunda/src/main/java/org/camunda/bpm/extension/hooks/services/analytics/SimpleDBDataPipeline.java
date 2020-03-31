@@ -78,7 +78,7 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                     String fileNamePrefix = StringUtils.substringBefore(entry.getKey(),"_file");
                     if(!lobMap.containsKey(entry.getKey())) {
                         Map<String,Object> lobData = new HashMap<>();
-                        lobData.put("name",data.get(fileNamePrefix.concat("_name")));
+                        lobData.put("name",data.get(fileNamePrefix.concat("_name"))+"_"+new DateTime());
                         lobData.put("file_mimetype",data.get(fileNamePrefix.concat("_mimetype")));
                         lobData.put("file_stream",entry.getValue());
                         lobData.put("file_size",data.get(fileNamePrefix.concat("_size")));
