@@ -78,7 +78,7 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                     String fileNamePrefix = StringUtils.substringBefore(entry.getKey(),"_file");
                     if(!lobMap.containsKey(entry.getKey())) {
                         Map<String,Object> lobData = new HashMap<>();
-                        lobData.put("name",data.get(fileNamePrefix.concat("_name"))+"_"+new DateTime());
+                        lobData.put("name",getDateWithoutSpecialCharacters(String.valueOf(data.get(fileNamePrefix.concat("_name")))));
                         lobData.put("file_mimetype",data.get(fileNamePrefix.concat("_mimetype")));
                         lobData.put("file_stream",entry.getValue());
                         lobData.put("file_size",data.get(fileNamePrefix.concat("_size")));
@@ -103,6 +103,13 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
             response.setStatus(ResponseStatus.FAILURE, ex);
         }
         return response;
+    }
+
+    private static String getDateWithoutSpecialCharacters(String filename) {
+        String timestampVal =  StringUtils.replace(StringUtils.replace(
+                StringUtils.replace(StringUtils.replace(StringUtils.substringBefore(new DateTime().toString(), "."), "-", ""), ":", "")
+                ,".","")," ","");
+        return StringUtils.substringBeforeLast(filename, ".")+"_"+timestampVal+"."+StringUtils.substringAfterLast(filename, ".");
     }
 
 
