@@ -147,6 +147,7 @@ public class FormBuilderPipelineController {
                 variables.put(entry.getKey(),new VariableData(entry.getValue()));
             }
             //Inject custom attributes
+            variables.put("form_key", new VariableData("CCII"));
             variables.put("entity_key", new VariableData("CCII"));
             variables.put("subprocess_entity_key", new VariableData("cciiissue"));
             variables.put("files_entity_key", new VariableData("cciifiles"));
