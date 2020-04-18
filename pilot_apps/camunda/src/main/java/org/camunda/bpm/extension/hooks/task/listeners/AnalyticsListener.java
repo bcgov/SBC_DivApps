@@ -134,7 +134,11 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
      * @return
      */
     private Map<String,Object> injectPrimaryKey(DelegateExecution execution,Map<String,Object> variables) {
-        variables.put("pid",execution.getProcessInstanceId());
+        if(execution.getVariables().containsKey("feature_by") && "task".equals(String.valueOf(execution.getVariable("feature_by")))) {
+            variables.put("pid",execution.getVariable("pid"));
+        } else {
+            variables.put("pid",execution.getProcessInstanceId());
+        }
         return variables;
     }
 
