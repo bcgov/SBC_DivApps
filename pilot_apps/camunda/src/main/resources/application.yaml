@@ -73,7 +73,7 @@ security:
 
 logging:
   level:
-    root: ${APP_ROOT_LOG_FLAG}
+    root: ERROR
     org.springframework.security: INFO
 
 plugin.identity.keycloak.rest:
