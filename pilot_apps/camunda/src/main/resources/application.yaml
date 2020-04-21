@@ -14,6 +14,8 @@ spring.datasource:
   username: ${JDBC_USER:sa}
   password: ${JDBC_PASSWORD:sa}
   driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+  hikari:
+    maximumPoolSize: ${CAMUNDA_MAX_POOLSIZE}
 #spring.h2.console.enabled: true
 
 analytics.datasource:
@@ -47,7 +49,7 @@ management:
 #    port: ${REDIS_PORT:6379}
 
 camunda.bpm:
-  history-level: audit
+  history-level: ${BPM_HISTORY_LEVEL}
   authorization:
     enabled: true
   filter:
@@ -69,7 +71,10 @@ security:
     resource:
       userInfoUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/userinfo
 
-logging.level.org.springframework.security: DEBUG
+logging:
+  level:
+    root: ${APP_ROOT_LOG_FLAG}
+    org.springframework.security: INFO
 
 plugin.identity.keycloak.rest:
   userNameClaim: preferred_username
