@@ -1,0 +1,72 @@
+.alert-danger {
+  color: #359241;
+  background-color: #b1f6ba;
+  border-color: #99fab1;
+}
+
+.btn-primary{
+  background-color: #0c8301;
+  border-color: #002a02;
+}
+
+.btn-primary.hover, .btn-primary:hover, .btn-primary.disabled:hover, .btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover, .btn-primary.disabled.hover, .btn-primary[disabled].hover,
+fieldset[disabled] .btn-primary.hover,
+.btn-primary.focus, .btn-primary:focus, .btn-primary.disabled:focus, .btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus {
+  background-color: #00661a;
+  border-color: #002a02;
+}
+
+.btn-primary:active:not(:hover), .btn-primary.active:not(.hover), .btn-primary.disabled:active:not(:hover), .btn-primary[disabled]:active:not(:hover),
+fieldset[disabled] .btn-primary:active:not(:hover), .btn-primary.disabled.active:not(.hover), .btn-primary[disabled].active:not(.hover),
+fieldset[disabled] .btn-primary.active:not(.hover),
+.btn-primary:active:hover, .btn-primary.active.hover, .btn-primary.disabled:active:hover, .btn-primary[disabled]:active:hover,
+fieldset[disabled] .btn-primary:active:hover, .btn-primary.disabled.active.hover, .btn-primary[disabled].active.hover,
+fieldset[disabled] .btn-primary.active.hover,
+.btn-primary:active, .btn-primary.active, .btn-primary.disabled:active, .btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active{
+  background-color: #004209;
+  border-color: #002a02;
+}
+
+ .navbar-brand {
+  text-indent: -999em;
+  background-image: url(./gov_bc_logo.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 200px;
+  margin: 3px 2px;
+}
+
+[cam-widget-header] {
+  border-top: #359251;
+  background-color: #00661a;
+}
+
+[cam-widget-header] a, [cam-widget-header] a:hover, [cam-widget-header] a:focus{
+  color: #fff;
+}
+
+.three-cols-layout .column-left .list-unstyled>.item.active, .three-cols-layout .column-center .list-unstyled>li.active, .three-cols-layout .column-left .list-unstyled>.item.active:hover, .three-cols-layout .column-center .list-unstyled>li.active:hover {
+  border-color: #00661a;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  border-bottom: #00661a;
+}
+
+aside li.active>a {
+  border-left-color: #00661a;
+}
+
+.navbar-header:after {
+  content: "Service Flow";
+  display: inline-flex;
+  color: #fff;
+  font-size: 35px;
+  padding: 7px;
+  line-height: 36px;
+}

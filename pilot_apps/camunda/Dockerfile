@@ -1,9 +1,18 @@
 # maven build
 FROM maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
+
+# set env to dev/test/prod
+ENV env=prod
+
 COPY pom-docker.xml /tmp/pom.xml
 COPY src /tmp/src/
 COPY settings-docker.xml /usr/share/maven/ref/
+
+# apply styling based on ENV var
+COPY user-styles /tmp/user-styles
 WORKDIR /tmp/
+RUN ./user-styles/user-style.sh $env
+
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
