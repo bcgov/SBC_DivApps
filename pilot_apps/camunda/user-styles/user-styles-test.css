@@ -1,0 +1,84 @@
+.alert-danger {
+  color: rgb(183, 183, 54);
+  background-color: #f6f1b1;
+  border-color: #faf099;
+}
+
+.btn-primary{
+  background-color: rgb(182, 182, 3);
+  border-color: #262a00;
+}
+
+.btn-primary.hover, .btn-primary:hover, .btn-primary.disabled:hover, .btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover, .btn-primary.disabled.hover, .btn-primary[disabled].hover,
+fieldset[disabled] .btn-primary.hover,
+.btn-primary.focus, .btn-primary:focus, .btn-primary.disabled:focus, .btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus {
+  background-color: rgb(155, 155, 0);
+  border-color: #262a00;
+}
+
+.btn-primary:active:not(:hover), .btn-primary.active:not(.hover), .btn-primary.disabled:active:not(:hover), .btn-primary[disabled]:active:not(:hover),
+fieldset[disabled] .btn-primary:active:not(:hover), .btn-primary.disabled.active:not(.hover), .btn-primary[disabled].active:not(.hover),
+fieldset[disabled] .btn-primary.active:not(.hover),
+.btn-primary:active:hover, .btn-primary.active.hover, .btn-primary.disabled:active:hover, .btn-primary[disabled]:active:hover,
+fieldset[disabled] .btn-primary:active:hover, .btn-primary.disabled.active.hover, .btn-primary[disabled].active.hover,
+fieldset[disabled] .btn-primary.active.hover,
+.btn-primary:active, .btn-primary.active, .btn-primary.disabled:active, .btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active{
+  background-color: rgb(83, 83, 0);
+  border-color: #262a00;
+}
+
+ .navbar-brand {
+  text-indent: -999em;
+  background-image: url(./gov_bc_logo.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 200px;
+  margin: 3px 2px;
+}
+
+[cam-widget-header] {
+  border-top: rgb(179, 179, 54);;
+  background-color: rgb(200, 197, 3);
+}
+
+[cam-widget-header] a, [cam-widget-header] a:hover, [cam-widget-header] a:focus{
+  color: #fff;
+}
+
+.three-cols-layout .column-left .list-unstyled>.item.active, .three-cols-layout .column-center .list-unstyled>li.active, .three-cols-layout .column-left .list-unstyled>.item.active:hover, .three-cols-layout .column-center .list-unstyled>li.active:hover {
+  border-color: rgb(155, 155, 0);
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  border-bottom: rgb(155, 155, 0);
+}
+
+aside li.active>a {
+  border-left-color: rgb(155, 155, 0);
+}
+
+.navbar-header:after {
+  content: "Service Flow";
+  display: inline-flex;
+  color: #fff;
+  font-size: 35px;
+  padding: 7px;
+  line-height: 36px;
+}
+
+.dropdown-menu > li:hover > a {
+  border-color: rgb(155, 155, 0);
+}
+
+aside li:hover>a {
+  border-left-color: rgb(155, 155, 0);
+}
+
+.three-cols-layout .column-left .list-unstyled>.item:hover, .three-cols-layout .column-center .list-unstyled>li:hover {
+  border-color: rgb(155, 155, 0);
+}
