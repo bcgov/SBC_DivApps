@@ -4,6 +4,15 @@ COPY pom-docker.xml /tmp/pom.xml
 COPY src /tmp/src/
 COPY settings-docker.xml /usr/share/maven/ref/
 WORKDIR /tmp/
+
+# set env to dev/test/prod
+ENV env=${APP_PROFILE}
+
+# apply styling based on ENV var
+COPY user-styles /tmp/user-styles
+WORKDIR /tmp/
+RUN ./user-styles/user-style.sh $env
+
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
