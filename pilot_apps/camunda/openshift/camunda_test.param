@@ -1,0 +1,3 @@
+APPLICATION_DOMAIN=test-serviceflow.pathfinder.gov.bc.ca
+IMAGE_TAG=test
+KEYCLOAK_URL=https://sso-test.pathfinder.gov.bc.ca
