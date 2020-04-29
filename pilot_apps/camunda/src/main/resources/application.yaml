@@ -16,6 +16,7 @@ spring.datasource:
   driverClassName: ${JDBC_DRIVER:org.h2.Driver}
   hikari:
     maximumPoolSize: ${CAMUNDA_MAX_POOLSIZE}
+    connectionTimeout: ${CAMUNDA_CONN_TIMEOUT}
 #spring.h2.console.enabled: true
 
 analytics.datasource:
@@ -82,6 +83,7 @@ logging:
     root: ${APP_ROOT_LOG_FLAG}
     org.springframework.security: ${APP_ROOT_LOG_FLAG}
     org.springframework.web: ${APP_ROOT_LOG_FLAG}
+    org.springframework.jdbc: ${APP_ROOT_LOG_FLAG}
     org.camunda.bpm.extension: ${APP_ROOT_LOG_FLAG}
 
 
