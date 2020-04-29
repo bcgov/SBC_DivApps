@@ -43,6 +43,9 @@ spring:
       seconds: ${SESSION_STORE_TIMEOUT}
 
 management:
+  health:
+    db:
+      enabled: false
   endpoints:
     web:
       exposure:
