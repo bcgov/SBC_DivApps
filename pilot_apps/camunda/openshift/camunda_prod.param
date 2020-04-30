@@ -1,2 +1,3 @@
+APP_ROOT_LOG_FLAG=ERROR
 DATABASE_SERVICE_NAME=patroni-masterdivapps
 IMAGE_TAG=prod
