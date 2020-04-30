@@ -25,23 +25,14 @@ Please note that this config creates a configmap that needs to be updated with y
 
 Import the buildconfig into your tools workspace
 
-### Dev
-
-Ensure that the database and secrets file are properly set up, then:
-```
-$ oc process -f camunda_deployconfig.yaml --param-file=camunda_dev.param | oc -n hdhclr-dev apply -f -
-```
-
-### Test
+### Deploy
 
 Ensure that the database and secrets file are properly set up, then
 ```
-$ oc process -f camunda_deployconfig.yaml --param-file=camunda_test.param | oc -n hdhclr-test apply -f -
-```
-
-### Production
-
-Ensure that the database and secrets file are properly set up, then
-```
-$ oc process -f camunda_deployconfig.yaml --param-file=camunda_prod.param | oc -n hdhclr-prod apply -f -
+$ oc process -f camunda_deployconfig.yaml \
+    --param-file=camunda_[ENV].param \
+    -p APPLICATION_DOMAIN=[YOUR APP DNS NAME] \
+    -p KEYCLOAK_URL=https://[YOUR OIDC DNS NAME] \
+    -p SMTP_SERVER=[YOUR SMTP DNS NAME] \
+    | oc -n hdhclr-[ENV] apply -f -
 ```

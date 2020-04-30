@@ -9,7 +9,7 @@ objects:
       # send mails via SMTP
       mail.transport.protocol=smtp
 
-      mail.smtp.host=apps.smtp.gov.bc.ca
+      mail.smtp.host=${SMTP_SERVER}
       mail.smtp.port=25
       mail.smtp.auth=false
       mail.smtp.ssl.enable=false
@@ -183,11 +183,13 @@ objects:
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
+              httpGet:
+                path: /camunda/actuator/health
+                port: 8080
+                scheme: HTTP
               initialDelaySeconds: 120
               periodSeconds: 10
               successThreshold: 1
-              tcpSocket:
-                port: 8080
               timeoutSeconds: 3
             name: ${NAME}
             ports:
@@ -195,11 +197,13 @@ objects:
                 protocol: TCP
             readinessProbe:
               failureThreshold: 3
+              httpGet:
+                path: /camunda/actuator/health
+                port: 8080
+                scheme: HTTP
               initialDelaySeconds: 120
               periodSeconds: 60
               successThreshold: 1
-              tcpSocket:
-                port: 8080
               timeoutSeconds: 3
             resources:
               limits:
@@ -241,6 +245,9 @@ parameters:
   description: The location for your image streams (Tools Workspace).
   required: true
   value: hdhclr-tools
+- name: SMTP_SERVER
+  description: The domain name of the SMTP server for sending emails.
+  required: true
 - name: DATABASE_DRIVER
   description: The database driver used to connnect to the persistent storage.
   required: true
@@ -274,7 +281,7 @@ parameters:
 - name: BPM_HISTORY_LEVEL
   description: The history level used in Camunda BPM.
   required: true
-  value: none
+  value: auto
 - name: CAMUNDA_MAX_POOLSIZE
   description: The maximum size of the hikari database connection pool.
   required: true

@@ -1,3 +1,1 @@
-APPLICATION_DOMAIN=dev-serviceflow.pathfinder.gov.bc.ca
 IMAGE_TAG=dev
-KEYCLOAK_URL=https://sso-dev.pathfinder.gov.bc.ca
