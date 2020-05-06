@@ -17,6 +17,7 @@ spring.datasource:
   type: com.zaxxer.hikari.HikariDataSource
   maximumPoolSize: ${CAMUNDA_MAX_POOLSIZE}
   connectionTimeout: ${CAMUNDA_CONN_TIMEOUT}
+  validationTimeout: ${CAMUNDA_VALID_TIMEOUT}
 #spring.h2.console.enabled: true
 
 analytics.datasource:
