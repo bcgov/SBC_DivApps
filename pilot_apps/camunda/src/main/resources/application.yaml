@@ -85,9 +85,7 @@ logging:
   level:
     root: ${APP_ROOT_LOG_FLAG}
     com.zaxxer: DEBUG
-    org.springframework.security: ${APP_ROOT_LOG_FLAG}
-    org.springframework.web: ${APP_ROOT_LOG_FLAG}
-    org.springframework.jdbc: ${APP_ROOT_LOG_FLAG}
+    org.springframework: ${APP_ROOT_LOG_FLAG}
     org.camunda.bpm.extension: ${APP_ROOT_LOG_FLAG}
 
 
