@@ -83,7 +83,7 @@ security:
 
 logging:
   level:
-    root: ${APP_ROOT_LOG_FLAG}
+    ROOT: ${APP_ROOT_LOG_FLAG}
     com.zaxxer: DEBUG
     org.springframework.security: ${APP_ROOT_LOG_FLAG}
     org.springframework.web: ${APP_ROOT_LOG_FLAG}
