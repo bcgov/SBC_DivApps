@@ -64,10 +64,24 @@ camunda.bpm:
     enabled: true
   filter:
     create: All tasks
+  webapp:
+    csrf:
+      enable-secure-cookie: true
+    header-security:
+      content-security-policy-disabled: false
+      content-security-policy-value:  base-uri 'self';
+        img-src 'self' data:;
+        block-all-mixed-content;
+        form-action 'self';
+        frame-ancestors 'none';
+        object-src 'none'
 
 server:
   port: 8080
   servlet.context-path: /camunda
+  session:
+    cookie:
+      secure: true
 
 security:
   oauth2:
@@ -80,6 +94,9 @@ security:
       grant-type: authorization_code implicit refresh_token password client_credentials
     resource:
       userInfoUri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/userinfo
+  headers:
+    hsts: domain
+
 
 logging:
   level:
