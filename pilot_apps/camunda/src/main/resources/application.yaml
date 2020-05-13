@@ -9,6 +9,8 @@ formbuilder.pipeline.service.username: ${FORMBUILDER_PIPELINE_USERNAME}
 formbuilder.pipeline.service.password: ${FORMBUILDER_PIPELINE_PASSWORD}
 formbuilder.pipeline.service.bpm-url: ${FORMBUILDER_PIPELINE_BPM_URL}
 
+spring.data.mongodb.uri: ${MONGODB_URI}
+
 spring.datasource:
   jdbc-url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
   username: ${JDBC_USER:sa}
@@ -36,7 +38,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   session:
-    store-type: jdbc
+    store-type: mongodb
     jdbc:
       initialize-schema: always
     timeout:
