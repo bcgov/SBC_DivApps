@@ -1,7 +1,9 @@
-if (window.location.href.includes("http://test-") || window.location.href.includes("https://test-")) {
-  document.querySelector("[cam-widget-header]").style.backgroundColor = "yellow";
-} else if (window.location.href.includes("http://dev-") || window.location.href.includes("https://dev-")) {
+if (window.location.href.startsWith("https://test-")) {
+  document.querySelector("[cam-widget-header]").style.backgroundColor = "orange";
+} else if (window.location.href.startsWith("https://dev-")) {
   document.querySelector("[cam-widget-header]").style.backgroundColor = "green";
+} else if (window.location.href.startsWith("http://localhost")) {
+  document.querySelector("[cam-widget-header]").style.backgroundColor = "grey";
 }
 
 window.camCockpitConf = {
