@@ -17,10 +17,10 @@ spring.datasource:
   password: ${JDBC_PASSWORD:sa}
   driverClassName: ${JDBC_DRIVER:org.h2.Driver}
   type: com.zaxxer.hikari.HikariDataSource
-  connectionTimeout: ${HIKARI_CONN_TIMEOUT}
-  idleTimeout: ${HIKARI_IDLE_TIMEOUT}
-  maximumPoolSize: ${HIKARI_MAX_POOLSIZE}
-  validationTimeout: ${HIKARI_VALID_TIMEOUT}
+  connectionTimeout: ${HIKARI_CONN_TIMEOUT:30000}
+  idleTimeout: ${HIKARI_IDLE_TIMEOUT:600000}
+  maximumPoolSize: ${HIKARI_MAX_POOLSIZE:10}
+  validationTimeout: ${HIKARI_VALID_TIMEOUT:5000}
 
 #spring.h2.console.enabled: true
 
