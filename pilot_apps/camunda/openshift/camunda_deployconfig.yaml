@@ -67,8 +67,8 @@ objects:
         targetPort: 8080
     selector:
       app: ${NAME}
-- apiVersion: apps/v1
-  kind: StatefulSet
+- apiVersion: v1
+  kind: DeploymentConfig
   metadata:
     annotations:
     labels:
@@ -77,9 +77,7 @@ objects:
   spec:
     replicas: 2
     selector:
-      matchLabels:
-        app: ${NAME}
-    serviceName: ${NAME}
+      app: ${NAME}
     strategy:
       activeDeadlineSeconds: 21600
       resources: {}
@@ -182,15 +180,14 @@ objects:
               value: ${APP_ROOT_LOG_FLAG}
             - name: BPM_HISTORY_LEVEL
               value: ${BPM_HISTORY_LEVEL}
-            - name: HIKARI_MAX_POOLSIZE
-              value: ${HIKARI_MAX_POOLSIZE}
-            - name: SESSION_STORE_TYPE
-              value: ${SESSION_STORE_TYPE}
-            - name: SESSION_STORE_TIMEOUT
-              value: ${SESSION_STORE_TIMEOUT}
             - name: HIKARI_CONN_TIMEOUT
               value: ${HIKARI_CONN_TIMEOUT}
-            image: docker-registry.default.svc:5000/${TOOLS_WORKSPACE}/${NAME}:${IMAGE_TAG}
+            - name: HIKARI_MAX_POOLSIZE
+              value: ${HIKARI_MAX_POOLSIZE}
+            - name: SESSION_STORE_TIMEOUT
+              value: ${SESSION_STORE_TIMEOUT}
+            - name: SESSION_STORE_TYPE
+              value: ${SESSION_STORE_TYPE}
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -198,7 +195,7 @@ objects:
                 path: /camunda/actuator/health
                 port: 8080
                 scheme: HTTP
-              initialDelaySeconds: 120
+              initialDelaySeconds: 60
               periodSeconds: 10
               successThreshold: 1
               timeoutSeconds: 3
@@ -212,7 +209,7 @@ objects:
                 path: /camunda/actuator/health
                 port: 8080
                 scheme: HTTP
-              initialDelaySeconds: 120
+              initialDelaySeconds: 60
               periodSeconds: 60
               successThreshold: 1
               timeoutSeconds: 3
@@ -242,6 +239,18 @@ objects:
                   path: mail-config.properties
               name: camunda-mail-setup
             name: camunda-mail-volume
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${NAME}:${IMAGE_TAG}
+          namespace: ${TOOLS_WORKSPACE}
+      type: ImageChange
 parameters:
 - name: NAME
   description: The name for all created objects.
@@ -294,15 +303,15 @@ parameters:
 - name: HIKARI_MAX_POOLSIZE
   description: The maximum size of the hikari database connection pool.
   required: true
-  value: "20"
+  value: "10"
 - name: HIKARI_CONN_TIMEOUT
   description: The milliseconds after which if hikari cannot provide a connection it throws an exception.
   required: true
-  value: "5000"
+  value: "30000"
 - name: SESSION_STORE_TYPE
-  description: The spring session type: jdbc, mongodb, none, or redis (hazelcast not yet in this build)
+  description: The spring session type of jdbc, mongodb, or none (redis and hazelcast not included in this build)
   required: true
-  value: "28800"
+  value: none
 - name: SESSION_STORE_TIMEOUT
   description: The spring session timeout for browser connections, in seconds.
   required: true
