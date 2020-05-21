@@ -9,7 +9,7 @@ formbuilder.pipeline.service.username: ${FORMBUILDER_PIPELINE_USERNAME}
 formbuilder.pipeline.service.password: ${FORMBUILDER_PIPELINE_PASSWORD}
 formbuilder.pipeline.service.bpm-url: ${FORMBUILDER_PIPELINE_BPM_URL}
 
-spring.data.mongodb.uri: ${MONGODB_URI}
+spring.data.mongodb.uri: ${MONGODB_URI:mongodb://localhost}
 
 spring.datasource:
   jdbc-url: ${JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
