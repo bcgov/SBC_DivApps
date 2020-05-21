@@ -45,7 +45,7 @@ spring:
 #    port: ${REDIS_PORT:6379}
   session:
     jdbc.initialize-schema: always
-    redis.flush-mode: immediate
+#    redis.flush-mode: immediate
     store-type: ${SESSION_STORE_TYPE:none}
     timeout.seconds: ${SESSION_STORE_TIMEOUT:28800}
 
