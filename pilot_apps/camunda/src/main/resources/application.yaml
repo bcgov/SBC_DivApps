@@ -40,12 +40,8 @@ spring:
           issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
   main:
     allow-bean-definition-overriding: true
-#  redis:
-#    host: ${REDIS_HOST:localhost}
-#    port: ${REDIS_PORT:6379}
   session:
     jdbc.initialize-schema: always
-#    redis.flush-mode: immediate
     store-type: ${SESSION_STORE_TYPE:none}
     timeout.seconds: ${SESSION_STORE_TIMEOUT:28800}
 
@@ -57,6 +53,13 @@ management:
     web:
       exposure:
         include: "health"
+# Redis Session Cache not yet in use
+#  session:
+#    store-type: ${SESSION_STORE_TYPE:none}
+#    redis.flush-mode: immediate
+#  redis:
+#    host: ${REDIS_HOST:localhost}
+#    port: ${REDIS_PORT:6379}
 
 camunda.bpm:
   history-level: ${BPM_HISTORY_LEVEL}
