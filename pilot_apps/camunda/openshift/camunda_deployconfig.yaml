@@ -75,12 +75,21 @@ objects:
       app: ${NAME}
     name: ${NAME}
   spec:
-    podManagementPolicy: Parallel
-    replicas: 3
+    replicas: 2
     selector:
       matchLabels:
         app: ${NAME}
     serviceName: ${NAME}
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
     template:
       metadata:
         labels:
@@ -173,12 +182,14 @@ objects:
               value: ${APP_ROOT_LOG_FLAG}
             - name: BPM_HISTORY_LEVEL
               value: ${BPM_HISTORY_LEVEL}
-            - name: CAMUNDA_MAX_POOLSIZE
-              value: ${CAMUNDA_MAX_POOLSIZE}
+            - name: HIKARI_MAX_POOLSIZE
+              value: ${HIKARI_MAX_POOLSIZE}
+            - name: SESSION_STORE_TYPE
+              value: ${SESSION_STORE_TYPE}
             - name: SESSION_STORE_TIMEOUT
               value: ${SESSION_STORE_TIMEOUT}
-            - name: CAMUNDA_CONN_TIMEOUT
-              value: ${CAMUNDA_CONN_TIMEOUT}
+            - name: HIKARI_CONN_TIMEOUT
+              value: ${HIKARI_CONN_TIMEOUT}
             image: docker-registry.default.svc:5000/${TOOLS_WORKSPACE}/${NAME}:${IMAGE_TAG}
             imagePullPolicy: Always
             livenessProbe:
@@ -231,8 +242,6 @@ objects:
                   path: mail-config.properties
               name: camunda-mail-setup
             name: camunda-mail-volume
-    updateStrategy:
-      type: RollingUpdate
 parameters:
 - name: NAME
   description: The name for all created objects.
@@ -282,14 +291,18 @@ parameters:
   description: The history level used in Camunda BPM.
   required: true
   value: auto
-- name: CAMUNDA_MAX_POOLSIZE
+- name: HIKARI_MAX_POOLSIZE
   description: The maximum size of the hikari database connection pool.
   required: true
   value: "20"
-- name: CAMUNDA_CONN_TIMEOUT
-  description: The maximum milliseconds to wait for a connection from the pool.
+- name: HIKARI_CONN_TIMEOUT
+  description: The milliseconds after which if hikari cannot provide a connection it throws an exception.
   required: true
   value: "5000"
+- name: SESSION_STORE_TYPE
+  description: The spring session type: jdbc, mongodb, none, or redis (hazelcast not yet in this build)
+  required: true
+  value: "28800"
 - name: SESSION_STORE_TIMEOUT
   description: The spring session timeout for browser connections, in seconds.
   required: true
