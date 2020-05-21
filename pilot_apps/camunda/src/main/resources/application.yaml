@@ -40,9 +40,9 @@ spring:
           issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
   main:
     allow-bean-definition-overriding: true
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+#  redis:
+#    host: ${REDIS_HOST:localhost}
+#    port: ${REDIS_PORT:6379}
   session:
     jdbc.initialize-schema: always
     redis.flush-mode: immediate
