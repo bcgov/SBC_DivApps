@@ -75,6 +75,14 @@ camunda.bpm:
         form-action 'self';
         frame-ancestors 'none';
         object-src 'none'
+  job-execution:
+    core-pool-size: ${JOB_CORE_POOL_SIZE:3}
+    lock-time-in-millis: ${JOB_LOCK_TIME_MILLIS:300000}
+    max-jobs-per-acquisition: ${JOB_MAXJOBS_PER_ACQUISITION:3}
+    max-pool-size: ${JOB_MAX_POOL_SIZE:10}
+    queue-capacity: ${JOB_QUEUE_SIZE:3}
+    wait-time-in-millis: ${JOB_WAIT_TIME_MILLIS:5000}
+    max-wait: ${JOB_MAX_WAIT:60000}
 
 server:
   port: 8080
@@ -100,7 +108,6 @@ security:
 
 logging:
   level:
-    root: ${APP_ROOT_LOG_FLAG}
     org.springframework.security: ${APP_ROOT_LOG_FLAG}
     org.springframework.web: ${APP_ROOT_LOG_FLAG}
     org.springframework.jdbc: ${APP_ROOT_LOG_FLAG}
