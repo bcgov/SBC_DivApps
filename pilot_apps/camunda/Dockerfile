@@ -12,9 +12,11 @@ FROM adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
 
 ENV JAVA_VERSION jdk-11.0.3+7
 ENV JAVA_HOME=/opt/java/openjdk \
-    PATH="/opt/java/openjdk/bin:$PATH"
+  PATH="/opt/java/openjdk/bin:$PATH"
 
 EXPOSE 8080
+# OpenShift has /app in the image, but it's missing when doing local development - create it when missing.
+RUN test ! -d /app && mkdir /app || :
 # add spring boot application
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/camunda-bpm-identity-keycloak-examples-sso-kubernetes*.jar ./app
 RUN chmod a+rwx -R /app
