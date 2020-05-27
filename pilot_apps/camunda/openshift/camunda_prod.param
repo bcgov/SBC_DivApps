@@ -1,4 +1,5 @@
 APP_ROOT_LOG_FLAG=ERROR
 DATABASE_SERVICE_NAME=patroni-masterdivapps
 IMAGE_TAG=prod
+MONGODB_SECRET=mongodivapps
 SESSION_STORE_TYPE=mongodb
