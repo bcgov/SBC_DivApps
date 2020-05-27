@@ -188,6 +188,25 @@ objects:
               value: ${SESSION_STORE_TIMEOUT}
             - name: SESSION_STORE_TYPE
               value: ${SESSION_STORE_TYPE}
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  key: mongo-url
+                  name: ${MONGODB_SECRET}
+            - name: JOB_CORE_POOL_SIZE
+              value: "3"
+            - name: JOB_LOCK_TIME_MILLIS
+              value: "300000"
+            - name: JOB_MAXJOBS_PER_ACQUISITION
+              value: "3"
+            - name: JOB_MAX_POOL_SIZE
+              value: "10"
+            - name: JOB_QUEUE_SIZE
+              value: "3"
+            - name: JOB_WAIT_TIME_MILLIS
+              value: "5000"
+            - name: JOB_MAX_WAIT
+              value: "60000"
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -308,6 +327,10 @@ parameters:
   description: The milliseconds after which if hikari cannot provide a connection it throws an exception.
   required: true
   value: "30000"
+- name: MONGODB_SECRET
+  description: The name of the secret that contains the "mongo-url" setting used to connect to MongoDB.
+  required: true
+  value: mongodb
 - name: SESSION_STORE_TYPE
   description: The spring session type of jdbc, mongodb, or none (redis and hazelcast not included in this build)
   required: true
