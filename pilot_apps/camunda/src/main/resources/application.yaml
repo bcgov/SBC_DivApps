@@ -86,7 +86,8 @@ camunda.bpm:
     queue-capacity: ${JOB_QUEUE_SIZE:3}
     wait-time-in-millis: ${JOB_WAIT_TIME_MILLIS:5000}
     max-wait: ${JOB_MAX_WAIT:60000}
-
+  metrics:
+    enabled: ${METRICS_FLAG:true}
 server:
   port: 8080
   servlet.context-path: /camunda
