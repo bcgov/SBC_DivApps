@@ -64,7 +64,7 @@ management:
 camunda.bpm:
   history-level: ${BPM_HISTORY_LEVEL}
   authorization:
-    enabled: ${AUTHORIZATION_FLAG}
+    enabled: ${AUTHORIZATION_FLAG:true}
   filter:
     create: All tasks
   webapp:
