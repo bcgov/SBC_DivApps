@@ -69,6 +69,7 @@ camunda.bpm:
   filter:
     create: All tasks
   webapp:
+    application-path: /
     csrf:
       enable-secure-cookie: true
     header-security:
@@ -118,6 +119,11 @@ logging:
     org.springframework.jdbc: ${APP_ROOT_LOG_FLAG}
     org.camunda.bpm.extension: ${APP_ROOT_LOG_FLAG}
 
+# Camunda Rest API
+rest.security:
+  enabled: true
+  jwk-set-url: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/certs
+  required-audience: camunda-rest-api
 
 plugin.identity.keycloak.rest:
   userNameClaim: preferred_username
