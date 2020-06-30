@@ -69,6 +69,7 @@ camunda.bpm:
   filter:
     create: All tasks
   webapp:
+    application-path: /
     csrf:
       enable-secure-cookie: true
     header-security:
