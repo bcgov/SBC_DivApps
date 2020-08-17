@@ -4,6 +4,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.extension.hooks.services.analytics.SimpleDBDataPipeline;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
@@ -32,10 +33,14 @@ public class AutoCloseListener implements ExecutionListener {
         List<ProcessInstance> processInstances = getAllProcessInstances(execution);
         for(ProcessInstance entry: processInstances) {
             Map<String, Object> processVariables = getVariables(execution, entry);
-            int isolationAge = CalculateIsodationAge(processVariables);
-            if(isolationAge > expireInDays) {
-                dbdatapipeline.execute(updateVariables(processVariables,execution.getVariables()));
-                execution.getProcessEngineServices().getRuntimeService().deleteProcessInstance(entry.getProcessInstanceId(),"Delete", true, true);
+            String arrivalDate = processVariables.containsKey("citizen_arrival_date") && processVariables.get("citizen_arrival_date") != null ?
+                    String.valueOf(processVariables.get("citizen_arrival_date")) : null;
+            if(StringUtils.isNotBlank(arrivalDate)) {
+                int isolationAge = CalculateIsolationAge(arrivalDate);
+                if (isolationAge > expireInDays) {
+                    dbdatapipeline.execute(updateVariables(processVariables, execution.getVariables()));
+                    execution.getProcessEngineServices().getRuntimeService().deleteProcessInstance(entry.getProcessInstanceId(), "Delete", true, true);
+                }
             }
         }
     }
@@ -50,8 +55,7 @@ public class AutoCloseListener implements ExecutionListener {
         return processInstances;
     }
 
-    private Integer CalculateIsodationAge(Map<String, Object> processVariables) {
-        String arrivalDate = (String) processVariables.get("citizen_arrival_date");
+    private Integer CalculateIsolationAge(String arrivalDate) {
         String[] split = arrivalDate.split("-");
         LocalDate arrival = LocalDate.of(Integer.valueOf(split[0]), Integer.valueOf(split[1]), Integer.valueOf(split[2]));
         LocalDate now = LocalDate.now();
