@@ -47,19 +47,19 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
             String arrivalDate = processVariables.containsKey("citizen_arrival_date") && processVariables.get("citizen_arrival_date") != null ?
                     String.valueOf(processVariables.get("citizen_arrival_date")) : null;
             //Condition#1 : Expire when arrival date exceeds isolation period
-            Boolean deleteEntry = Boolean.FALSE;
+            String conditionId = null;
             if(StringUtils.isNotBlank(arrivalDate) && CalculateIsolationAge(arrivalDate) > expireInDays) {
-                    deleteEntry = Boolean.TRUE;
+                conditionId = AutocloseCondition.PAST_ISOLATION_PERIOD.name();
             }
             //Condition#2 : Age is under 12.
             String dob = processVariables.containsKey("citizen_birth_date") && processVariables.get("citizen_birth_date") != null ?
                     String.valueOf(processVariables.get("citizen_birth_date")) : null;
             if(StringUtils.isNotBlank(dob) && CalculateAge(dob) < 12) {
-                    deleteEntry = Boolean.TRUE;
+                conditionId = AutocloseCondition.AGE_UNDER_12.name();
             }
-            if(deleteEntry) {
+            if(StringUtils.isNotBlank(conditionId)) {
                 try {
-                    Map<String,Object> rspVariableMap = dbdatapipeline.execute(updateVariables(processVariables, execution.getVariables()));
+                    Map<String,Object> rspVariableMap = dbdatapipeline.execute(updateVariables(processVariables, execution.getVariables(), conditionId));
                     execution.getProcessEngineServices().getRuntimeService().deleteProcessInstance(entry.getProcessInstanceId(), "Delete", true, true);
                     deletedInstances.add(entry.getProcessInstanceId());
                     notifyForAttention(execution, entry.getProcessInstanceId(), rspVariableMap);
@@ -67,10 +67,10 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
                     LOGGER.log(Level.SEVERE, "Exception occurred while closing pid:"+entry.getProcessInstanceId(), ex);
                     notifyForAttention(execution, entry.getProcessInstanceId(), ExceptionUtils.exceptionStackTraceAsString(ex));
                 }
-                }
             }
-            LOGGER.info("End - AutoClose job. Count ="+deletedInstances.size());
-            LOGGER.info("End - AutoClose job. Deleted Instances = "+deletedInstances);
+        }
+        LOGGER.info("End - AutoClose job. Count ="+deletedInstances.size());
+        LOGGER.info("End - AutoClose job. Deleted Instances = "+deletedInstances);
     }
 
     private List<ProcessInstance> getAllProcessInstances(DelegateExecution execution) {
@@ -101,9 +101,18 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
         return execution.getProcessEngineServices().getRuntimeService().getVariables(processInstance.getId());
     }
 
-    private Map<String,Object> updateVariables(Map<String, Object> processVariables,Map<String, Object> variables) {
+    private Map<String,Object> updateVariables(Map<String, Object> processVariables,Map<String, Object> variables, String conditionId) {
         for(Map.Entry<String,Object> entry: variables.entrySet()) {
             processVariables.put(entry.getKey(),entry.getValue());
+        }
+        if(AutocloseCondition.PAST_ISOLATION_PERIOD.name().equals(conditionId)) {
+            processVariables.put("action",variables.get("past_isolation_action_msg"));
+            processVariables.put("feedback",variables.get("past_isolation_feedback_msg"));
+
+        } else if(AutocloseCondition.AGE_UNDER_12.name().equals(conditionId)) {
+            processVariables.put("action",variables.get("citizen_age_action_msg"));
+            processVariables.put("feedback",variables.get("citizen_age_feedback_msg"));
+        } else {
         }
         return processVariables;
     }
@@ -119,17 +128,22 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
     }
 
     private void notifyForAttention(DelegateExecution execution, String pid,String exception){
-            Map<String,Object> exVarMap = new HashMap<>();
-            //Additional Response Fields - BEGIN
-            exVarMap.put("pid",pid);
-            exVarMap.put("subject","Exception Alert: AutoClose Job");
-            exVarMap.put("category","autoclose_service_exception");
-            StringValue exceptionDataValue = Variables.stringValue(exception,true);
-            exVarMap.put("exception",exceptionDataValue);
-            //Additional Response Fields - END
-            sendMessage(execution,exVarMap);
-            LOGGER.info("\n\nMessage sent! " + "\n\n");
+        Map<String,Object> exVarMap = new HashMap<>();
+        //Additional Response Fields - BEGIN
+        exVarMap.put("pid",pid);
+        exVarMap.put("subject","Exception Alert: AutoClose Job");
+        exVarMap.put("category","autoclose_service_exception");
+        StringValue exceptionDataValue = Variables.stringValue(exception,true);
+        exVarMap.put("exception",exceptionDataValue);
+        //Additional Response Fields - END
+        sendMessage(execution,exVarMap);
+        LOGGER.info("\n\nMessage sent! " + "\n\n");
 
+    }
+
+    enum AutocloseCondition {
+        PAST_ISOLATION_PERIOD,
+        AGE_UNDER_12;
     }
 
 
