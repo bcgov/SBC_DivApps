@@ -86,6 +86,12 @@ public class CamundaApplication {
         return new NamedParameterJdbcTemplate(analyticsDS);
     }
 
+	@Bean("bpmJdbcTemplate")
+	public NamedParameterJdbcTemplate bpmJdbcTemplate(@Qualifier("camundaBpmDataSource") DataSource camundaBpmDataSource) {
+		return new NamedParameterJdbcTemplate(camundaBpmDataSource);
+	}
+
+
 	@Bean
 	@ConfigurationProperties(prefix = "security.oauth2.client")
 	public Properties clientCredentialProperties() {
