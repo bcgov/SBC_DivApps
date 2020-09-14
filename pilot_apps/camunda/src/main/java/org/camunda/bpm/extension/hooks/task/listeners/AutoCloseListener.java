@@ -69,7 +69,10 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
     }
 
     private Map<String, Object> getVariables(DelegateExecution execution, String processInstanceId) {
-        return execution.getProcessEngineServices().getRuntimeService().getVariables(processInstanceId);
+        Map<String,Object> variables = execution.getProcessEngineServices().getRuntimeService().getVariables(processInstanceId);
+        String entityKey = MapUtils.isNotEmpty(variables) ?  MapUtils.getString(variables,"entity_key", null) : null;
+        if(StringUtils.isNotEmpty(entityKey)) {return variables;}
+        return null;
     }
 
     private List<AutoCloseProcessInstance> getAllProcessInstances() {
