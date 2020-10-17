@@ -1,7 +1,7 @@
 # Camunda
 
 This is a modified build of Camunda that includes:
-* Camunda BPM 7.12 with Postgresql
+* Camunda BPM with Postgresql
 * Camunda Process Engine
 * SSO Keycloak Integration
 * Keycloak integration to the Process Engine
