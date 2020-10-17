@@ -227,7 +227,6 @@ parameters:
 - name: TOOLS_WORKSPACE
   description: The location for your image streams (Tools Workspace).
   required: true
-  value: hdhclr-tools
 - name: SMTP_SERVER
   description: The domain name of the SMTP server for sending emails.
   required: true
@@ -248,35 +247,35 @@ parameters:
   required: true
   value: "5432"
 - name: APPLICATION_DOMAIN
-  description: The exposed hostname that will route to the Vue application
+  description: The exposed hostname that will route to the Vue application. IE. workflow.<domain>.com
   required: true
 - name: DB_USERNAME
   description: The postgres database username.
   required: true  
 - name: DB_PASSWORD
-  description: The postgrs database password.
+  description: The postgres database password.
   required: true
 - name: KEYCLOAK_URL
   description: The URL used to connnect to the OIDC provider.
   required: true
 - name: KEYCLOAK_REALM
-  description: The URL used to connnect to the OIDC provider.
+  description: The realm used to connnect to the OIDC provider.
   required: true
 - name: KEYCLOAK_CLIENTID
-  description: The URL used to connnect to the OIDC provider.
+  description: The clientid used to connnect to the OIDC provider.
   required: true
 - name: KEYCLOAK_CLIENTSECRET
-  description: The URL used to connnect to the OIDC provider.
+  description: The client secret used to connnect to the OIDC provider.
   required: true
 - name: ANALYTICS_DB_JDBCURL
-  description: The database driver used to connnect to the analytics database.
+  description: The database url used to connnect to the analytics database.
   required: true
 - name: ANALYTICS_DB_USERNAME
-  description: The database driver used to connnect to the analytics database.
+  description: The database username used to connnect to the analytics database.
   required: true
   value:
 - name: ANALYTICS_DB_PASSWORD
-  description: The database driver used to connnect to the analytics database.
+  description: The database password used to connnect to the analytics database.
   required: true
   value:
 - name: ANALYTICS_DB_DRIVER
