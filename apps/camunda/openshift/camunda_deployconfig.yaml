@@ -251,10 +251,10 @@ parameters:
   description: The exposed hostname that will route to the Vue application
   required: true
 - name: DB_USERNAME
-  description: The URL used to connnect to the OIDC provider.
+  description: The postgres database username.
   required: true  
 - name: DB_PASSWORD
-  description: The URL used to connnect to the OIDC provider.
+  description: The postgrs database password.
   required: true
 - name: KEYCLOAK_URL
   description: The URL used to connnect to the OIDC provider.
@@ -274,13 +274,15 @@ parameters:
 - name: ANALYTICS_DB_USERNAME
   description: The database driver used to connnect to the analytics database.
   required: true
+  value:
 - name: ANALYTICS_DB_PASSWORD
   description: The database driver used to connnect to the analytics database.
   required: true
+  value:
 - name: ANALYTICS_DB_DRIVER
   description: The database driver used to connnect to the analytics database.
   required: true
-  value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  value: org.postgresql.Driver
 - name: FORMBUILDER_PIPELINE_BPM_URL
   description: The URL for the formbuilder connection 
   required: true

@@ -2,10 +2,9 @@
 
 ## Prerequisites:
 * Postgres Database already exists
-
 <br/>
-## Orbeon API support:
-<br/><br/>
+
+## Feature: Orbeon API support:
 This implementation includes the ability to create an API for basic authentication to submit forms data to BPM.
 <br/><br/>
 formbuilder_bpm_url format is: 
@@ -19,6 +18,12 @@ Example URL for send action:
 ```
 https://{camunda_url}/camunda/engine-rest/process-definition/key/CC_Process/start
 ```
+
+## Feature: Ability to camunda data to another database
+
+In our case an analytics database.  
+
+If you do not have this requirement, set the analytics parmater values to be the same as the CAMUNDA database in the sample camunda_dev_param file.
 
 ## Deployment:
 Please note that this config creates a configmap that needs to be updated with your own smtp server information.

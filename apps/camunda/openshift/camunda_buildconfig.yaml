@@ -17,7 +17,7 @@ parameters:
   - name: SOURCE_CONTEXT_DIR
     displayName: Git context directory
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: /pilot_apps/camunda
+    value: /apps/camunda
 objects:
  -  kind: ImageStream
     apiVersion: v1
