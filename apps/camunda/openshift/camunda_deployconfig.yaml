@@ -75,7 +75,7 @@ objects:
       app: ${NAME}
     name: ${NAME}
   spec:
-    replicas: 2
+    replicas: 1
     selector:
       app: ${NAME}
     strategy:
@@ -110,103 +110,49 @@ objects:
             - name: JDBC_URL
               value: jdbc:postgresql://${DATABASE_SERVICE_NAME}:${DATABASE_PORT}/${DATABASE_NAME}
             - name: JDBC_USER
-              valueFrom:
-                secretKeyRef:
-                  key: db_username
-                  name: ${NAME}
+              value: ${DB_USERNAME}
             - name: JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: db_password
-                  name: ${NAME}
+              value: ${DB_PASSWORD}
             - name: WAIT_FOR
               value: ${DATABASE_SERVICE_NAME}:${DATABASE_PORT}
             - name: KEYCLOAK_URL
               value: ${KEYCLOAK_URL}
             - name: KEYCLOAK_URL_REALM
-              valueFrom:
-                secretKeyRef:
-                  key: keycloak_realm
-                  name: ${NAME}
+              value: ${KEYCLOAK_REALM}
             - name: KEYCLOAK_CLIENTID
-              valueFrom:
-                secretKeyRef:
-                  key: keycloak_clientid
-                  name: ${NAME}
+              value: ${KEYCLOAK_CLIENTID}
             - name: KEYCLOAK_CLIENTSECRET
-              valueFrom:
-                secretKeyRef:
-                  key: keycloak_clientsecret
-                  name: ${NAME}
+              value: ${KEYCLOAK_CLIENTSECRET}
             - name: DEBUG
               value: "False"
             - name: MAIL_CONFIG
               value: /app/mail-config.properties
             - name: ANALYTICS_DB_JDBCURL
-              valueFrom:
-                secretKeyRef:
-                  key: analytics_db_jdbcurl
-                  name: ${NAME}
+              value: ${ANALYTICS_DB_JDBCURL}
             - name: ANALYTICS_DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: analytics_db_username
-                  name: ${NAME}
+              value: ${ANALYTICS_DB_USERNAME}
             - name: ANALYTICS_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: analytics_db_password
-                  name: ${NAME}
+              value: ${ANALYTICS_DB_PASSWORD}
             - name: ANALYTICS_DB_DRIVER
               value: ${ANALYTICS_DB_DRIVER}
             - name: FORMBUILDER_PIPELINE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: formbuilder_username
-                  name: ${NAME}
+              value: ${FORMBUILDER_PIPELINE_USERNAME}
             - name: FORMBUILDER_PIPELINE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: formbuilder_password
-                  name: ${NAME}
+              value: ${FORMBUILDER_PIPELINE_PASSWORD}
             - name: FORMBUILDER_PIPELINE_BPM_URL
-              valueFrom:
-                secretKeyRef:
-                  key: formbuilder_bpm_url
-                  name: ${NAME}
+              value: ${FORMBUILDER_PIPELINE_BPM_URL}
             - name: TZ
               value: UTC
             - name: APP_ROOT_LOG_FLAG
               value: ${APP_ROOT_LOG_FLAG}
             - name: BPM_HISTORY_LEVEL
               value: ${BPM_HISTORY_LEVEL}
-            - name: HIKARI_CONN_TIMEOUT
-              value: ${HIKARI_CONN_TIMEOUT}
-            - name: HIKARI_MAX_POOLSIZE
-              value: ${HIKARI_MAX_POOLSIZE}
-            - name: SESSION_STORE_TIMEOUT
-              value: ${SESSION_STORE_TIMEOUT}
             - name: SESSION_STORE_TYPE
-              value: ${SESSION_STORE_TYPE}
-            - name: MONGODB_URI
-              valueFrom:
-                secretKeyRef:
-                  key: mongo-url
-                  name: ${MONGODB_SECRET}
-            - name: JOB_CORE_POOL_SIZE
-              value: "3"
-            - name: JOB_LOCK_TIME_MILLIS
-              value: "300000"
-            - name: JOB_MAXJOBS_PER_ACQUISITION
-              value: "3"
-            - name: JOB_MAX_POOL_SIZE
-              value: "10"
-            - name: JOB_QUEUE_SIZE
-              value: "3"
-            - name: JOB_WAIT_TIME_MILLIS
-              value: "5000"
-            - name: JOB_MAX_WAIT
-              value: "60000"
+              value: jdbc
+            - name: SESSION_STORE_TIMEOUT
+              value: "28800"
+            - name: JAVA_SYSTEM_PROPERTIES
+              value: -Xmx2048m
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -304,38 +250,55 @@ parameters:
 - name: APPLICATION_DOMAIN
   description: The exposed hostname that will route to the Vue application
   required: true
+- name: DB_USERNAME
+  description: The URL used to connnect to the OIDC provider.
+  required: true  
+- name: DB_PASSWORD
+  description: The URL used to connnect to the OIDC provider.
+  required: true
 - name: KEYCLOAK_URL
   description: The URL used to connnect to the OIDC provider.
+  required: true
+- name: KEYCLOAK_REALM
+  description: The URL used to connnect to the OIDC provider.
+  required: true
+- name: KEYCLOAK_CLIENTID
+  description: The URL used to connnect to the OIDC provider.
+  required: true
+- name: KEYCLOAK_CLIENTSECRET
+  description: The URL used to connnect to the OIDC provider.
+  required: true
+- name: ANALYTICS_DB_JDBCURL
+  description: The database driver used to connnect to the analytics database.
+  required: true
+- name: ANALYTICS_DB_USERNAME
+  description: The database driver used to connnect to the analytics database.
+  required: true
+- name: ANALYTICS_DB_PASSWORD
+  description: The database driver used to connnect to the analytics database.
   required: true
 - name: ANALYTICS_DB_DRIVER
   description: The database driver used to connnect to the analytics database.
   required: true
   value: com.microsoft.sqlserver.jdbc.SQLServerDriver
+- name: FORMBUILDER_PIPELINE_BPM_URL
+  description: The URL for the formbuilder connection 
+  required: true
+- name: FORMBUILDER_PIPELINE_USERNAME
+  description: The username for the formbuilder connection
+  required: true
+- name: FORMBUILDER_PIPELINE_PASSWORD
+  description: The password for the formbuilder connection.
+  required: true
 - name: APP_ROOT_LOG_FLAG
   description: The log4j logging level to use for the application logs.
   required: true
-  value: INFO
+  value: ERROR
 - name: BPM_HISTORY_LEVEL
   description: The history level used in Camunda BPM.
   required: true
   value: auto
-- name: HIKARI_MAX_POOLSIZE
-  description: The maximum size of the hikari database connection pool.
-  required: true
-  value: "10"
-- name: HIKARI_CONN_TIMEOUT
-  description: The milliseconds after which if hikari cannot provide a connection it throws an exception.
-  required: true
-  value: "30000"
-- name: MONGODB_SECRET
-  description: The name of the secret that contains the "mongo-url" setting used to connect to MongoDB.
-  required: true
-  value: mongodb
 - name: SESSION_STORE_TYPE
-  description: The spring session type of jdbc, mongodb, or none (redis and hazelcast not included in this build)
+  description: Session management for Multiple Pod implementations
   required: true
   value: none
-- name: SESSION_STORE_TIMEOUT
-  description: The spring session timeout for browser connections, in seconds.
-  required: true
-  value: "28800"
