@@ -4,6 +4,7 @@ import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,8 @@ import java.util.logging.Logger;
 public class NotifyListener implements TaskListener, IMessageEvent {
 
     private static final Logger log = Logger.getLogger(NotifyListener.class.getName());
+
+    private Expression messageName;
 
     @Value("${formbuilder.pipeline.service.bpm-url}")
     private String appcontexturl;
@@ -49,7 +52,7 @@ public class NotifyListener implements TaskListener, IMessageEvent {
             log.info("Inside notify attributes:" + emailAttributes);
             execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/?task="+taskId);
             if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
-                sendMessage(execution, emailAttributes);
+                sendMessage(execution, emailAttributes,getMessageName(execution));
             }
         }
     }
@@ -58,4 +61,9 @@ public class NotifyListener implements TaskListener, IMessageEvent {
         return StringUtils.remove(StringUtils.remove(appcontexturl, StringUtils.substringBetween(appcontexturl,"://","@")),"@");
     }
 
+
+
+    private String getMessageName(DelegateExecution execution){
+        return String.valueOf(this.messageName.getValue(execution));
+    }
 }

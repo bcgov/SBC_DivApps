@@ -22,12 +22,12 @@ public interface IMessageEvent extends IUser{
     Logger log = Logger.getLogger(IMessageEvent.class.getName());
 
 
-    default void sendMessage(DelegateExecution execution, Map<String,Object> messageVariables){
+    default void sendMessage(DelegateExecution execution, Map<String,Object> messageVariables,String messageId) {
         RuntimeService runtimeService = execution.getProcessEngineServices().getRuntimeService();
         Map<String,Object> eMessageVariables = new HashMap<>();
         eMessageVariables.putAll(messageVariables);
         eMessageVariables.putAll(injectFormDataInLightMode(execution));
-        runtimeService.startProcessInstanceByMessage("Message_Email",eMessageVariables);
+        runtimeService.startProcessInstanceByMessage(messageId,eMessageVariables);
         log.info("\n\nMessage sent! " + eMessageVariables+ "\n\n");
     }
 

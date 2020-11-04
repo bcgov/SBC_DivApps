@@ -111,9 +111,13 @@ public class AutoCloseListener implements ExecutionListener , IMessageEvent {
         StringValue exceptionDataValue = Variables.stringValue(exception, true);
         exVarMap.put("exception", exceptionDataValue);
         //Additional Response Fields - END
-        sendMessage(execution, exVarMap);
+        sendMessage(execution, exVarMap,getMessageName());
         LOGGER.info("\n\nMessage sent! " + "\n\n");
 
+    }
+
+    private String getMessageName(){
+        return "Service_Api_Message_Email";
     }
 }
 

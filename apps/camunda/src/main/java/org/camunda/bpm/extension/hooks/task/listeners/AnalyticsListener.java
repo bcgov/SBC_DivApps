@@ -4,13 +4,11 @@ package org.camunda.bpm.extension.hooks.task.listeners;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.DelegateTask;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
-import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.engine.delegate.*;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.FileValue;
 import org.camunda.bpm.engine.variable.value.StringValue;
+import org.camunda.bpm.extension.hooks.services.IFileService;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.camunda.bpm.extension.hooks.services.analytics.IDataPipeline;
 import org.camunda.bpm.extension.hooks.services.analytics.SimpleDBDataPipeline;
@@ -33,7 +31,7 @@ import java.util.logging.Logger;
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Named("analyticsDelegate")
-public class AnalyticsListener implements TaskListener, ExecutionListener, IMessageEvent {
+public class AnalyticsListener implements TaskListener, ExecutionListener, IMessageEvent, IFileService {
 
     @Autowired
     private SimpleDBDataPipeline dbdatapipeline;
@@ -54,6 +52,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                 + ", executionId=" + task.getId()
                 + ", variables=" + task.getVariables()
                 + " \n\n");
+        transformFiles(task);
         Map<String,Object> rspVariableMap = dbdatapipeline.execute(injectAdditionalProcessingFields(task.getExecution(),task.getExecution().getVariables()));
         notifyForAttention(task.getExecution(),rspVariableMap);
     }
@@ -156,7 +155,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                 }
             }
             //Additional Response Fields - END
-            sendMessage(execution,exVarMap);
+            sendMessage(execution,exVarMap,getMessageName());
             LOGGER.info("\n\nMessage sent! " + "\n\n");
         }
     }
@@ -165,4 +164,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         return UUID.randomUUID().toString();
     }
 
+    private String getMessageName(){
+        return "Service_Api_Message_Email";
+    }
 }
