@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
 
     private Expression escalationGroup;
+    private Expression messageName;
     private Expression currentDate;
     private static final Logger log = Logger.getLogger(TimeoutNotifyListener.class.getName());
 
@@ -94,13 +95,17 @@ public class TimeoutNotifyListener implements TaskListener, IMessageEvent {
             log.info("Inside notify attributes:" + emailAttributes);
             execution.setVariable("taskurl", getAPIContextURL()+"/app/tasklist/default/#/?task="+taskId);
             if(StringUtils.isNotBlank(toAddress) && StringUtils.indexOf(toAddress,"@") > 0) {
-                sendMessage(execution, emailAttributes);
+                sendMessage(execution, emailAttributes,getMessageName(execution));
             }
         }
     }
 
     private String getAPIContextURL() {
         return StringUtils.remove(StringUtils.remove(appcontexturl, StringUtils.substringBetween(appcontexturl,"://","@")),"@");
+    }
+
+    private String getMessageName(DelegateExecution execution){
+        return String.valueOf(this.messageName.getValue(execution));
     }
 
 }
