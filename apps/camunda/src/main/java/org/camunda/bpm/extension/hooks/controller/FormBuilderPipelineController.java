@@ -91,7 +91,7 @@ public class FormBuilderPipelineController {
                 StringValue exceptionDataValue = Variables.stringValue(exceptionTrace,true);
                 variables.put("exception", exceptionDataValue);
             }
-            msgRequest.setMessageName("Message_Email");
+            msgRequest.setMessageName("Service_Api_Message_Email");
             msgRequest.setProcessVariables(variables);
             HttpEntity<String> msgReq = new HttpEntity<String>(mapper.writeValueAsString(msgRequest), headers);
             ResponseEntity<String> msgResponse = getOAuth2RestTemplate().postForEntity(
