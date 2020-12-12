@@ -27,13 +27,13 @@ import org.springframework.web.context.request.RequestContextListener;
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 15)
 public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
-		@Inject
-		private KeycloakLogoutHandler keycloakLogoutHandler;
+	@Inject
+	private KeycloakLogoutHandler keycloakLogoutHandler;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-		.csrf().ignoringAntMatchers("/api/**", "/engine-rest/**", "/camunda/engine-rest/**","/camunda/form-builder/**")
+				.csrf().ignoringAntMatchers("/api/**", "/engine-rest/**", "/camunda/engine-rest/**", "/engine-ext-rest/**", "/camunda/engine-ext-rest/**","/camunda/form-builder/**")
 				.and()
 				.antMatcher("/**")
 				.authorizeRequests()
@@ -71,15 +71,15 @@ public class WebAppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	/**
 	 * Configures the OAuth2 TokenStore for Redis Cache usage.
-	 * 
+	 *
 	 * @param redisConnectionFactory the Redis Connection Factoryf
 	 * @return Redis prepared TokenStore
 	 */
 	/*
 	 * Redis Session Cache not yet in use
-	 * 
+	 *
 	 * @Bean
-	 * 
+	 *
 	 * @Primary public TokenStore tokenStore(RedisConnectionFactory
 	 * redisConnectionFactory) { return new RedisTokenStore(redisConnectionFactory);
 	 * }
