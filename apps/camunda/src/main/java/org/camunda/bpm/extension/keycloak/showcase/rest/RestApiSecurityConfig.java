@@ -1,6 +1,7 @@
 package org.camunda.bpm.extension.keycloak.showcase.rest;
 
 import javax.inject.Inject;
+import javax.ws.rs.HttpMethod;
 
 import org.camunda.bpm.engine.IdentityService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -32,7 +34,7 @@ public class RestApiSecurityConfig extends ResourceServerConfigurerAdapter {
 	/** Configuration for REST Api security. */
 	@Inject
 	private RestApiSecurityConfigurationProperties configProps;
-	
+
 	/** Access to Camunda's Identity Service. */
 	@Inject
 	private IdentityService identityService;
@@ -40,16 +42,15 @@ public class RestApiSecurityConfig extends ResourceServerConfigurerAdapter {
 	/**
 	 * {@inheritDoc}
 	 */
+
 	@Override
 	public void configure(final HttpSecurity http) throws Exception {
-        http
-    	.csrf().ignoringAntMatchers("/api/**", "/engine-rest/**")
-    	.and()
-        .antMatcher("/engine-rest/**")
-        .authorizeRequests()
-          .anyRequest()
-          .authenticated()
-		;
+		http.requestMatchers().antMatchers("/engine-rest/**","/engine-ext-rest/**").
+				and().authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/engine-rest/**").permitAll()
+				.and().authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/engine-rest-ext/**").permitAll()
+				.antMatchers("/engine-rest/**","/engine-ext-rest/**")
+				.authenticated().and().csrf().disable()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	/**
@@ -58,8 +59,8 @@ public class RestApiSecurityConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(final ResourceServerSecurityConfigurer config) {
 		config
-			.tokenServices(tokenServices())
-			.resourceId(configProps.getRequiredAudience());
+				.tokenServices(tokenServices())
+				.resourceId(configProps.getRequiredAudience());
 	}
 
 	/**
@@ -80,18 +81,18 @@ public class RestApiSecurityConfig extends ResourceServerConfigurerAdapter {
 		return defaultTokenServices;
 	}
 
-    /**
-     * Registers the REST Api Keycloak Authentication Filter.
-     * @return filter registration
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+	/**
+	 * Registers the REST Api Keycloak Authentication Filter.
+	 * @return filter registration
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Bean
-    public FilterRegistrationBean keycloakAuthenticationFilter(){
-        FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
-        filterRegistration.setFilter(new KeycloakAuthenticationFilter(identityService));
-        filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
-        filterRegistration.addUrlPatterns("/engine-rest/*");
-        return filterRegistration;
-    }
-   
+	public FilterRegistrationBean keycloakAuthenticationFilter(){
+		FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
+		filterRegistration.setFilter(new KeycloakAuthenticationFilter(identityService));
+		filterRegistration.setOrder(102); // make sure the filter is registered after the Spring Security Filter Chain
+		filterRegistration.addUrlPatterns("/engine-rest/*","/engine-ext-rest/*");
+		return filterRegistration;
+	}
+
 }
