@@ -1,3 +1,4 @@
+[![img](https://img.shields.io/badge/Lifecycle-Stable-97ca00)]
 # SBC_DivApps
 
 This repository holds all code required to deploy and maintain applications used by Service BC on the OpenShift Container Platform.
