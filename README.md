@@ -1,4 +1,4 @@
-![img](https://img.shields.io/badge/Lifecycle-Stable-97ca00)
+[![img](https://img.shields.io/badge/Lifecycle-Stable-97ca00)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 # SBC_DivApps
 
 This repository holds all code required to deploy and maintain applications used by Service BC on the OpenShift Container Platform.
