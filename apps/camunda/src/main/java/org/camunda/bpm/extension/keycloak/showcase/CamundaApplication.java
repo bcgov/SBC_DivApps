@@ -16,6 +16,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.session.jdbc.config.annotation.SpringSessionDataSource;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -32,7 +33,7 @@ public class CamundaApplication {
 
 	/** This class' logger. */
 	private static final Logger LOG = LoggerFactory.getLogger(CamundaApplication.class);
-	
+
 	/**
 	 * Post deployment work.
 	 * @param event
@@ -43,7 +44,7 @@ public class CamundaApplication {
 		LOG.info("Successfully started Camunda Showcase");
 		LOG.info("========================================");
 	}
-	
+
 	/**
 	 * Starts this application.
 	 * @param args arguments
@@ -66,6 +67,19 @@ public class CamundaApplication {
 	}
 
 	/**
+	 * Session datasource.
+	 * Note: Bean name should not be changed.
+	 * @return
+	 */
+	@Bean(name="springSessionDataSource")
+	@ConfigurationProperties("session.datasource")
+	@SpringSessionDataSource
+	public DataSource springSessionDataSource(){
+		return DataSourceBuilder.create().build();
+	}
+
+
+	/**
 	 * Secondary datasource.
 	 * This is used only for publishing data to analytics.
 	 * @return
@@ -76,6 +90,7 @@ public class CamundaApplication {
 		return DataSourceBuilder.create().build();
 	}
 
+
 	/**
 	 * JDBC template for analytics datasource interaction.
 	 * @param analyticsDS
@@ -83,8 +98,8 @@ public class CamundaApplication {
 	 */
 	@Bean("analyticsJdbcTemplate")
 	public NamedParameterJdbcTemplate analyticsJdbcTemplate(@Qualifier("analyticsDS") DataSource analyticsDS) {
-        return new NamedParameterJdbcTemplate(analyticsDS);
-    }
+		return new NamedParameterJdbcTemplate(analyticsDS);
+	}
 
 	@Bean("bpmJdbcTemplate")
 	public NamedParameterJdbcTemplate bpmJdbcTemplate(@Qualifier("camundaBpmDataSource") DataSource camundaBpmDataSource) {
