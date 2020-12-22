@@ -257,7 +257,7 @@ parameters:
 - name: DATABASE_DRIVER
   description: The database driver used to connnect to the persistent storage.
   required: true
-  value: ''
+  value: 'org.postgresql.Driver'
 - name: DATABASE_SERVICE_NAME
   description: The Service name used to connect to the database.
   required: true
@@ -269,7 +269,7 @@ parameters:
 - name: DATABASE_PORT
   description: The port that the database is running on.
   required: true
-  value: ''
+  value: '5432'
 - name: APPLICATION_DOMAIN
   description: The exposed hostname that will route to the Vue application. IE. workflow.<domain>.com
   required: true
@@ -318,11 +318,11 @@ parameters:
 - name: APP_ROOT_LOG_FLAG
   description: The log4j logging level to use for the application logs.
   required: true
-  value: ''
+  value: 'ERROR'
 - name: BPM_HISTORY_LEVEL
   description: The history level used in Camunda BPM.
   required: true
-  value: ''
+  value: 'auto'
 - name: SESSION_STORE_TYPE
   description: Session management for Multiple Pod implementations
   required: true
@@ -341,28 +341,28 @@ parameters:
   value: none
 - name: SESSION_HIKARI_CONN_TIMEOUT
   required: true
-  value: none
+  value: '20000'
 - name: SESSION_HIKARI_IDLE_TIMEOUT
   required: true
-  value: none
+  value: '600000'
 - name: SESSION_HIKARI_MAX_POOLSIZE
   required: true
-  value: none
+  value: '10'
 - name: SESSION_HIKARI_VALID_TIMEOUT
   required: true
-  value: none
+  value: '20000'
 - name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
   required: true
-  value: none
+  value: '20000'
 - name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
   required: true
-  value: none
+  value: '600000'
 - name: ANALYTICS_DB_HIKARI_MAX_POOLSIZE
   required: true
-  value: none
+  value: '10'
 - name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
   required: true
-  value: none
+  value: '20000'
 - name: JAVA_SYSTEM_PROPERTIES
   required: true
-  value: none
+  value: '-Xmx2048m'
