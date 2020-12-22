@@ -153,6 +153,32 @@ objects:
               value: "28800"
             - name: JAVA_SYSTEM_PROPERTIES
               value: -Xmx2048m
+#Connection pool for session management			
+		      	- name: SESSION_JDBC_URL
+              value: ${SESSION_JDBC_URL}
+            - name: SESSION_JDBC_USER
+              value: ${SESSION_JDBC_USER}			  
+            - name: SESSION_JDBC_PASSWORD
+              value: ${SESSION_JDBC_PASSWORD}
+            - name: SESSION_JDBC_DRIVER
+              value: ${SESSION_JDBC_DRIVER}			  
+            - name: SESSION_HIKARI_CONN_TIMEOUT
+              value: ${SESSION_HIKARI_CONN_TIMEOUT}			  
+            - name: SESSION_HIKARI_IDLE_TIMEOUT
+              value: ${SESSION_HIKARI_IDLE_TIMEOUT}			  
+            - name: SESSION_HIKARI_MAX_POOLSIZE
+              value: ${SESSION_HIKARI_MAX_POOLSIZE}			  
+            - name: SESSION_HIKARI_VALID_TIMEOUT
+              value: ${SESSION_HIKARI_VALID_TIMEOUT}	
+#Connection pool for analytics server			  
+            - name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_CONN_TIMEOUT}
+            - name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_IDLE_TIMEOUT}
+            - name: ANALYTICS_DB_HIKARI_MAX_POOLSIZE
+              value: ${ANALYTICS_DB_HIKARI_MAX_POOLSIZE}			  
+            - name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_VALID_TIMEOUT}
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -301,5 +327,43 @@ parameters:
   value: auto
 - name: SESSION_STORE_TYPE
   description: Session management for Multiple Pod implementations
+  required: true
+  value: none
+#Connection pool for session management	
+- name: SESSION_JDBC_URL
+  required: true
+  value: none
+- name: SESSION_JDBC_USER
+  required: true
+  value: none
+- name: SESSION_JDBC_PASSWORD
+  required: true
+  value: none
+- name: SESSION_JDBC_DRIVER
+  required: true
+  value: none
+- name: SESSION_HIKARI_CONN_TIMEOUT
+  required: true
+  value: none
+- name: SESSION_HIKARI_IDLE_TIMEOUT
+  required: true
+  value: none
+- name: SESSION_HIKARI_MAX_POOLSIZE
+  required: true
+  value: none
+- name: SESSION_HIKARI_VALID_TIMEOUT
+  required: true
+  value: none
+#Connection pool for analytics server	
+- name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
+  required: true
+  value: none
+- name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
+  required: true
+  value: none
+- name: ANALYTICS_DB_HIKARI_MAX_POOLSIZE
+  required: true
+  value: none
+- name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
   required: true
   value: none
