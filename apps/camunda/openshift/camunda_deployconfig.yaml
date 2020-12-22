@@ -152,9 +152,8 @@ objects:
             - name: SESSION_STORE_TIMEOUT
               value: "28800"
             - name: JAVA_SYSTEM_PROPERTIES
-              value: -Xmx2048m
-#Connection pool for session management			
-		      	- name: SESSION_JDBC_URL
+              value: ${JAVA_SYSTEM_PROPERTIES}
+            - name: SESSION_JDBC_URL
               value: ${SESSION_JDBC_URL}
             - name: SESSION_JDBC_USER
               value: ${SESSION_JDBC_USER}			  
@@ -170,7 +169,6 @@ objects:
               value: ${SESSION_HIKARI_MAX_POOLSIZE}			  
             - name: SESSION_HIKARI_VALID_TIMEOUT
               value: ${SESSION_HIKARI_VALID_TIMEOUT}	
-#Connection pool for analytics server			  
             - name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
               value: ${ANALYTICS_DB_HIKARI_CONN_TIMEOUT}
             - name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
@@ -259,11 +257,11 @@ parameters:
 - name: DATABASE_DRIVER
   description: The database driver used to connnect to the persistent storage.
   required: true
-  value: org.postgresql.Driver
+  value: ''
 - name: DATABASE_SERVICE_NAME
   description: The Service name used to connect to the database.
   required: true
-  value: patroni-persistent-master
+  value: ''
 - name: DATABASE_NAME
   description: The name of the database to connect to.
   required: true
@@ -271,7 +269,7 @@ parameters:
 - name: DATABASE_PORT
   description: The port that the database is running on.
   required: true
-  value: "5432"
+  value: ''
 - name: APPLICATION_DOMAIN
   description: The exposed hostname that will route to the Vue application. IE. workflow.<domain>.com
   required: true
@@ -307,7 +305,7 @@ parameters:
 - name: ANALYTICS_DB_DRIVER
   description: The database driver used to connnect to the analytics database.
   required: true
-  value: org.postgresql.Driver
+  value: ''
 - name: FORMBUILDER_PIPELINE_BPM_URL
   description: The URL for the formbuilder connection 
   required: true
@@ -320,16 +318,15 @@ parameters:
 - name: APP_ROOT_LOG_FLAG
   description: The log4j logging level to use for the application logs.
   required: true
-  value: ERROR
+  value: ''
 - name: BPM_HISTORY_LEVEL
   description: The history level used in Camunda BPM.
   required: true
-  value: auto
+  value: ''
 - name: SESSION_STORE_TYPE
   description: Session management for Multiple Pod implementations
   required: true
   value: none
-#Connection pool for session management	
 - name: SESSION_JDBC_URL
   required: true
   value: none
@@ -354,7 +351,6 @@ parameters:
 - name: SESSION_HIKARI_VALID_TIMEOUT
   required: true
   value: none
-#Connection pool for analytics server	
 - name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
   required: true
   value: none
@@ -365,5 +361,8 @@ parameters:
   required: true
   value: none
 - name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
+  required: true
+  value: none
+- name: JAVA_SYSTEM_PROPERTIES
   required: true
   value: none
