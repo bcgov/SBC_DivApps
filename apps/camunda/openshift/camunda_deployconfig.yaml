@@ -148,7 +148,7 @@ objects:
             - name: BPM_HISTORY_LEVEL
               value: ${BPM_HISTORY_LEVEL}
             - name: SESSION_STORE_TYPE
-              value: jdbc
+              value: ${SESSION_STORE_TYPE}
             - name: SESSION_STORE_TIMEOUT
               value: "28800"
             - name: JAVA_SYSTEM_PROPERTIES
@@ -326,7 +326,7 @@ parameters:
 - name: SESSION_STORE_TYPE
   description: Session management for Multiple Pod implementations
   required: true
-  value: none
+  value: 'jdbc'
 - name: SESSION_JDBC_URL
   required: true
   value: none
@@ -338,7 +338,7 @@ parameters:
   value: none
 - name: SESSION_JDBC_DRIVER
   required: true
-  value: none
+  value: 'org.postgresql.Driver'
 - name: SESSION_HIKARI_CONN_TIMEOUT
   required: true
   value: '20000'
