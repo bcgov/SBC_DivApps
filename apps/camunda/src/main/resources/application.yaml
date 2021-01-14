@@ -61,13 +61,17 @@ spring:
     timeout.seconds: ${SESSION_STORE_TIMEOUT:28800}
 
 management:
-  health:
+  readyz:
     db:
       enabled: true
+  healthz:
+    db:
+      enabled: false
   endpoints:
     web:
       exposure:
-        include: "health"
+        include: "healthz"
+        include: "readyz"
 # Redis Session Cache not yet in use
 #  session:
 #    store-type: ${SESSION_STORE_TYPE:none}
