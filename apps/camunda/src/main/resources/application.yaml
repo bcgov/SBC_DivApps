@@ -63,7 +63,7 @@ spring:
 management:
   health:
     db:
-      enabled: false
+      enabled: true
   endpoints:
     web:
       exposure:
