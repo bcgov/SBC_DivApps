@@ -227,14 +227,3 @@ class ProcessMapperResourceByApplicationId(Resource):
              return ApplicationService.get_application_form_mapper_by_id(application_id), HTTPStatus.OK
         except BusinessException as err:
              return err.error, err.status_code
-
-@cors_preflight('GET,OPTIONS')
-@API.route('/healthcheck', methods=['GET', 'OPTIONS'])
-class HealthCheck(Resource):
-    """Resource for health check of API"""
-
-    @staticmethod
-    @cors.crossdomain(origin='*')
-    def get(application_id):
-
-        return HTTPStatus.OK
