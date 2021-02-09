@@ -17,6 +17,6 @@ class HealthCheck(Resource):
 
     @staticmethod
     @cors.crossdomain(origin='*')
-    def get(application_id):
+    def get():
 
         return HTTPStatus.OK
