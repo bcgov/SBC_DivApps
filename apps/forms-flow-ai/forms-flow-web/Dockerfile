@@ -1,5 +1,5 @@
 # base image
-FROM node:12.4.0-alpine as build-stage
+FROM node:latest as build-stage
 
 # set working directory
 WORKDIR /forms-flow-web/app
@@ -19,7 +19,7 @@ COPY forms-flow-util/package.json /forms-flow-web/app/forms-flow-util/package.js
 
 RUN npm install
 COPY . /forms-flow-web/app/
-RUN npm run build
+RUN npm run build --prod
 
 #RUN set -x \
 #	&& chmod -R 777 /forms-flow-web/app/
