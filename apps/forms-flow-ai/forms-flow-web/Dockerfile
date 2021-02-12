@@ -1,5 +1,5 @@
 # base image
-FROM node:latest as build-stage
+FROM node:12.2.0-alpine as build-stage
 
 # set working directory
 WORKDIR /forms-flow-web/app
