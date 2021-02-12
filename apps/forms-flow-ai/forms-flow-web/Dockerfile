@@ -1,5 +1,5 @@
 # base image
-FROM docker-remote.artifacts.developer.gov.bc.ca/node:12.4.0-alpine as build-stage
+FROM node:12.4.0-alpine as build-stage
 
 # set working directory
 WORKDIR /forms-flow-web/app
@@ -17,6 +17,7 @@ COPY forms-flow-util/package.json /forms-flow-web/app/forms-flow-util/package.js
 #RUN npm install --silent
 #RUN npm install react-scripts@3.0.1 -g --silent
 
+RUN npm install
 COPY . /forms-flow-web/app/
 RUN npm run build
 
@@ -26,7 +27,7 @@ RUN npm run build
 # start app
 #CMD ["npm", "start", "--prefix", "/forms-flow-web/app"]
 
-FROM docker-remote.artifacts.developer.gov.bc.ca/nginx:1.17 as production-stage
+FROM nginx:1.17 as production-stage
 RUN mkdir /forms-flow-web/app
 COPY --from=build-stage /app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
