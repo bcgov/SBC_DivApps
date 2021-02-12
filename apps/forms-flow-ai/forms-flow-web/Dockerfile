@@ -15,7 +15,7 @@ COPY package-lock.json /forms-flow-web/app/package-lock.json
 COPY package.json /forms-flow-web/app/package.json
 COPY forms-flow-util/package.json /forms-flow-web/app/forms-flow-util/package.json
 #RUN npm install --silent
-RUN npm install react-scripts@3.0.1 -g --silent
+#RUN npm install react-scripts@3.0.1 -g --silent
 
 COPY . /forms-flow-web/app/
 RUN npm run build
@@ -25,6 +25,7 @@ RUN npm run build
 
 # start app
 #CMD ["npm", "start", "--prefix", "/forms-flow-web/app"]
+
 FROM docker-remote.artifacts.developer.gov.bc.ca/nginx:1.17 as production-stage
 RUN mkdir /forms-flow-web/app
 COPY --from=build-stage /app/build /usr/share/nginx/html
