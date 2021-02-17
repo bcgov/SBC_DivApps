@@ -2,12 +2,18 @@
 
 # Maven build
 FROM maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
-COPY pom-docker.xml /tmp/pom.xml
-COPY settings-docker.xml /usr/share/maven/ref/
+
+# Clone code
+RUN mkdir /bpm \
+        cd /bpm \    
+        git clone https://github.com/AOT-Technologies/forms-flow-ai.git
+
+COPY /bpm/pom-docker.xml /tmp/pom.xml
+COPY /bpm/settings-docker.xml /usr/share/maven/ref/
 WORKDIR /tmp/
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
-COPY src /tmp/src/
+COPY /bpm/src /tmp/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
