@@ -37,8 +37,13 @@ public class NotifyListener implements TaskListener, IMessageEvent {
      * @param delegateTask: The task which sends the message
      */
     public void notify(DelegateTask delegateTask) {
-        log.info("\n\nNotify listener invoked! " + delegateTask.getId());
-            sendEmailNotification(delegateTask.getExecution(), getEmailsOfUnassignedTask(delegateTask),delegateTask.getId());
+    	if(delegateTask.getExecution().getVariable("isServiceGroupNotNeeded") != null && (Boolean)delegateTask.getExecution().getVariable("isServiceGroupNotNeeded")) {
+        log.info("\n\nNotify listener invoked with isServiceGroupNotNeeded! " + delegateTask.getId());
+            sendEmailNotification(delegateTask.getExecution(), getEmailsWOServiceGroup(delegateTask),delegateTask.getId());
+    	} else {
+    		log.info("\n\nNotify listener invoked! " + delegateTask.getId());
+            	sendEmailNotification(delegateTask.getExecution(), getEmailsOfUnassignedTask(delegateTask),delegateTask.getId());
+    	}
     }
 
     private void sendEmailNotification(DelegateExecution execution,List<String> toEmails,String taskId) {
