@@ -6,6 +6,12 @@
 # hub.docker.com/r/_/node/
 FROM node:12.2.0-alpine
 
+RUN apt-get update \
+    && apt-get install -y git 
+
+# Clone code
+RUN git -b v4.0.0-alpha clone https://github.com/AOT-Technologies/forms-flow-ai.git /forms/
+
 # set working directory
 WORKDIR /forms-flow-forms/app
 
@@ -41,7 +47,7 @@ RUN ln -sf $NPM_PACKAGES/node_modules node_modules
 #   DEBUG=formio:*
 ENV DEBUG=""
 
-COPY . /forms-flow-forms/app/
+RUN cp /forms/forms-flow-forms/ /forms-flow-forms/app/
 
 RUN set -x \
 	&& chmod -R 777 /forms-flow-forms/app/
