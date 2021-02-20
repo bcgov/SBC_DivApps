@@ -55,6 +55,8 @@ objects:
         type: Git
       strategy:
         dockerStrategy:
+          pullSecret:
+            name: artifactory-creds
           dockerfilePath: Dockerfile
         type: Docker
       successfulBuildsHistoryLimit: 5
