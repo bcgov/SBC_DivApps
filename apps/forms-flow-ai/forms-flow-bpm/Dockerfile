@@ -1,14 +1,13 @@
 # Modified by Yichun Zhao and Walter Moar
 
 # Maven build
-FROM maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
+FROM docker-remote.artifacts.developer.gov.bc.ca/maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
 
 RUN apt-get update \
     && apt-get install -y git 
 
 RUN git -b v4.0.0-alpha clone https://github.com/AOT-Technologies/forms-flow-ai.git /bpm/
 
-WORKDIR /bpm/forms-flow-bpm
 RUN cp /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
 RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
 
@@ -20,7 +19,7 @@ RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
-FROM adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
+FROM docker-remote.artifacts.developer.gov.bc.ca/adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
 
 ENV JAVA_VERSION jdk-11.0.3+7
 ENV JAVA_HOME=/opt/java/openjdk \
