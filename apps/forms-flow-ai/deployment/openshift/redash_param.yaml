@@ -1,6 +1,0 @@
-IMAGE_NAMESPACE=e69aae-tools
-FFA_ANALYTICS_URL=dev-sbc-ffa-analytics.apps.silver.devops.gov.bc.ca
-POSTGRES_PASSWORD: EDkL58NPY71GHFwVwTebaTk3A30UqxxX
-REDASH_DATABASE_URL: 'postgresql://camunda:EDkL58NPY71GHFwVwTebaTk3A30UqxxX@patroni-master:5432/ffa-webapi'
-REDASH_HOST: 'redis-dev'
-REDASH_REDIS_URL: redis://redis-dev:6379/0
