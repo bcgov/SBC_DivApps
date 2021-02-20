@@ -1,0 +1,4 @@
+IMAGE_NAMESPACE=e69aae-tools
+FORMIO_ADMIN_EMAIL=sbcts@gov.bc.ca
+FFA_FORMS_URL=dev-sbc-ffa-forms.apps.silver.devops.gov.bc.ca
+MONGO_URI=mongodb://userKDK:YIIEXXYITQR0boC1@mongodb:27017/formiodb

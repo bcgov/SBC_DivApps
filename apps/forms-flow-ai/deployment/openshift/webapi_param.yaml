@@ -1,0 +1,10 @@
+IMAGE_NAMESPACE=e69aae-tools
+KEYCLOAK_REALM=vtkayq4c
+KEYCLOAK_URL=https://dev.oidc.gov.bc.ca
+WEBAPI_URL=dev-sbc-ffa-webapi.apps.silver.devops.gov.bc.ca
+PATRONI_USERNAME=camunda
+PATRONI_PASSWORD=EDkL58NPY71GHFwVwTebaTk3A30UqxxX
+DATABASE_SERVICE_NAME=patroni-master
+FFA_BPM_KEYCLOAK_CLIENTID="forms-flow-bpm"
+FFA_BPM_KEYCLOAK_CLIENTSECRET="1221e9e4-c073-4a45-8e8b-ebe0301abeff"
+MONGO_URI=mongodb://userKDK:YIIEXXYITQR0boC1@mongodb:27017/formiodb

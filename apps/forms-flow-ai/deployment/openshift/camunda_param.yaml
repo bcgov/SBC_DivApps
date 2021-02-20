@@ -1,0 +1,10 @@
+TOOLS_WORKSPACE=e69aae-tools
+DATABASE_SERVICE_NAME=patroni-master
+DATABASE_NAME=ffa-camunda
+KEYCLOAK_URL=https://dev.oidc.gov.bc.ca
+PATRONI_USERNAME=camunda
+PATRONI_PASSWORD=EDkL58NPY71GHFwVwTebaTk3A30UqxxX
+keycloak_clientid=forms-flow-bpm
+keycloak_clientsecret=1221e9e4-c073-4a45-8e8b-ebe0301abeff
+keycloak_realm=vtkayq4c
+CAMUNDA_URL=dev-sbc-ffa-bpm.apps.silver.devops.gov.bc.ca
