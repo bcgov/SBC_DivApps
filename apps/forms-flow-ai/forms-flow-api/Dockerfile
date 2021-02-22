@@ -1,4 +1,4 @@
-FROM python:3.8docker-remote.artifacts.developer.gov.bc.ca/python:3.8
+FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.8
 
 RUN apt-get update \
     && apt-get install -y git 
