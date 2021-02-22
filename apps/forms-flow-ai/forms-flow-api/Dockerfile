@@ -3,15 +3,15 @@ FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.8
 RUN apt-get update \
     && apt-get install -y git 
 
-RUN git -b v4.0.0-alpha clone https://github.com/AOT-Technologies/forms-flow-ai.git /api/
+RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /api/
 
-RUN cp /api/forms-flow-api/ /forms-flow-api/app
 WORKDIR /forms-flow-api/app
+RUN cp -r /api/forms-flow-api/* /forms-flow-api/app
 
 RUN pip install --upgrade pip
 RUN pip install psycopg2
 
-RUN pip install .
+RUN pip install -e .
 
 RUN mkdir /nltk_data && chmod 777 /nltk_data
 
