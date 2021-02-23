@@ -11,9 +11,10 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
 # Clone code
-RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /app/
+RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /web/
 
-COPY /public/logo.svg /app/forms-flow-web/public/logo.svg
+RUN cp -rf /web/forms-flow-web/* /app/
+COPY /public/logo.svg /app/public/logo.svg
 
 RUN npm install
 RUN npm run build
