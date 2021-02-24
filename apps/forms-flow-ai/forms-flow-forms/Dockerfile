@@ -7,14 +7,18 @@
 FROM node:12.2.0-alpine
 
 # set working directory
-WORKDIR /forms-flow-forms/app
+WORKDIR /forms/
 
 # "bcrypt" requires python/make/g++, all must be installed in alpine
 # (note: using pinned versions to ensure immutable build environment)
 RUN apk update && \
     apk upgrade && \
     apk add make=4.2.1-r2 && \
-    apk add g++=8.3.0-r0
+    apk add g++=8.3.0-r0 &&\
+    apk add git
+
+# Clone code
+RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /forms/
 
 # Using an alternative package install location
 # to allow overwriting the /app folder at runtime
@@ -41,10 +45,10 @@ RUN ln -sf $NPM_PACKAGES/node_modules node_modules
 #   DEBUG=formio:*
 ENV DEBUG=""
 
-COPY . /forms-flow-forms/app/
+#RUN cp /forms/forms-flow-forms/ /forms-flow-forms/app/
 
 RUN set -x \
-	&& chmod -R 777 /forms-flow-forms/app/
+	&& chmod -R 777 /forms/
 
 # This will initialize the application based on
 # some questions to the user (login email, password, etc.)

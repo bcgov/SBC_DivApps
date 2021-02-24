@@ -19,7 +19,7 @@ import java.util.Set;
  * @author sumathi.thirumani@aot-technologies.com, yichun.zhao@aot-technologies.com
  */
 public interface IUser {
-
+	
     default String getName(DelegateExecution execution, String userId) {
         User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
         return user.getFirstName()+" "+user.getLastName();
@@ -50,7 +50,21 @@ public interface IUser {
         }
         return emails;
     }
+    
+    default List<String> getEmailsWOServiceGroup(DelegateTask delegateTask) {
+        Set<IdentityLink> identityLinks = delegateTask.getCandidates();
+        List<String> emails = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(identityLinks)) {
+            for (IdentityLink entry : identityLinks) {
+                if (StringUtils.isNotEmpty(entry.getGroupId()) && !entry.getGroupId().equals("ServiceFlow_Access_Staff")) {
+                    emails.addAll(getEmailsForGroup(delegateTask.getExecution(), entry.getGroupId()));
+                }
+            }
+        }
+        return emails;
+    }
 
+    
     default List<String> getEmailsForGroup(DelegateExecution execution,String groupName) {
         List<User> users =  execution.getProcessEngine().getIdentityService().createUserQuery().memberOfGroup(StringUtils.trim(groupName)).list();
         List<String> emails = new ArrayList<>();
