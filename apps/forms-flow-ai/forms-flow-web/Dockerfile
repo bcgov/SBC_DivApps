@@ -15,7 +15,7 @@ RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai
 
 RUN cp -rf /web/forms-flow-web/* /app/
 RUN rm /app/public/formsflow.ai_icon.svg
-COPY /public/gov_bc_logo.svg /app/public/
+COPY /public/formsflow.ai_icon.svg /app/public/
 
 RUN npm install
 RUN npm run build
