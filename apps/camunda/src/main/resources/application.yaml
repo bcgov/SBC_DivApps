@@ -22,13 +22,28 @@ spring.datasource:
   maximumPoolSize: ${HIKARI_MAX_POOLSIZE:10}
   validationTimeout: ${HIKARI_VALID_TIMEOUT:5000}
 
-#spring.h2.console.enabled: true
+session.datasource:
+  jdbc-url: ${SESSION_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+  username: ${SESSION_JDBC_USER:sa}
+  password: ${SESSION_JDBC_PASSWORD:sa}
+  driverClassName: ${SESSION_JDBC_DRIVER:org.h2.Driver}
+  type: com.zaxxer.hikari.HikariDataSource
+  connectionTimeout: ${SESSION_HIKARI_CONN_TIMEOUT:30000}
+  idleTimeout: ${SESSION_HIKARI_IDLE_TIMEOUT:600000}
+  maximumPoolSize: ${SESSION_HIKARI_MAX_POOLSIZE:10}
+  validationTimeout: ${SESSION_HIKARI_VALID_TIMEOUT:5000}
 
 analytics.datasource:
   jdbc-url: ${ANALYTICS_DB_JDBCURL}
   username: ${ANALYTICS_DB_USERNAME}
   password: ${ANALYTICS_DB_PASSWORD}
   driverClassName: ${ANALYTICS_DB_DRIVER}
+  type: com.zaxxer.hikari.HikariDataSource
+  connectionTimeout: ${ANALYTICS_DB_HIKARI_CONN_TIMEOUT:30000}
+  idleTimeout: ${ANALYTICS_DB_HIKARI_IDLE_TIMEOUT:600000}
+  maximumPoolSize: ${ANALYTICS_DB_HIKARI_MAX_POOLSIZE:10}
+  validationTimeout: ${ANALYTICS_DB_HIKARI_VALID_TIMEOUT:5000}
+
 
 spring:
   jersey:
@@ -48,7 +63,7 @@ spring:
 management:
   health:
     db:
-      enabled: false
+      enabled: true
   endpoints:
     web:
       exposure:

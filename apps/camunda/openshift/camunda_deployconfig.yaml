@@ -148,11 +148,35 @@ objects:
             - name: BPM_HISTORY_LEVEL
               value: ${BPM_HISTORY_LEVEL}
             - name: SESSION_STORE_TYPE
-              value: jdbc
+              value: ${SESSION_STORE_TYPE}
             - name: SESSION_STORE_TIMEOUT
               value: "28800"
             - name: JAVA_SYSTEM_PROPERTIES
-              value: -Xmx2048m
+              value: ${JAVA_SYSTEM_PROPERTIES}
+            - name: SESSION_JDBC_URL
+              value: ${SESSION_JDBC_URL}
+            - name: SESSION_JDBC_USER
+              value: ${SESSION_JDBC_USER}			  
+            - name: SESSION_JDBC_PASSWORD
+              value: ${SESSION_JDBC_PASSWORD}
+            - name: SESSION_JDBC_DRIVER
+              value: ${SESSION_JDBC_DRIVER}			  
+            - name: SESSION_HIKARI_CONN_TIMEOUT
+              value: ${SESSION_HIKARI_CONN_TIMEOUT}			  
+            - name: SESSION_HIKARI_IDLE_TIMEOUT
+              value: ${SESSION_HIKARI_IDLE_TIMEOUT}			  
+            - name: SESSION_HIKARI_MAX_POOLSIZE
+              value: ${SESSION_HIKARI_MAX_POOLSIZE}			  
+            - name: SESSION_HIKARI_VALID_TIMEOUT
+              value: ${SESSION_HIKARI_VALID_TIMEOUT}	
+            - name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_CONN_TIMEOUT}
+            - name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_IDLE_TIMEOUT}
+            - name: ANALYTICS_DB_HIKARI_MAX_POOLSIZE
+              value: ${ANALYTICS_DB_HIKARI_MAX_POOLSIZE}			  
+            - name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
+              value: ${ANALYTICS_DB_HIKARI_VALID_TIMEOUT}
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -233,11 +257,11 @@ parameters:
 - name: DATABASE_DRIVER
   description: The database driver used to connnect to the persistent storage.
   required: true
-  value: org.postgresql.Driver
+  value: 'org.postgresql.Driver'
 - name: DATABASE_SERVICE_NAME
   description: The Service name used to connect to the database.
   required: true
-  value: patroni-persistent-master
+  value: ''
 - name: DATABASE_NAME
   description: The name of the database to connect to.
   required: true
@@ -245,7 +269,7 @@ parameters:
 - name: DATABASE_PORT
   description: The port that the database is running on.
   required: true
-  value: "5432"
+  value: '5432'
 - name: APPLICATION_DOMAIN
   description: The exposed hostname that will route to the Vue application. IE. workflow.<domain>.com
   required: true
@@ -281,7 +305,7 @@ parameters:
 - name: ANALYTICS_DB_DRIVER
   description: The database driver used to connnect to the analytics database.
   required: true
-  value: org.postgresql.Driver
+  value: ''
 - name: FORMBUILDER_PIPELINE_BPM_URL
   description: The URL for the formbuilder connection 
   required: true
@@ -294,12 +318,51 @@ parameters:
 - name: APP_ROOT_LOG_FLAG
   description: The log4j logging level to use for the application logs.
   required: true
-  value: ERROR
+  value: 'ERROR'
 - name: BPM_HISTORY_LEVEL
   description: The history level used in Camunda BPM.
   required: true
-  value: auto
+  value: 'auto'
 - name: SESSION_STORE_TYPE
   description: Session management for Multiple Pod implementations
   required: true
+  value: 'jdbc'
+- name: SESSION_JDBC_URL
+  required: true
   value: none
+- name: SESSION_JDBC_USER
+  required: true
+  value: none
+- name: SESSION_JDBC_PASSWORD
+  required: true
+  value: none
+- name: SESSION_JDBC_DRIVER
+  required: true
+  value: 'org.postgresql.Driver'
+- name: SESSION_HIKARI_CONN_TIMEOUT
+  required: true
+  value: '20000'
+- name: SESSION_HIKARI_IDLE_TIMEOUT
+  required: true
+  value: '600000'
+- name: SESSION_HIKARI_MAX_POOLSIZE
+  required: true
+  value: '10'
+- name: SESSION_HIKARI_VALID_TIMEOUT
+  required: true
+  value: '20000'
+- name: ANALYTICS_DB_HIKARI_CONN_TIMEOUT
+  required: true
+  value: '20000'
+- name: ANALYTICS_DB_HIKARI_IDLE_TIMEOUT
+  required: true
+  value: '600000'
+- name: ANALYTICS_DB_HIKARI_MAX_POOLSIZE
+  required: true
+  value: '10'
+- name: ANALYTICS_DB_HIKARI_VALID_TIMEOUT
+  required: true
+  value: '20000'
+- name: JAVA_SYSTEM_PROPERTIES
+  required: true
+  value: '-Xmx2048m'
