@@ -14,7 +14,8 @@ RUN apk update && apk upgrade && \
 RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /web/
 
 RUN cp -rf /web/forms-flow-web/* /app/
-COPY /public/logo.svg /app/public/logo.svg
+RUN rm /app/public/formsflow.ai_icon.svg
+COPY /public/gov_bc_logo.svg /app/public/
 
 RUN npm install
 RUN npm run build
