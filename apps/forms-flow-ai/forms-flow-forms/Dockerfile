@@ -18,7 +18,7 @@ RUN apk update && \
     apk add git
 
 # Clone code
-RUN git clone -b ${REPOBRANCH} ${REPOURL} /forms/
+RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /forms/
 
 # Using an alternative package install location
 # to allow overwriting the /app folder at runtime

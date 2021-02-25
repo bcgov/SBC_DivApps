@@ -11,7 +11,7 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
 # Clone code
-RUN git clone -b ${REPOBRANCH} ${REPOURL} /web/
+RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /web/
 
 RUN cp -rf /web/forms-flow-web/* /app/
 RUN rm /app/public/formsflow.ai_icon.svg
