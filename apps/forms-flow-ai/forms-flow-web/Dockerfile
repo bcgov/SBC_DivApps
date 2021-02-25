@@ -11,7 +11,7 @@ RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
 # Clone code
-RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /web/
+RUN git clone -b ${REPOBRANCH} ${REPOURL} /web/
 
 RUN cp -rf /web/forms-flow-web/* /app/
 RUN rm /app/public/formsflow.ai_icon.svg

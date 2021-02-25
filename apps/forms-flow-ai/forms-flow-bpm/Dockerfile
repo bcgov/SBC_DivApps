@@ -6,7 +6,7 @@ FROM docker-remote.artifacts.developer.gov.bc.ca/maven:3.6.1-jdk-11-slim AS MAVE
 RUN apt-get update \
     && apt-get install -y git 
 
-RUN git clone --branch v4.0.0-alpha https://github.com/AOT-Technologies/forms-flow-ai.git /bpm/
+RUN git clone -b ${REPOBRANCH} ${REPOURL} /bpm/
 
 RUN cp /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
 RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/

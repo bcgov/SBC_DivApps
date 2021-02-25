@@ -18,7 +18,7 @@ RUN apk update && \
     apk add git
 
 # Clone code
-RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /forms/
+RUN git clone -b ${REPOBRANCH} ${REPOURL} /forms/
 
 # Using an alternative package install location
 # to allow overwriting the /app folder at runtime
