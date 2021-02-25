@@ -3,7 +3,7 @@ FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.8
 RUN apt-get update \
     && apt-get install -y git 
 
-RUN git clone -b v4.0.0-alpha  https://github.com/AOT-Technologies/forms-flow-ai.git /api/
+RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /api/
 
 WORKDIR /forms-flow-api/app
 RUN cp -r /api/forms-flow-api/* /forms-flow-api/app
