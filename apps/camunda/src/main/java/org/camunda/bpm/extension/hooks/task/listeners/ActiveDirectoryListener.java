@@ -46,8 +46,8 @@ public class ActiveDirectoryListener implements ExecutionListener {
                 SearchResult sr = (SearchResult)answer.next();
                 Attributes attrs = sr.getAttributes();
                 try {
-                    uid = attrs.get("sAMAccountName").toString();
-                    System.out.println("uid: " + uid);
+                    uid = attrs.get("bcgovGUID").toString();
+                    System.out.println("bcgovGUID: " + uid);
 					System.out.println("attrs: " + attrs);
                     uid = uid.substring(uid.indexOf(':') + 2);
                 } catch (Exception err) {
@@ -75,7 +75,7 @@ public class ActiveDirectoryListener implements ExecutionListener {
 
     private NamingEnumeration getLDAPAttrs(String user, String pass, String searchFilter, String host, String domain, String searchBase) throws NamingException, Exception {
         // set attribute names to obtain value of
-        String[] returnedAtts = { "sAMAccountName", "cn", "mail" };
+        String[] returnedAtts = { "sAMAccountName", "bcgovGUID" };
         SearchControls searchCtls = new SearchControls();
         searchCtls.setReturningAttributes(returnedAtts);
 
