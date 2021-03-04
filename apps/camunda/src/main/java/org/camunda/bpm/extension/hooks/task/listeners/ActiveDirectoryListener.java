@@ -37,7 +37,6 @@ public class ActiveDirectoryListener implements ExecutionListener {
         String guid = null;
         String searchFilter ="(&(objectCategory=person)(objectClass=user)(sAMAccountName=" + userid + "))";
         try {
-            System.out.println("Start: getLDAPAttrs");
             NamingEnumeration answer =
                 getLDAPAttrs(ldapUser, ldapAuth, searchFilter, "idir.BCGOV", "idir", "OU=BCGOV,DC=idir,DC=BCGOV");
             String uid = "";
@@ -46,19 +45,17 @@ public class ActiveDirectoryListener implements ExecutionListener {
                 SearchResult sr = (SearchResult)answer.next();
                 Attributes attrs = sr.getAttributes();
                 try {
-                    uid = attrs.get("bcgovGUID").toString();
-                    System.out.println("bcgovGUID: " + uid);
-					System.out.println("attrs: " + attrs);
+                    uid = attrs.get("sAMAccountName").toString();
+					guid = attrs.get("bcgovGUID").toString();
                     uid = uid.substring(uid.indexOf(':') + 2);
+					guid = guid.substring(guid.indexOf(':') + 2);
                 } catch (Exception err) {
-//                    uid = "";
                     System.out.println(err.getMessage());
                     err.printStackTrace();
                 }
                 // verify userid
                 if (userid.equalsIgnoreCase(uid)) {
-                    guid = uid;
-                    break;
+                    return guid;
                 }
             }
         } catch (NamingException ne) {
