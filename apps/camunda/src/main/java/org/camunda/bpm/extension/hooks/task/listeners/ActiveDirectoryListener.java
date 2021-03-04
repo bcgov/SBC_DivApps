@@ -48,7 +48,7 @@ public class ActiveDirectoryListener implements ExecutionListener {
                 try {
                     uid = attrs.get("sAMAccountName").toString();
                     System.out.println("uid: " + uid);
-                    System.out.println(attrs.get("mail"));
+					System.out.println("attrs: " + attrs);
                     uid = uid.substring(uid.indexOf(':') + 2);
                 } catch (Exception err) {
 //                    uid = "";
