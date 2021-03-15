@@ -1,0 +1,22 @@
+Metadata-Version: 1.2
+Name: api
+Version: 0.0.0
+Summary: A short description of the project
+Home-page: https://github.com/bcgov/queue-management/
+Author: Service BC
+Author-email: 
+License: Apache Software License Version 2.0
+Description: 
+        # Wait Time Dashboard API
+        
+        Wait Time Dashboard API.
+        
+        
+Platform: UNKNOWN
+Classifier: Development Status :: Beta
+Classifier: Intended Audience :: Developers / QA
+Classifier: Topic :: Report
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3.6
