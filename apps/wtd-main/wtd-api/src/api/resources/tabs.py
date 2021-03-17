@@ -28,7 +28,7 @@ api = Namespace('Tabs', description='API for managing and obtaining tab informat
 filepath = 'src/api/resources/db.json'
 
 
-@api.route('/tab')
+@api.route('')
 class TabManagement(Resource):
     """TabManagement resource."""
 
