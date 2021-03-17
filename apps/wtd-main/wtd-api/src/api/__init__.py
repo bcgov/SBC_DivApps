@@ -30,7 +30,7 @@ def create_app(run_mode=os.getenv('FLASK_ENV', 'production')):
     @app.after_request
     def add_version(response):  # pylint:  disable=unused-variable
         version = os.getenv('OPENSHIFT_BUILD_COMMIT', '')
-        response.headers['API'] = f'notifications_api/{version}'
+        response.headers['API'] = f'waittimedashboard_api/{version}'
         return response
 
     register_shellcontext(app)

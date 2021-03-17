@@ -4,6 +4,7 @@
 from marshmallow import fields, Schema
 import datetime
 from . import db
+from .tilemodel import BlogpostSchema
 
 
 class Tab(db.Model):  # pylint: disable=too-many-instance-attributes
