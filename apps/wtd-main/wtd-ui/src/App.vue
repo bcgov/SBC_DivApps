@@ -78,7 +78,7 @@ import * as Views from '@/views'
 
 // Mixins, interfaces, etc
 import { AuthMixin } from '@/mixins'
-import { ActionBindingIF, DashboardTabIF, DashboardTileIF } from '@/interfaces' // eslint-disable-line no-unused-vars
+import { ActionBindingIF, DashboardTabIF, DashboardPayloadIF } from '@/interfaces' // eslint-disable-line no-unused-vars
 
 // Enums and Constants
 import { SessionStorageKeys } from 'sbc-common-components/src/util/constants'
@@ -341,49 +341,24 @@ export default class App extends Mixins(AuthMixin) {
      * authConfig is a workaround to fix the user settings call as it expects a URL with no trailing slash.
      * This will be removed when a fix is made to sbc-common-components to handle this
      */
-    console.log('tabs response: ' + response)
-    console.log('tabs response: ' + response.data[0].tabName)
-    this.dashboards = response.data
-    console.log('dashboard: ' + this.dashboards[0].tabName)
+    this.dashboards = response.data.tabs
   }
 
   private async updateDashboardDetails (updatedDashboards: DashboardTabIF[]): Promise<any> {
     // get config from environment
-    console.log('started  updateDashboardDetails')
-    const origin: string = window.location.origin
-    const processEnvVueAppPath: string = process.env.VUE_APP_PATH
-    const processEnvBaseUrl = process.env.BASE_URL
-    const windowLocationPathname = window.location.pathname // eg, /basePath/...
-    const windowLocationOrigin = window.location.origin // eg, http://localhost:8080
-
-    console.log('origin: ' + origin +
-    ', processEnvVueAppPath: ' + processEnvVueAppPath +
-    ', processEnvBaseUrl: ' + processEnvBaseUrl +
-    ', windowLocationPathname: ' + windowLocationPathname +
-    ', windowLocationOrigin: ' + windowLocationOrigin)
-
-    if (!origin || !processEnvVueAppPath || !processEnvBaseUrl || !windowLocationPathname || !windowLocationOrigin) {
-      return Promise.reject(new Error('Missing environment variables'))
-    }
-
-    // fetch config from API
-    // eg, http://localhost:8080/basePath/config/configuration.json
-    // eg, https://ppr-dev.pathfinder.gov.bc.ca/ppr/config/configuration.json
-    // const url = `${origin}/${processEnvVueAppPath}/config/configuration.json`
-    const url = 'http://localhost:3000/tabs'
+    const url = sessionStorage.getItem('WTD_API_URL')
     const headers = {
       Accept: 'application/json',
       ResponseType: 'application/json',
       'Cache-Control': 'no-cache'
     }
 
-    console.log('URL: ' + url)
+    console.log('updating dashboard to url: ' + url)
     console.log('Dashboards: ' + updatedDashboards[0].tabName)
     this.dashboards = []
     updatedDashboards.forEach(val => this.dashboards.push(Object.assign({}, val)))
-
-    // const response = await axios.post(url, dashboards, { headers }).catch(() => {
-    await axios.get(url, { headers }).catch(() => {
+    const payload: DashboardPayloadIF = { tabs: updatedDashboards }
+    await axios.post(url, payload, { headers }).catch(() => {
       this.saveErrorDialog = true
       return Promise.reject(new Error('Could not post dashboard.json'))
     })

@@ -1,11 +1,8 @@
 {
   "REGISTRY_URL": "https://dev.bcregistry.ca",
-  "WTD_API_URL": "http://localhost:3000/tabs",
-  "PPR_API_KEY": "diGbLm3qjmKLjvU4GWIgPNlhxtpLWlN0",
+  "WTD_API_URL": "http://localhost:5000/api/v1/Tabs",
+  "WTD_API_KEY": "notused",
   "AUTH_URL": "https://dev.oidc.gov.bc.ca/auth/",
   "AUTH_API_URL": "https://dev.oidc.gov.bc.ca/auth/vtkayq4c",
-  "SBC_CONFIG_AUTH_API_URL": "http://localhost:3000",
-  "LD_CLIENT_ID": "",
-  "SENTRY_DSN": "",
-  "KEYCLOAK_CONFIG_PATH": "/local-keycloak-config-url/keycloak.json"
+  "KEYCLOAK_CONFIG_PATH": "http://localhost:5000/api/v1/config/keycloak.json"
 }

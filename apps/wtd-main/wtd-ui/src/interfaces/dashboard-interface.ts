@@ -15,3 +15,7 @@ export interface DashboardTileIF {
   tileURL: string
   tileRoles: string[]
 }
+
+export interface DashboardPayloadIF {
+  tabs : DashboardTabIF[]
+}
