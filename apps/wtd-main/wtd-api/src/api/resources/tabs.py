@@ -18,17 +18,19 @@ from flask_restx import Namespace
 from flask_restx import Resource
 from flask_restx import reqparse
 from flask_restx import cors
+from api.utilities.cors_util import cors_preflight
+
 import json
 
 from api.auth.auth import jwt
 
-api = Namespace('Tabs', description='API for managing and obtaining tab information')
+api = Namespace('', description='API for managing and obtaining tab information')
 
 #filepath = 'C:/Users/josh.colaco/Documents/WaitTimeDashboard/wtd/SBC_DivApps/apps/wtd-main/wtd-api/src/api/resources/db.json'
 filepath = 'src/api/resources/db.json'
 
-
-@api.route('')
+@cors_preflight('GET,POST,OPTIONS')
+@api.route('/Tabs', methods=['GET', 'POST', 'OPTIONS'])
 class TabManagement(Resource):
     """TabManagement resource."""
 
@@ -51,3 +53,6 @@ class TabManagement(Resource):
         # Reading from file 
         f.write(json.dumps(data))
         return data, 200
+
+
+
