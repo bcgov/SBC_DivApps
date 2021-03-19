@@ -272,7 +272,7 @@
                                 ]
                             },
                             {
-                                "operator": "contains",
+                                "operator": "equals",
                                 "arguments": [
                                     {
                                         "operand": "attribute",
@@ -304,7 +304,7 @@
                         },
                         {
                             "id": "param3",
-                            "type": "select",
+                            "type": "select-unique",
                             "title": "City is",
                             "value": "",
                             "choices": [],
