@@ -1,4 +1,5 @@
 import { Action, Module } from 'vuex-module-decorators'
+import { CurrentUserIF } from '@/interfaces'
 import AccountModule from 'sbc-common-components/src/store/modules/account'
 
 @Module({
@@ -19,7 +20,12 @@ export default class AccountOverrideModule extends AccountModule {
   @Action({ rawError: true })
   public async getCurrentUserProfile (isAuth: boolean = false) {
     try {
-      const userProfile = null
+      const userProfile: CurrentUserIF = {
+        userTerms: {
+          isTermsOfUseAccepted: true
+        }
+      }
+      // const userProfile = null //currentUser?.userTerms?.isTermsOfUseAccepted
       return userProfile
     } catch (error) {
       console.error('Error: ', error?.response)

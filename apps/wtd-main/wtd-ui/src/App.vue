@@ -404,14 +404,14 @@ export default class App extends Mixins(AuthMixin) {
   /** Fetches current user info and stores it. */
   private async loadUserInfo (): Promise<any> {
     // NB: will throw if API error
-    const response = await this.fetchCurrentUser()
-    const userInfo = response?.data
-    console.log('user info loaded: ' + userInfo)
-    if (userInfo) {
-      this.setUserInfo(userInfo)
-    } else {
-      throw new Error('Invalid user info')
-    }
+    // const response = await this.fetchCurrentUser()
+    // const userInfo = response?.data
+    // console.log('user info loaded: ' + userInfo)
+    // if (userInfo) {
+    //   this.setUserInfo(userInfo)
+    // } else {
+    //   throw new Error('Invalid user info')
+    // }
   }
 
   /** Gets account information (e.g. Premium account) and stores it. */
