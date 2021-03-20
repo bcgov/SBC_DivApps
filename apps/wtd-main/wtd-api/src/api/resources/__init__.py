@@ -29,6 +29,9 @@ from .tiles import api as TILES_API
 from .dashboard_config import api as DASHBOARD_CONFIG_API
 from .keycloak_config import api as KEYCLOAK_CONFIG_API
 from .ssrs_reverse_proxy import api as SSRS_PROXY_API
+import os
+
+SSRS_BASE_URI = os.getenv('SSRS_BASE_URI')
 
 # This will add the Authorize button to the swagger docs
 # TODO oauth2 & openid may not yet be supported by restplus <- check on this
@@ -52,4 +55,4 @@ API.add_namespace(TABS_API, path='/api/v1')
 API.add_namespace(TILES_API, path='/api/v1/tile')
 API.add_namespace(DASHBOARD_CONFIG_API, path='/api/v1/config')
 API.add_namespace(KEYCLOAK_CONFIG_API, path='/api/v1/config')
-API.add_namespace(SSRS_PROXY_API, path='/ReportServer')
+API.add_namespace(SSRS_PROXY_API, path=f'/{SSRS_BASE_URI}')

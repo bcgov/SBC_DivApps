@@ -21,29 +21,34 @@ from flask_restx import cors
 from requests_ntlm import HttpNtlmAuth
 import json
 import requests
+import os
 
 from api.auth.auth import jwt
 
 api = Namespace('ssrs', description='Proxy for SSRS embedded reports')
 
-SERVER = 'padawan'
-ORIGIN = f'http://{SERVER}'
-SITE_NAME = f'http://{SERVER}/ReportServer'
 
-SYSTEM_USER = 'IDIR\\USER'
-SYSTEM_CODE = 'CODE'
+SSRS_SERVER = os.getenv('SSRS_SERVER')
+SSRS_BASE_URI = os.getenv('SSRS_BASE_URI')
+SSRS_SYSTEM_USER = os.getenv('SSRS_SYSTEM_USER')
+SSRS_SYSTEM_CODE = os.getenv('SSRS_SYSTEM_CODE')
+
+ORIGIN = f'http://{SSRS_SERVER}'
+SITE_NAME = f'http://{SSRS_SERVER}/{SSRS_BASE_URI}'
+
 
 #  http://localhost:5000/ReportServer/Pages/ReportViewer.aspx?%2FProject-COVID_SI%2FCOVID%20SI%20Plan%20-%20Director%20Dashboard&rs%3AParameterLanguage=en-CA
 #  http://padawan/ReportServer/Pages/ReportViewer.aspx?%2FProject-COVID_SI%2FCOVID%20SI%20Plan%20-%20Director%20Dashboard&rs%3AParameterLanguage=en-CA
 
-@api.route('/<path:path>',methods=['GET','POST','DELETE'])
+@api.route('/<path:path>',methods=['GET','POST'])
 class SSRSProxy(Resource):
 
     @cors.crossdomain(origin='*')
     def get(self, path):
+        print(f'USERNAME: {SSRS_SYSTEM_USER}')
         query = request.query_string.decode()
-        print(f'----> GET  REDIRECT:   {SITE_NAME}/{path}?{query}')
-        resp = requests.get(f'{SITE_NAME}/{path}?{query}', headers=self.parse_headers(), auth=HttpNtlmAuth(SYSTEM_USER,SYSTEM_CODE))
+        # print(f'----> GET  REDIRECT:   {SITE_NAME}/{path}?{query}')
+        resp = requests.get(f'{SITE_NAME}/{path}?{query}', headers=self.parse_headers(), auth=HttpNtlmAuth(SSRS_SYSTEM_USER, SSRS_SYSTEM_CODE))
         response = Response(resp.content, resp.status_code)
 
         if resp.headers.get('Content-Type') != None:
@@ -54,13 +59,13 @@ class SSRSProxy(Resource):
     def post(self, path):
         query = request.query_string.decode()
         payload = request.get_data()
-        print(f'----> POST REDIRECT:   {SITE_NAME}/{path}?{query}')
+        # print(f'----> POST REDIRECT:   {SITE_NAME}/{path}?{query}')
         
         # TODO Maybe payload will be different for different queries
         textpayload = f'{payload}'
         textpayload = textpayload[2:-1]
 
-        resp = requests.post(f'{SITE_NAME}/{path}?{query}',data=textpayload, headers=self.parse_headers(), auth=HttpNtlmAuth(SYSTEM_USER,SYSTEM_CODE))
+        resp = requests.post(f'{SITE_NAME}/{path}?{query}',data=textpayload, headers=self.parse_headers(), auth=HttpNtlmAuth(SSRS_SYSTEM_USER, SSRS_SYSTEM_CODE))
         
         response = Response(resp.content, resp.status_code)
         return response
@@ -71,10 +76,13 @@ class SSRSProxy(Resource):
         for (name, value) in request.headers.items():
             new_headers[name] = value
         if request.headers.get('Referer') != None:
-            # TODO: pares original header to get the referrer
-            new_headers['Referer'] = 'http://padawan/ReportServer/Pages/ReportViewer.aspx?%2FProject-COVID_SI%2FCOVID%20SI%20Plan%20-%20Director%20Dashboard&rs%3AParameterLanguage=en-CA'
+            original_referrer = request.headers.get('Referer')
+            index = original_referrer.index(SSRS_BASE_URI)
+            existing_uri = original_referrer[index + len(SSRS_BASE_URI) + 1:]
+            new_referrer = f'http://{SSRS_SERVER}/{SSRS_BASE_URI}/{existing_uri}'
+            new_headers['Referer'] = new_referrer
         if request.headers.get('Host') != None:
-            new_headers['Host'] = SERVER
+            new_headers['Host'] = SSRS_SERVER
         if request.headers.get('Origin') != None:
             new_headers['Origin'] = ORIGIN
         return new_headers
