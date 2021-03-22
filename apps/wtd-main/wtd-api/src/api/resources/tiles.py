@@ -18,7 +18,7 @@ from flask_restx import Namespace
 from flask_restx import Resource
 from flask_restx import cors
 
-from api.auth.auth import jwt
+from api.auth.auth import jwtmanager
 
 api = Namespace('Tiles', description='API for managing and obtaining tile information')
 

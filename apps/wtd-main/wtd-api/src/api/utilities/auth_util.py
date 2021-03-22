@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.'''
 from enum import Enum
 from functools import wraps
-from qsystem import time_print
 
 from flask import g, abort
 
@@ -56,6 +55,24 @@ def has_role(need_roles: list, all_roles: list, user, caller):
     if any(role in all_roles for role in need_roles):
         return
     else:
-        time_print("==> has_role, R: " + str(need_roles) + "; T: " + str(all_roles))
-        time_print("    --> U: " + user + "; C:  " + caller)
         abort(403)
+
+class Group(Enum):
+    """Groups"""
+    analytics_editor = 'Analytics-editor'
+    analytics_sdb = 'Analytics-SDB'
+
+def has_any_group(groups: list):
+    """Check if the user has any group listed in groups."""
+
+    def decorated(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            token_groups = g.jwt_oidc_token_info['groups']
+            if any(group in token_groups for group in groups):
+                return f(*args, **kwargs)
+            abort(403)
+
+        return wrapper
+
+    return decorated

@@ -40,12 +40,15 @@ def create_app(run_mode=os.getenv('FLASK_ENV', 'production')):
 
 def setup_jwt_manager(app):
     """Use flask app to configure the JWTManager to work for a particular Realm."""
-    from api.auth.auth import jwt as jwt_manager
+    from api.auth.auth import jwtmanager as jwt_manager
 
     def get_roles(a_dict):
         return a_dict['realm_access']['roles']  # pragma: no cover
 
-    app.config['JWT_ROLE_CALLBACK'] = get_roles
+    def get_groups(a_dict):
+        return a_dict['groups']
+
+    app.config['JWT_GROUP_CALLBACK'] = get_groups
 
     jwt_manager.init_app(app)
 
