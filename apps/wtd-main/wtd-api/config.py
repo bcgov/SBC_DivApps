@@ -59,6 +59,11 @@ class _Config(object):  # pylint: disable=too-few-public-methods
     SMS_APPOINTMENT_APP_URL = os.getenv('SMS_APPOINTMENT_APP_URL')
     APPOINTMENT_APP_URL = os.getenv('APPOINTMENT_APP_URL')
 
+    SSRS_SERVER = os.getenv('SSRS_SERVER')
+    SSRS_BASE_URI = os.getenv('SSRS_BASE_URI')
+    SSRS_SYSTEM_USER = os.getenv('SSRS_SYSTEM_USER')
+    SSRS_SYSTEM_CODE = os.getenv('SSRS_SYSTEM_CODE')
+
     #   Set up OIDC variables.
     SECRET_KEY = os.getenv('SECRET_KEY')
 

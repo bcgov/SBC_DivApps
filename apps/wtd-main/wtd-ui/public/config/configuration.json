@@ -1,0 +1,8 @@
+{
+  "REGISTRY_URL": "https://dev.bcregistry.ca",
+  "WTD_API_URL": "http://d-yyj0002.vic.cgi.com:5000/api/v1/Tabs",
+  "WTD_API_KEY": "notused",
+  "AUTH_URL": "https://dev.oidc.gov.bc.ca/auth/",
+  "AUTH_API_URL": "https://dev.oidc.gov.bc.ca/auth/vtkayq4c",
+  "KEYCLOAK_CONFIG_PATH": "http://d-yyj0002.vic.cgi.com:5000/api/v1/config/keycloak.json"
+}
