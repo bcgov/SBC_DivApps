@@ -18,3 +18,4 @@ flask-script
 marshmallow
 flask-bcrypt
 pyjwt
+requests_ntlm

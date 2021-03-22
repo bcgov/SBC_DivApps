@@ -23,7 +23,7 @@ import json
 import requests
 import os
 
-from api.auth.auth import jwt
+from api.auth.auth import jwtmanager
 
 api = Namespace('ssrs', description='Proxy for SSRS embedded reports')
 

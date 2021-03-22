@@ -23,6 +23,8 @@ src/api/resources/dashboard_config.py
 src/api/resources/keycloak_config.py
 src/api/resources/meta.py
 src/api/resources/ops.py
+src/api/resources/ssrs_reverse_proxy.py
+src/api/resources/ssrs_reverse_proxy_orig.py
 src/api/resources/tabs.py
 src/api/resources/tiles.py
 src/api/services/__init__.py

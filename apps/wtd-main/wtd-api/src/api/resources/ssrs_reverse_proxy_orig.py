@@ -22,7 +22,7 @@ from requests_ntlm import HttpNtlmAuth
 import json
 import requests
 
-from api.auth.auth import jwt
+from api.auth.auth import jwtmanager
 
 api = Namespace('ssrs', description='Proxy for SSRS embedded reports')
 

@@ -20,7 +20,7 @@ from flask_restx import reqparse
 from flask_restx import cors
 import json
 
-from api.auth.auth import jwt
+from api.auth.auth import jwtmanager
 
 api = Namespace('config', description='API for returning inital dashboard configuration')
 
