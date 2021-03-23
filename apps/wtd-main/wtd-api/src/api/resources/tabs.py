@@ -22,11 +22,13 @@ from api.utilities.cors_util import cors_preflight
 
 import json
 import jwt
+import os
 
 from api.auth.auth import jwtmanager
 
 api = Namespace('', description='API for managing and obtaining tab information')
 
+EDIT_GROUP = os.getenv('EDIT_GROUP')
 #filepath = 'C:/Users/josh.colaco/Documents/WaitTimeDashboard/wtd/SBC_DivApps/apps/wtd-main/wtd-api/src/api/resources/db.json'
 filepath = 'src/api/resources/db.json'
 PREFIX = 'Bearer '
@@ -53,17 +55,21 @@ class TabManagement(Resource):
         token = get_token(request.headers['Authorization'])
         decoded = jwt.decode(token, verify=False)
         groups = decoded['groups']
-        for _ in range(1000):
-            for tab in data['tabs']:
-                for tile in tab['tiles']:
-                    tilegroups = tile['tileGroups']
-                    #loop through check if role exists in the tile's group, if not remove tile               
-                    if any(i in tilegroups for i in groups) == False:
-                        tab['tiles'].remove(tile)
-        for _ in range(1000):
-            for tab in data['tabs']:
-                if not 'tiles' in tab or len(tab['tiles']) == 0:
-                    data['tabs'].remove(tab)
+        #Remove Tiles if user doesn't have group
+        for tab in data['tabs']:
+            tilelist = []
+            for tile in tab['tiles']:
+                tilegroups = tile['tileGroups']
+                #Loop through check if role exists in the tile's group, if not remove tile  
+                if any(i in tilegroups for i in groups) == True:
+                    tilelist.append(tile)
+            tab['tiles'] = tilelist
+        #Remove empty tabs from view
+        tablist = []   
+        for tab in data['tabs']:
+            if len(tab['tiles']) != 0:
+                tablist.append(tab)
+        data['tabs'] = tablist
         return data, 200
 
 
@@ -72,13 +78,19 @@ class TabManagement(Resource):
     def post(self):
         """POST a JSON object of tab and tile information"""
         # Fetch json file containing tab/tile info
-        data = request.get_json(force=True)
-        verify = json.loads(data)
-        f = open (filepath, "w") 
-        f.seek(0)
-        # Reading from file 
-        f.write(json.dumps(data))
-        return data, 200
+        token = get_token(request.headers['Authorization'])
+        decoded = jwt.decode(token, verify=False)
+        groups = decoded['groups']
+        if EDIT_GROUP in groups:
+            data = request.get_json(force=True)
+            #verify = json.loads(data)
+            f = open (filepath, "w") 
+            f.seek(0)
+            # Reading from file 
+            f.write(json.dumps(data))
+            return data, 200
+        else:
+            return {'error': 'Unsufficient keycloak group permissions'}, 401
 
 
 
