@@ -47,7 +47,7 @@ API = Api(
     title='WTD API',
     version='1.0',
     description='WaitTimeDashboard API for Service BC',
-    prefix='/',
+    prefix='/wtd',
     security=['apikey'],
     authorizations=AUTHORIZATIONS)
 
