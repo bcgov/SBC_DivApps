@@ -92,5 +92,27 @@ class TabManagement(Resource):
         else:
             return {'error': 'Unsufficient keycloak group permissions'}, 401
 
+@cors_preflight('GET,POST,OPTIONS')
+@api.route('/Tabs/edit', methods=['GET', 'OPTIONS'])
+class TabEditManagement(Resource):
+
+    @cors.crossdomain(origin='*')
+    @jwtmanager.requires_auth
+    def get(self):
+        """Return a JSON object of tab and tile information."""
+        # Fetch json file containing tab/tile info
+        token = get_token(request.headers['Authorization'])
+        decoded = jwt.decode(token, verify=False)
+        groups = decoded['groups']
+        f = open (filepath, "r") 
+        # Reading from file
+        if EDIT_GROUP in groups: 
+            data = json.loads(f.read())
+            return data
+        else:
+            return {'error': 'Unsufficient keycloak group permissions'}, 401
+
+        
+
 
 

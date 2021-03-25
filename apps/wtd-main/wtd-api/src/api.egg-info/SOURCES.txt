@@ -27,6 +27,7 @@ src/api/resources/ssrs_reverse_proxy.py
 src/api/resources/ssrs_reverse_proxy_orig.py
 src/api/resources/tabs.py
 src/api/resources/tiles.py
+src/api/resources/waittimemap.py
 src/api/services/__init__.py
 src/api/services/sms/__init__.py
 src/api/services/sms/custom_notify.py

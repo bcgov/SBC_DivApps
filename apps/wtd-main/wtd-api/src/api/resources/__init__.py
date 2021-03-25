@@ -29,6 +29,7 @@ from .tiles import api as TILES_API
 from .dashboard_config import api as DASHBOARD_CONFIG_API
 from .keycloak_config import api as KEYCLOAK_CONFIG_API
 from .ssrs_reverse_proxy import api as SSRS_PROXY_API
+from .waittimemap import api as WAITTIMEMAP_API
 import os
 
 SSRS_BASE_URI = os.getenv('SSRS_BASE_URI')
@@ -56,3 +57,4 @@ API.add_namespace(TILES_API, path='/api/v1/tile')
 API.add_namespace(DASHBOARD_CONFIG_API, path='/api/v1/config')
 API.add_namespace(KEYCLOAK_CONFIG_API, path='/api/v1/config')
 API.add_namespace(SSRS_PROXY_API, path=f'/{SSRS_BASE_URI}')
+API.add_namespace(WAITTIMEMAP_API, path='/api/v1')
