@@ -1,0 +1,1326 @@
+{
+    "type": "FeatureCollection",
+    "totalFeatures": "unknown",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "61",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.297478,
+                    51.644455
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "100 Mile House",
+                "OFFICE_ADDRESS": "300 Hwy 97",
+                "OFFICE_CITY": "100 Mile House",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/100milehouse",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "2",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.28096,
+                    50.720196
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Ashcroft",
+                "OFFICE_ADDRESS": "318 Railway Ave",
+                "OFFICE_CITY": "Ashcroft",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/ashcroft",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "3",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -133.689529,
+                    59.57803
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Atlin",
+                "OFFICE_ADDRESS": "100 - 3rd St",
+                "OFFICE_CITY": "Atlin",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/atlin",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "8",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -126.754929,
+                    52.372311
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Bella Coola",
+                "OFFICE_ADDRESS": "636 Cliff St",
+                "OFFICE_CITY": "Bella Coola",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/bellacoola",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "11",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -125.755997,
+                    54.225189
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Burns Lake",
+                "OFFICE_ADDRESS": "161 Hwy 16",
+                "OFFICE_CITY": "Burns Lake",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/burnslake",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "12",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -125.255341,
+                    50.026196
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Campbell River",
+                "OFFICE_ADDRESS": "UNIT 115 -- 1180 Ironwood St",
+                "OFFICE_CITY": "Campbell River",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/campbellriver",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "19",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.633568,
+                    55.69812
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Chetwynd",
+                "OFFICE_ADDRESS": "4744 52nd St NW",
+                "OFFICE_CITY": "Chetwynd",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/chetwynd",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "14",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.964371,
+                    49.148037
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Chilliwack",
+                "OFFICE_ADDRESS": "SUITE 1 -- 45467 Yale Rd",
+                "OFFICE_CITY": "Chilliwack",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/chilliwack",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "15",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.586548,
+                    51.091679
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Clinton",
+                "OFFICE_ADDRESS": "RM 102 -- 1423 Hwy 97",
+                "OFFICE_CITY": "Clinton",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/clinton",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "16",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -124.982185,
+                    49.676392
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Courtenay",
+                "OFFICE_ADDRESS": "2500 Cliffe Ave",
+                "OFFICE_CITY": "Courtenay",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/courtenay",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "17",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -115.766701,
+                    49.514183
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Cranbrook",
+                "OFFICE_ADDRESS": "100 Cranbrook St N",
+                "OFFICE_CITY": "Cranbrook",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/cranbrook",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "18",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.509323,
+                    49.095634
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Creston",
+                "OFFICE_ADDRESS": "1404 Canyon St",
+                "OFFICE_CITY": "Creston",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/creston",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "23",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -120.235703,
+                    55.758682
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Dawson Creek",
+                "OFFICE_ADDRESS": "1201 103 Ave",
+                "OFFICE_CITY": "Dawson Creek",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/dawsoncreek",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "13",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -129.986115,
+                    58.434784
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Dease Lake",
+                "OFFICE_ADDRESS": "Block D, Hwy 37",
+                "OFFICE_CITY": "Dease Lake",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/deaselake",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "25",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.706764,
+                    48.780663
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Duncan",
+                "OFFICE_ADDRESS": "5785 Duncan St",
+                "OFFICE_CITY": "Duncan",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/duncan",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "30",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -115.064972,
+                    49.503906
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Fernie",
+                "OFFICE_ADDRESS": "401 4th Ave",
+                "OFFICE_CITY": "Fernie",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/fernie",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "32",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.706429,
+                    58.804218
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Fort Nelson",
+                "OFFICE_ADDRESS": "5319 50th Ave S",
+                "OFFICE_CITY": "Fort Nelson",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/fortnelson",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "33",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -124.258308,
+                    54.444965
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Fort St. James",
+                "OFFICE_ADDRESS": "470 Stuart Dr W",
+                "OFFICE_CITY": "Fort St. James",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/fortstjames",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "31",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -120.848259,
+                    56.252186
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Fort St. John",
+                "OFFICE_ADDRESS": "10600 100 St",
+                "OFFICE_CITY": "Fort St. John",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/fortstjohn",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "37",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.508842,
+                    48.860123
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Ganges",
+                "OFFICE_ADDRESS": "343 Lower Ganges Rd",
+                "OFFICE_CITY": "Salt Spring Island",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/ganges",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "35",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.96579,
+                    51.296452
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Golden",
+                "OFFICE_ADDRESS": "837 Park Dr",
+                "OFFICE_CITY": "Golden",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/golden",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "36",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -118.436592,
+                    49.032658
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Grand Forks",
+                "OFFICE_ADDRESS": "7290 2nd St",
+                "OFFICE_CITY": "Grand Forks",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/grandforks",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "1",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -127.659248,
+                    55.257271
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Hazelton",
+                "OFFICE_ADDRESS": "2210 Hwy 62",
+                "OFFICE_CITY": "Hazelton",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/hazelton",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "39",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -126.646774,
+                    54.398605
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Houston",
+                "OFFICE_ADDRESS": "3400 11th St",
+                "OFFICE_CITY": "Houston",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/houston",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "38",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.028587,
+                    50.50959
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Invermere",
+                "OFFICE_ADDRESS": "625 4th St",
+                "OFFICE_CITY": "Invermere",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/invermere",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "40",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -120.330704,
+                    50.670486
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Kamloops",
+                "OFFICE_ADDRESS": "UNIT 250 -- 455 Columbia St",
+                "OFFICE_CITY": "Kamloops",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/kamloops",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "41",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.904266,
+                    49.911354
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Kaslo",
+                "OFFICE_ADDRESS": "312 4th St",
+                "OFFICE_CITY": "Kaslo",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/kaslo",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "42",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.49374,
+                    49.88638
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Kelowna",
+                "OFFICE_ADDRESS": "UNIT 305 -- 478 Bernard Ave",
+                "OFFICE_CITY": "Kelowna",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/kelowna",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "43",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -128.65802,
+                    54.054947
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Kitimat",
+                "OFFICE_ADDRESS": "795 S Lahakas Blvd",
+                "OFFICE_CITY": "Kitimat",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/kitimat",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "45",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -121.934807,
+                    50.693432
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Lillooet",
+                "OFFICE_ADDRESS": "SUITE A -- 639 Main St",
+                "OFFICE_CITY": "Lillooet",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/lillooet",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "47",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.094444,
+                    55.340084
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Mackenzie",
+                "OFFICE_ADDRESS": "64 Centennial Dr",
+                "OFFICE_CITY": "Mackenzie",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/mackenzie",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "46",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.599586,
+                    49.219883
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Maple Ridge",
+                "OFFICE_ADDRESS": "UNIT 175 -- 22470 Dewdney Trunk Rd",
+                "OFFICE_CITY": "Maple Ridge",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/mapleridge",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "48",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -132.147247,
+                    54.012707
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Masset",
+                "OFFICE_ADDRESS": "1666 Orr St",
+                "OFFICE_CITY": "Masset",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/masset",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "50",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -120.785324,
+                    50.108223
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Merritt",
+                "OFFICE_ADDRESS": "2194 Coutlee Ave",
+                "OFFICE_CITY": "Merritt",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/merritt",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "51",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -117.805176,
+                    50.241566
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Nakusp",
+                "OFFICE_ADDRESS": "204 6th Ave NW",
+                "OFFICE_CITY": "Nakusp",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/nakusp",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "55",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.939514,
+                    49.162148
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Nanaimo",
+                "OFFICE_ADDRESS": "460 Selby St",
+                "OFFICE_CITY": "Nanaimo",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/nanaimo",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "56",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -117.296028,
+                    49.493191
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Nelson",
+                "OFFICE_ADDRESS": "310 Ward St",
+                "OFFICE_CITY": "Nelson",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/nelson",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "60",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.5532,
+                    49.18095
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Oliver",
+                "OFFICE_ADDRESS": "RM 101 -- 583 Fairview Rd",
+                "OFFICE_CITY": "Oliver",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/oliver",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "65",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.58744,
+                    49.485542
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Penticton",
+                "OFFICE_ADDRESS": "40 Calgary Ave",
+                "OFFICE_CITY": "Penticton",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/penticton",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "66",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -124.800896,
+                    49.250038
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Port Alberni",
+                "OFFICE_ADDRESS": "4070 8th Ave",
+                "OFFICE_CITY": "Port Alberni",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/portalberni",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "64",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -127.494904,
+                    50.719498
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Port Hardy",
+                "OFFICE_ADDRESS": "8785 Gray St",
+                "OFFICE_CITY": "Port Hardy",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/porthardy",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "67",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -124.522987,
+                    49.845833
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Powell River",
+                "OFFICE_ADDRESS": "6953 Alberni St",
+                "OFFICE_CITY": "Powell River",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/powellriver",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "68",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.7425,
+                    53.914349
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Prince George",
+                "OFFICE_ADDRESS": "1044 5th Ave",
+                "OFFICE_CITY": "Prince George",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/princegeorge",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "69",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -130.322006,
+                    54.31411
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Prince Rupert",
+                "OFFICE_ADDRESS": "201 3rd Ave W",
+                "OFFICE_CITY": "Prince Rupert",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/princerupert",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "70",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -120.508942,
+                    49.458992
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Princeton",
+                "OFFICE_ADDRESS": "UNIT 10 -- 136 Tapton Ave",
+                "OFFICE_CITY": "Princeton",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/princeton",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "73",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -132.082489,
+                    53.254551
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Queen Charlotte",
+                "OFFICE_ADDRESS": "216 Oceanview Dr",
+                "OFFICE_CITY": "Queen Charlotte City",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/queencharlotte",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "75",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.494682,
+                    52.9771
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Quesnel",
+                "OFFICE_ADDRESS": "UNIT 102 -- 350 Barlow Ave",
+                "OFFICE_CITY": "Quesnel",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/quesnel",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "80",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -118.207619,
+                    51.00457
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Revelstoke",
+                "OFFICE_ADDRESS": "UNIT 104 -- 1123 2nd St W",
+                "OFFICE_CITY": "Revelstoke",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/revelstoke",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "85",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.268257,
+                    50.705482
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Salmon Arm",
+                "OFFICE_ADDRESS": "850A 16 St NE",
+                "OFFICE_CITY": "Salmon Arm",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/salmonarm",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "82",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.758102,
+                    49.471561
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Sechelt",
+                "OFFICE_ADDRESS": "UNIT 102 -- 5710 Teredo St",
+                "OFFICE_CITY": "Sechelt",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/sechelt",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "86",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -127.173943,
+                    54.777294
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Smithers",
+                "OFFICE_ADDRESS": "1020 Murray St",
+                "OFFICE_CITY": "Smithers",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/smithers",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "83",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -114.884979,
+                    49.732502
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Sparwood",
+                "OFFICE_ADDRESS": "SUITE 96 -- 101 Red Cedar Dr",
+                "OFFICE_CITY": "Sparwood",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/sparwood",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "84",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.152306,
+                    49.701435
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Squamish",
+                "OFFICE_ADDRESS": "1360 Pemberton Ave",
+                "OFFICE_CITY": "Squamish",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/squamish",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "87",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -129.991302,
+                    55.938038
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Stewart",
+                "OFFICE_ADDRESS": "703 Brightwell St",
+                "OFFICE_CITY": "Stewart",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/stewart",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "88",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -128.599762,
+                    54.517963
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Terrace",
+                "OFFICE_ADDRESS": "UNIT 101 -- 3220 Eby St",
+                "OFFICE_CITY": "Terrace",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/terrace",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "81",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -117.706924,
+                    49.096405
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Trail",
+                "OFFICE_ADDRESS": "1050 Eldorado St",
+                "OFFICE_CITY": "Trail",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/trail",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "89",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -125.547447,
+                    48.941795
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Ucluelet",
+                "OFFICE_ADDRESS": "UNIT 5 -- 1636 Peninsula Rd",
+                "OFFICE_CITY": "Ucluelet",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/ucluelet",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "91",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.267754,
+                    52.833233
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Valemount",
+                "OFFICE_ADDRESS": "1300 4th Ave",
+                "OFFICE_CITY": "Valemount",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/valemount",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "92",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -124.007271,
+                    54.01638
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Vanderhoof",
+                "OFFICE_ADDRESS": "189 Stewart St E",
+                "OFFICE_CITY": "Vanderhoof",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/vanderhoof",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "93",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -119.270538,
+                    50.265568
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Vernon",
+                "OFFICE_ADDRESS": "3201 30 St",
+                "OFFICE_CITY": "Vernon",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/vernon",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "94",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.377106,
+                    48.458359
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Victoria",
+                "OFFICE_ADDRESS": "UNIT 403 -- 771 Vernon Ave",
+                "OFFICE_CITY": "Victoria",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/victoria",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "97",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.139999,
+                    52.130417
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Williams Lake",
+                "OFFICE_ADDRESS": "SUITE 104 -- 540 Borland St",
+                "OFFICE_CITY": "Williams Lake",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/williamslake",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "10",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.991381,
+                    49.226592
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Burnaby",
+                "OFFICE_ADDRESS": "UNIT 400 - 5021 Kingsway",
+                "OFFICE_CITY": "Burnaby",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/burnaby",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "90",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -122.79926311792,
+                    49.1928860142708
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Surrey",
+                "OFFICE_ADDRESS": "200-10470 152nd Street",
+                "OFFICE_CITY": "Surrey",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/surrey",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "95",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.12255397174,
+                    49.2820203583397
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Vancouver",
+                "OFFICE_ADDRESS": "865 Hornby St 7th Floor",
+                "OFFICE_CITY": "Vancouver",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/vancouver",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "98",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.369772847957,
+                    48.4529316046064
+                ]
+            },
+            "geometry_name": "SHAPE",
+            "properties": {
+                "OFFICE_NAME": "Head Office",
+                "OFFICE_ADDRESS": "4000 Seymour Pl",
+                "OFFICE_CITY": "Victoria",
+                "OFFICE_URL": "http://gov.bc.ca/servicebc/",
+                "WAIT_TIME": "N/A",
+                "WAIT_NUM": "N/A"
+            }
+        }
+    ]
+}
