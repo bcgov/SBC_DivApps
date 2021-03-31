@@ -4,12 +4,14 @@
 FROM docker-remote.artifacts.developer.gov.bc.ca/maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
 
 RUN apt-get update \
-    && apt-get install -y git 
+    && apt-get install -y git
 
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 
-RUN cp /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
-RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+#RUN cp /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
+#RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+COPY ./pom-docker.xml /tmp/pom.xml
+COPY ./settings-docker.xml /usr/share/maven/ref/
 
 WORKDIR /tmp/
 
@@ -17,6 +19,10 @@ WORKDIR /tmp/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
 RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
+
+# Override these files they have custom changes in the sbc_divapps directory
+COPY ./src/main/java/org/camunda/bpm/extension/hooks/controllers/  /tmp/src/main/java/org/camunda/bpm/extension/hooks/controllers/
+COPY ./src/main/java/org/camunda/bpm/extension/hooks/listeners/execution/ /tmp/src/main/java/org/camunda/bpm/extension/hooks/listeners/execution/
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
 FROM docker-remote.artifacts.developer.gov.bc.ca/adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
