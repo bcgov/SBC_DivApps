@@ -20,9 +20,12 @@ RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins d
 RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
+
+ARG HOOKS_DIR=src/main/java/org/camunda/bpm/extension/hooks
+
 # Override these files they have custom changes in the sbc_divapps directory
-COPY ./src/main/java/org/camunda/bpm/extension/hooks/controllers/  /tmp/src/main/java/org/camunda/bpm/extension/hooks/controllers/
-COPY ./src/main/java/org/camunda/bpm/extension/hooks/listeners/execution/ /tmp/src/main/java/org/camunda/bpm/extension/hooks/listeners/execution/
+COPY ./${HOOKS_DIR}/controllers/  /tmp/${HOOKS_DIR}/controllers/
+COPY ./${HOOKS_DIR}/listeners/execution/ /tmp/${HOOKS_DIR}/listeners/execution/
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
 FROM docker-remote.artifacts.developer.gov.bc.ca/adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
