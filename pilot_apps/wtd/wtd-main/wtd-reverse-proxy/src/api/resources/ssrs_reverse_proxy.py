@@ -24,9 +24,10 @@ import json
 import requests
 import os
 import jwt
+import urllib.parse
 
 from api.utilities.cors_util import cors_preflight
-from api.auth.auth import jwtmanager
+from api.auth.auth import jwtcookiemanager
 
 api = Namespace('ssrs', description='Proxy for SSRS embedded reports')
 
@@ -35,12 +36,15 @@ SSRS_BASE_URI = os.getenv('SSRS_BASE_URI')
 SSRS_SYSTEM_USER = os.getenv('SSRS_SYSTEM_USER')
 SSRS_SYSTEM_CODE = os.getenv('SSRS_SYSTEM_CODE')
 
+DB_FOLDER = os.getenv('DB_FOLDER', '/app/resources')
+SSRS_VALIDATION_URI=os.getenv('SSRS_VALIDATION_URI', None) # determine which pages to roles authorization, None means everything will pass
+
 ORIGIN = f'http://{SSRS_SERVER}'
 SITE_NAME = f'http://{SSRS_SERVER}/{SSRS_BASE_URI}'
+DB_FILE_PATH = f'{DB_FOLDER}{os.path.sep}db.json'
 
 PREFIX = 'Bearer '
 COOKIE_PREFIX = 'wtd-rp='
-SSRS_ACCESS_GROUP = os.getenv('SSRS_ACCESS_GROUP', 'SBC Staff')
 
 
 #  http://localhost:5000/ReportServer/Pages/ReportViewer.aspx?%2FProject-COVID_SI%2FCOVID%20SI%20Plan%20-%20Director%20Dashboard&rs%3AParameterLanguage=en-CA
@@ -68,23 +72,55 @@ def get_token_from_cookie(headers):
                         return strippedCookie[len(COOKIE_PREFIX):]
     return None
 
+def validateRole(path, requestUrl):
+    if not SSRS_VALIDATION_URI:
+        return (True, 'No Validation URI set')
+    if not os.path.exists(DB_FILE_PATH):
+        warnings.warn(f'No authorization validation because file: {DB_FILE_PATH} cannot be found')
+        return (True, 'No db.json set')
+   
+    # Just check the if the inital request has a token. no need to check all the javascript and css files that come back
+    if path and path.lower() != SSRS_VALIDATION_URI.lower():
+        return (True, 'URL is not meant to be validated')    
+        
+    token = get_token_from_cookie(request.headers)
+    if not token:
+        return (False, 'Missing token')
+    decoded = jwt.decode(token, verify=False)
+    groups = decoded['groups']
+
+    #pthyon requests don't come as https for some reason so rename it before compare
+    requestUrl = requestUrl.replace('http://', 'https://')
+
+    encodedRequestUrl = urllib.parse.quote(requestUrl)
+    # Fetch json file containing tab/tile info
+    f = open (DB_FILE_PATH, "r") 
+    # Reading from file 
+    data = json.loads(f.read())
+    for tab in data['tabs']:
+        for tile in tab['tiles']:
+            tileUrl = tile['tileURL']
+            encodedTileUrl = urllib.parse.quote(tileUrl)
+            if encodedTileUrl == encodedRequestUrl:
+                tilegroups = tile['tileGroups']
+                #Loop through check if role exists in the tile's group, if not remove tile  
+                if any(i in tilegroups for i in groups):
+                    return (True, 'Authorization found')
+                else:
+                    return (False, 'Unsufficient permissions')
+    return (False, f'Did not find matching URL for: [{requestUrl}]')                        
+
 @cors_preflight('GET,POST,OPTIONS')
 @api.route('/<path:path>',methods=['GET','POST','OPTIONS'])
 class SSRSProxy(Resource):
 
     @cors.crossdomain(origin='*')
-    # @jwtmanager.requires_auth
+    @jwtcookiemanager.requires_auth
     def get(self, path):
-        if path and path.lower() == 'pages/reportviewer.aspx':
-            # Just check the if the inital request has a token. no need to check all the javascript and css files that come back
-            token = get_token_from_cookie(request.headers)
-            if not token:
-                return {'error': 'Missing token'}, 401
-            decoded = jwt.decode(token, verify=False)
-            groups = decoded['groups']
-            print(f'Groups are: {groups}')
-            if SSRS_ACCESS_GROUP not in groups:
-                return {'error': 'Unsufficient permissions'}, 401
+        (result, message) = validateRole(path, request.url)
+        print(f'Endpoint Authorization: {message}')
+        if not result:
+            return {'error': message}, 401
         query = request.query_string.decode()
         resp = requests.get(f'{SITE_NAME}/{path}?{query}', headers=self.parse_headers(), auth=HttpNtlmAuth(SSRS_SYSTEM_USER, SSRS_SYSTEM_CODE))
 
@@ -95,7 +131,7 @@ class SSRSProxy(Resource):
         return response
 
     @cors.crossdomain(origin='*')
-    # @jwtmanager.requires_auth
+    @jwtcookiemanager.requires_auth
     def post(self, path):
         query = request.query_string.decode()
         payload = request.get_data()

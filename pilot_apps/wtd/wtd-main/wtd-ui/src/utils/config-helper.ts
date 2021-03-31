@@ -44,6 +44,10 @@ export async function fetchConfig (): Promise<any> {
   sessionStorage.setItem('REGISTRY_URL', registryUrl)
   console.log('Set REGISTRY URL to: ' + registryUrl)
 
+  const cookieDomain: string = response.data.COOKIE_DOMAIN
+  sessionStorage.setItem('COOKIE_DOMAIN', cookieDomain)
+  console.log('Set COOKIE DOMAIN to: ' + cookieDomain)
+
   const editGroup: string = response.data.EDIT_GROUP
   sessionStorage.setItem('EDIT_GROUP', editGroup)
   console.log('Set EDIT GROUP to: ' + editGroup)
