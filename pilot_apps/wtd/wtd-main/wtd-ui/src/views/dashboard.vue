@@ -40,6 +40,7 @@
         <v-tab
           v-for="(n, index) in visibleDashboards"
           :key="index"
+          @click="tabClicked()"
         >
           {{ n.tabName }}
           <v-icon v-if="isEditing" right @click="deleteTab(index)">mdi-delete</v-icon>
@@ -359,13 +360,23 @@ export default class Dashboard extends Vue {
   }
 
   created () {
-    // this.$cookies.set('wtd-rp', sessionStorage.getItem(SessionStorageKeys.KeyCloakToken))
+    this.updateCookie()
+  }
+
+  tabClicked () {
+    this.updateCookie()
+  }
+
+  private updateCookie () {
+    this.$cookies.remove('wtd-rp', null, sessionStorage.getItem('COOKIE_DOMAIN'))
     this.$cookies.set(
       'wtd-rp',
       sessionStorage.getItem(SessionStorageKeys.KeyCloakToken),
       null,
       null,
-      'apps.silver.devops.gov.bc.ca') // domain address
+      sessionStorage.getItem('COOKIE_DOMAIN')) // domain address
+    // null,
+    // 'Lax')
   }
 }
 </script>

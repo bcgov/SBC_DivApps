@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Auth."""
-from flask_jwt_oidc import JwtManager
+from api.utilities.jwt_cookie_manager import JwtCookieManager
 
-jwtmanager = JwtManager()
+jwtcookiemanager = JwtCookieManager()
