@@ -14,6 +14,7 @@ RUN pip install psycopg2
 RUN pip install -e .
 
 RUN mkdir /nltk_data && chmod 777 /nltk_data
+RUN python -m nltk.downloader punkt vader_lexicon subjectivity
 
 EXPOSE 5000
 RUN chmod u+x ./entrypoint
