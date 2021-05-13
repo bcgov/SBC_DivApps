@@ -110,7 +110,7 @@
 			<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
 
-		<!-- Redis Session Cache
+		<!-- Redis Session Cache -->
 		<dependency>
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-data-redis</artifactId>
@@ -119,7 +119,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		-->
+
 
 		<!-- jdbc Session Cache -->
 		<!--dependency>
@@ -142,7 +142,7 @@
 		</dependency-->
 
 		<!-- Keycloak Identity Prover Plugin  -->
-		<dependency>
+		<!--dependency>
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-core</artifactId>
 		</dependency>
@@ -150,7 +150,7 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-jdbc</artifactId>
 		</dependency>
-
+		-->
 		<!-- MongoDB Session Cache
             <dependency>
                 <groupId>org.springframework.session</groupId>
