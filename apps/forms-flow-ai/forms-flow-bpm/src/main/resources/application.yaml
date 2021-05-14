@@ -74,6 +74,7 @@ spring:
 spring.redis:
   host: ${CAMUNDA_SESSION_REDIS_HOST:localhost}
   port: ${CAMUNDA_SESSION_REDIS_PORT:6379}
+  password: ${CAMUNDA_SESSION_REDIS_PASSWORD:password}
 
 
 management:
