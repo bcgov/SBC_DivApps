@@ -137,7 +137,9 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         if(execution.getVariables().containsKey("feature_by") && "task".equals(String.valueOf(execution.getVariable("feature_by")))) {
             variables.put("pid",execution.getVariable("pid"));
         } else {
-            variables.put("pid",execution.getProcessInstanceId());
+            if(!variables.containsKey("pid")) {
+                variables.put("pid", execution.getProcessInstanceId());
+            }
         }
         return variables;
     }
