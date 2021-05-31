@@ -14,8 +14,8 @@ RUN apk update && apk upgrade && \
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /web/
 
 RUN cp -rf /web/forms-flow-web/* /app/
-RUN rm /app/public/formsflow.ai_icon.svg
-COPY /public/formsflow.ai_icon.svg /app/public/
+RUN rm /app/public/logo.svg
+COPY /public/logo.svg /app/public/
 
 RUN npm install
 RUN npm run build
