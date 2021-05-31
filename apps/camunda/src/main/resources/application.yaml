@@ -22,16 +22,16 @@ spring.datasource:
   maximumPoolSize: ${HIKARI_MAX_POOLSIZE:10}
   validationTimeout: ${HIKARI_VALID_TIMEOUT:5000}
 
-session.datasource:
-  jdbc-url: ${SESSION_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-  username: ${SESSION_JDBC_USER:sa}
-  password: ${SESSION_JDBC_PASSWORD:sa}
-  driverClassName: ${SESSION_JDBC_DRIVER:org.h2.Driver}
-  type: com.zaxxer.hikari.HikariDataSource
-  connectionTimeout: ${SESSION_HIKARI_CONN_TIMEOUT:30000}
-  idleTimeout: ${SESSION_HIKARI_IDLE_TIMEOUT:600000}
-  maximumPoolSize: ${SESSION_HIKARI_MAX_POOLSIZE:10}
-  validationTimeout: ${SESSION_HIKARI_VALID_TIMEOUT:5000}
+#session.datasource:
+#  jdbc-url: ${SESSION_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+#  username: ${SESSION_JDBC_USER:sa}
+#  password: ${SESSION_JDBC_PASSWORD:sa}
+#  driverClassName: ${SESSION_JDBC_DRIVER:org.h2.Driver}
+#  type: com.zaxxer.hikari.HikariDataSource
+#  connectionTimeout: ${SESSION_HIKARI_CONN_TIMEOUT:30000}
+#  idleTimeout: ${SESSION_HIKARI_IDLE_TIMEOUT:600000}
+#  maximumPoolSize: ${SESSION_HIKARI_MAX_POOLSIZE:10}
+#  validationTimeout: ${SESSION_HIKARI_VALID_TIMEOUT:5000}
 
 analytics.datasource:
   jdbc-url: ${ANALYTICS_DB_JDBCURL}
@@ -55,10 +55,10 @@ spring:
           issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
   main:
     allow-bean-definition-overriding: true
-  session:
-    jdbc.initialize-schema: always
-    store-type: ${SESSION_STORE_TYPE:none}
-    timeout.seconds: ${SESSION_STORE_TIMEOUT:28800}
+#  session:
+#    jdbc.initialize-schema: always
+#    store-type: ${SESSION_STORE_TYPE:none}
+#    timeout.seconds: ${SESSION_STORE_TIMEOUT:28800}
 
 management:
   health:
