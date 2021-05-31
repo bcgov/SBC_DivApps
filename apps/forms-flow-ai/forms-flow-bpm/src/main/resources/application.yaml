@@ -20,17 +20,6 @@ spring.datasource:
   maximumPoolSize: ${CAMUNDA_HIKARI_MAX_POOLSIZE:10}
   validationTimeout: ${CAMUNDA_HIKARI_VALID_TIMEOUT:5000}
 
-session.datasource:
-  jdbc-url: ${CAMUNDA_SESSION_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-  username: ${CAMUNDA_SESSION_JDBC_USER:sa}
-  password: ${CAMUNDA_SESSION_JDBC_PASSWORD:sa}
-  driverClassName: ${CAMUNDA_SESSION_JDBC_DRIVER:org.h2.Driver}
-  type: com.zaxxer.hikari.HikariDataSource
-  connectionTimeout: ${CAMUNDA_SESSION_HIKARI_CONN_TIMEOUT:30000}
-  idleTimeout: ${CAMUNDA_SESSION_HIKARI_IDLE_TIMEOUT:600000}
-  maximumPoolSize: ${CAMUNDA_SESSION_HIKARI_MAX_POOLSIZE:10}
-  validationTimeout: ${CAMUNDA_SESSION_HIKARI_VALID_TIMEOUT:5000}
-
 analytics.datasource:
   jdbc-url: ${CAMUNDA_ANALYTICS_JDBC_URL}
   username: ${CAMUNDA_ANALYTICS_JDBC_USER}
@@ -64,10 +53,10 @@ spring:
           issuer-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}
   main:
     allow-bean-definition-overriding: true
-  session:
-    jdbc.initialize-schema: always
-    store-type: ${CAMUNDA_SESSION_STORE_TYPE:none}
-    timeout.seconds: ${CAMUNDA_SESSION_STORE_TIMEOUT:28800}
+#  session:
+#    jdbc.initialize-schema: always
+#    store-type: ${CAMUNDA_SESSION_STORE_TYPE:none}
+#    timeout.seconds: ${CAMUNDA_SESSION_STORE_TIMEOUT:28800}
 
 management:
   health:
@@ -85,6 +74,19 @@ info:
     version: "7.13"
   java:
     version: "11"
+
+# Enable the below given block for session management of camunda. This is not required for externalised tasklist.
+#session.datasource:
+#  jdbc-url: ${CAMUNDA_SESSION_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+#  username: ${CAMUNDA_SESSION_JDBC_USER:sa}
+#  password: ${CAMUNDA_SESSION_JDBC_PASSWORD:sa}
+#  driverClassName: ${CAMUNDA_SESSION_JDBC_DRIVER:org.h2.Driver}
+#  type: com.zaxxer.hikari.HikariDataSource
+#  connectionTimeout: ${CAMUNDA_SESSION_HIKARI_CONN_TIMEOUT:30000}
+#  idleTimeout: ${CAMUNDA_SESSION_HIKARI_IDLE_TIMEOUT:600000}
+#  maximumPoolSize: ${CAMUNDA_SESSION_HIKARI_MAX_POOLSIZE:10}
+#  validationTimeout: ${CAMUNDA_SESSION_HIKARI_VALID_TIMEOUT:5000}
+
 
 # Redis Session Cache not yet in use
 #  session:
