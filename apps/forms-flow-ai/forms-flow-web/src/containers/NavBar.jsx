@@ -45,12 +45,12 @@ const NavBar = React.memo(() => {
                 src={logoPath}
                 width="100px"
                 min-width="87px"
-                max-width="175px"
+                max-width="100px"
                 max-height="55px"
                 alt="Logo"
               />
             </Link>
-            <div className="custom-app-name">{appName}</div>
+            <div className="custom-app-name pl-2">{appName}</div>
           </Navbar.Brand>
          {/*
            <Navbar.Brand className="d-flex">
@@ -67,12 +67,12 @@ const NavBar = React.memo(() => {
             <Navbar.Collapse id="responsive-navbar-nav" className="navbar-nav">
             <Nav id="main-menu-nav" className="mr-auto">
               <Nav.Link as={Link} to='/form'  className={`main-nav nav-item ${
-                pathname.match(/^\/form/) ? "active-tab" : ""
+                pathname.match(/^\/form/) ? "active-tab" : "inactive-tab"
               }`}>  <img className="header-forms-icon" src="/webfonts/fa-wpforms.svg" alt="back"/> Forms</Nav.Link>
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT) ?
                 <Nav.Link as={Link} to='/application'  className={`main-nav nav-item ${
-                  pathname.match(/^\/application/) ? "active-tab" : ""
+                  pathname.match(/^\/application/) ? "active-tab" : "inactive-tab"
                 }`}> <img className="applications-icon-header" src="/webfonts/fa-regular_list-alt.svg" alt="back"/> Applications</Nav.Link>
                 :
                 null}
@@ -86,21 +86,21 @@ const NavBar = React.memo(() => {
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
                 <NavDropdown title={<span className="white-text"><img className="task-dropdown-icon" src="/webfonts/fa-solid_list.svg" alt="back"/> Tasks</span>} id="task-dropdown"
-                             className={`main-nav nav-item taskDropdown ${pathname.match(/^\/task/) ? "active-tab-dropdown" : ""}`} onClick={goToTask}>
+                             className={`main-nav nav-item taskDropdown  ${pathname.match(/^\/task/) ? "active-tab-dropdown" : "inactive-tab"}`} onClick={goToTask}>
                   <ServiceFlowFilterListDropDown/>
               </NavDropdown>:null}
 
-              {getUserRolePermission(userRoles, STAFF_REVIEWER) ?<NavDropdown title={<span className="white-text"><img className="dasboard-icon-dropdown" src="/webfonts/fa_dashboard.svg" alt="back"/> Dashboards</span>}
+              {getUserRolePermission(userRoles, STAFF_REVIEWER) ?<NavDropdown title={<span className="inactive-tab white-text"><img className="dasboard-icon-dropdown" src="/webfonts/fa_dashboard.svg" alt="back"/> Dashboards</span>}
                                                                               id="dashboard-dropdown"
                                                                               className={`main-nav nav-item ${
-                                                                                pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "active-tab-dropdown" : ""
+                                                                                pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "active-tab-dropdown" : "inactive-tab-dropdown"
                                                                               }`}>
                 <NavDropdown.Item as={Link} to='/metrics' className={`main-nav nav-item ${
                   pathname.match(/^\/metrics/) ? "active-tab" : ""
-                }`}><img src="/webfonts/fa_pie-chart.svg" alt="back"/> Metrics</NavDropdown.Item>
+                }`}><img src="/webfonts/fa_pie-chart.svg" alt="back"/> <span className="black-text">Metrics</span></NavDropdown.Item>
                 <NavDropdown.Item as={Link} to='/insights' className={`main-nav nav-item ${
                   pathname.match(/^\/insights/) ? "active-tab" : ""
-                }`}><img src="/webfonts/fa_lightbulb-o.svg" alt="back"/> Insights</NavDropdown.Item>
+                }`}><img src="/webfonts/fa_lightbulb-o.svg" alt="back"/> <span className="black-text">Insights</span></NavDropdown.Item>
               </NavDropdown>:null}
             </Nav>
             <Nav className="ml-auto">
