@@ -17,6 +17,11 @@ RUN cp -rf /web/forms-flow-web/* /app/
 RUN rm /app/public/logo.svg
 COPY /public/logo.svg /app/public/
 
+ARG CUSTOM_SRC_DIR=src
+
+# Override these files they have custom changes in the sbc_divapps directory
+COPY ./${CUSTOM_SRC_DIR}/  /app/${CUSTOM_SRC_DIR}/
+
 RUN npm install
 RUN npm run build
 
