@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 
 /**
@@ -38,6 +39,12 @@ public class CamundaExtConfiguration {
 	@Bean("analyticsJdbcTemplate")
 	public NamedParameterJdbcTemplate analyticsJdbcTemplate(@Qualifier("analyticsDS") DataSource analyticsDS) {
 		return new NamedParameterJdbcTemplate(analyticsDS);
+	}
+
+	@Bean
+	@ConfigurationProperties(prefix = "websocket")
+	public Properties messageBrokerProperties() {
+		return new Properties();
 	}
 
 
