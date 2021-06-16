@@ -40,5 +40,11 @@ public class CamundaExtConfiguration {
 		return new NamedParameterJdbcTemplate(analyticsDS);
 	}
 
+	@Bean
+	@ConfigurationProperties(prefix = "websocket")
+	public Properties messageBrokerProperties() {
+		return new Properties();
+	}
+
 
 }
