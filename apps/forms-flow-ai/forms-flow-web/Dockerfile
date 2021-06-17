@@ -22,7 +22,7 @@ ARG CUSTOM_SRC_DIR=src
 # Override these files they have custom changes in the sbc_divapps directory
 COPY ./${CUSTOM_SRC_DIR}/  /app/${CUSTOM_SRC_DIR}/
 
-RUN npm install --unsafe-perm
+RUN npm install
 RUN npm run build
 
 FROM docker-remote.artifacts.developer.gov.bc.ca/nginx:1.17 as production-stage
