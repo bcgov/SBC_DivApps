@@ -67,13 +67,43 @@ const NavBar = React.memo(() => {
             <Navbar.Collapse id="responsive-navbar-nav" className="navbar-nav">
             <Nav id="main-menu-nav" className="mr-auto">
               <Nav.Link as={Link} to='/form'  className={`main-nav nav-item ${
-                pathname.match(/^\/form/) ? "active-tab" : "inactive-tab"
-              }`}>  <img className="header-forms-icon" src="/webfonts/fa-wpforms.svg" alt="back"/> Forms</Nav.Link>
+                pathname.match(/^\/form/) ? "" : "inactive-tab"
+              }`}>  
+                <img
+                  className={`header-forms-icon 
+                              ${pathname.match(/^\/form/) ? "active-tab" : ""}`
+                            } 
+                  src="/webfonts/fa-wpforms.svg"
+                  alt="Header Form Icon"
+                />
+                <span 
+                  className={`tab-text-padding 
+                              ${pathname.match(/^\/form/) ? "active-tab-text" : ""}`
+                            }
+                >
+                  Forms
+                </span>
+              </Nav.Link>
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT) ?
                 <Nav.Link as={Link} to='/application'  className={`main-nav nav-item ${
-                  pathname.match(/^\/application/) ? "active-tab" : "inactive-tab"
-                }`}> <img className="applications-icon-header" src="/webfonts/fa-regular_list-alt.svg" alt="back"/> Applications</Nav.Link>
+                  pathname.match(/^\/application/) ? "" : "inactive-tab"
+                }`}> 
+                  <img
+                    className={`applications-icon-header
+                                ${pathname.match(/^\/application/) ? "active-tab" : ""}
+                                `}
+                    src="/webfonts/fa-regular_list-alt.svg"
+                    alt="Header Applications Icon"
+                  /> 
+                  <span
+                    className={`tab-text-padding 
+                    ${pathname.match(/^\/application/) ? "active-tab-text" : ""}`
+                  }
+                  >
+                    Applications
+                  </span>
+                </Nav.Link>
                 :
                 null}
 
@@ -85,22 +115,93 @@ const NavBar = React.memo(() => {
                 null}*/}
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
-                <NavDropdown title={<span className="white-text"><img className="task-dropdown-icon" src="/webfonts/fa-solid_list.svg" alt="back"/> Tasks</span>} id="task-dropdown"
-                             className={`main-nav nav-item taskDropdown  ${pathname.match(/^\/task/) ? "active-tab-dropdown" : "inactive-tab"}`} onClick={goToTask}>
+                <NavDropdown
+                  title={
+                      <span className="white-text">
+                        <img
+                          className={`task-dropdown-icon
+                                      ${pathname.match(/^\/task/) ? "active-tab-dropdown" : "inactive-tab"}`
+                                    }
+                          src="/webfonts/fa-solid_list.svg"
+                          alt="Task Icon"
+                        /> 
+                        <span
+                          className={`tab-text-padding 
+                                    ${pathname.match(/^\/task/) ? "active-tab-text" : ""}
+                          `}
+                        >
+                            Tasks
+                        </span>
+                      </span>
+                  }
+                  id="task-dropdown"
+                  className={`main-nav nav-item taskDropdown
+                            ${pathname.match(/^\/task/) ? "" : "inactive-tab"}`
+                  }
+                  onClick={goToTask}
+                >
                   <ServiceFlowFilterListDropDown/>
               </NavDropdown>:null}
 
-              {getUserRolePermission(userRoles, STAFF_REVIEWER) ?<NavDropdown title={<span className="inactive-tab white-text"><img className="dasboard-icon-dropdown" src="/webfonts/fa_dashboard.svg" alt="back"/> Dashboards</span>}
-                                                                              id="dashboard-dropdown"
-                                                                              className={`main-nav nav-item ${
-                                                                                pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "active-tab-dropdown" : "inactive-tab-dropdown"
-                                                                              }`}>
-                <NavDropdown.Item as={Link} to='/metrics' className={`main-nav nav-item ${
-                  pathname.match(/^\/metrics/) ? "active-tab" : ""
-                }`}><img src="/webfonts/fa_pie-chart.svg" alt="back"/> <span className="black-text">Metrics</span></NavDropdown.Item>
-                <NavDropdown.Item as={Link} to='/insights' className={`main-nav nav-item ${
-                  pathname.match(/^\/insights/) ? "active-tab" : ""
-                }`}><img src="/webfonts/fa_lightbulb-o.svg" alt="back"/> <span className="black-text">Insights</span></NavDropdown.Item>
+              {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
+                <NavDropdown 
+                  title={
+                  <span className="white-text">
+                    <i 
+                      class={`fa fa-tachometer fa-2 dashboard-icon-dropdown
+                      ${pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "active-tab-text" : ""}
+                      `}
+                      aria-hidden="true"
+                    >     
+                    </i>
+                    <span
+                      className={`tab-text-padding 
+                      ${pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "active-tab-text" : ""}
+                          `}
+                    >
+                      Dashboards
+                    </span>
+                  </span>
+                  }
+                  id="dashboard-dropdown"
+                  className={`main-nav nav-item 
+                              ${pathname.match(/^\/metrics/) || pathname.match(/^\/insights/) ? "" : "inactive-tab-dropdown"}`
+                  }
+                >
+                  <NavDropdown.Item
+                    as={Link}
+                    to='/metrics'
+                    className={`main-nav nav-item 
+                    ${pathname.match(/^\/metrics/) ? "dropdown-option-selected" : ""}`
+                    }
+                  >
+                    <i
+                      class={`fa fa-pie-chart dashboard-dropdown-options black-text
+                      ${pathname.match(/^\/metrics/) ? "dropdown-option-selected" : ""}
+                      `}
+                      aria-hidden="true"
+                    >
+                    </i>
+                    <span className={`${pathname.match(/^\/metrics/) ? "dropdown-option-selected" : "black-text"}`}>
+                      Metrics
+                    </span>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={Link} to='/insights'
+                    className={`main-nav nav-item 
+                    ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : ""}
+                    `}
+                  >
+                    <i
+                      class={`fa fa-lightbulb-o dashboard-dropdown-options
+                      ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}
+                      `}
+                      aria-hidden="true"
+                    ></i>
+                    <span className={`${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}`}>
+                      Insights
+                    </span>
+                  </NavDropdown.Item>
               </NavDropdown>:null}
             </Nav>
             <Nav className="ml-auto">
@@ -113,7 +214,7 @@ const NavBar = React.memo(() => {
                         alt="profile"
                       />
                     </span>
-                      <span className="d-none d-lg-inline-block">
+                      <span id="username" className="d-none d-lg-inline-block">
                       {user.name || user.preferred_username || ""}
                   </span>
                     </Dropdown.Toggle>

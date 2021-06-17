@@ -23,9 +23,15 @@ const ServiceFlowFilterListDropDown = React.memo(() => {
       return (
         <>
           {filterList.map((filter,index)=> (
-            <NavDropdown.Item as={Link} to='/task' className={`main-nav nav-item ${filter?.id === selectedFilter?.id ? "active-tab" : ""}`}
+            <NavDropdown.Item as={Link} to='/task' className={`main-nav nav-item ${filter?.id === selectedFilter?.id ? "dropdown-option-selected" : ""}`}
                               key={index} onClick={()=>changeFilterSelection(filter)}>
-              <span className="black-text">{filter?.name}</span>
+              <span
+                className={`
+                  ${filter?.id === selectedFilter?.id ? "dropdown-option-selected" : "black-text"}
+                `}
+                >
+                  {filter?.name}
+                </span>
               {/*{`(${filter?.itemCount})`}*/}
             </NavDropdown.Item>
             )
