@@ -16,6 +16,7 @@ const NavBar = React.memo(() => {
   const { pathname } = location;
   const user = useSelector((state) => state.user.userDetail);
   const userRoles = useSelector((state) => state.user.roles);
+  const showApplications= useSelector((state) => state.user.showApplications);
   const dispatch = useDispatch();
   const logoPath = "/logo.svg";
   const appName = APPLICATION_NAME;
@@ -85,7 +86,7 @@ const NavBar = React.memo(() => {
                 </span>
               </Nav.Link>
 
-              {getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT) ?
+              {showApplications?(getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT)) ?
                 <Nav.Link as={Link} to='/application'  className={`main-nav nav-item ${
                   pathname.match(/^\/application/) ? "" : "inactive-tab"
                 }`}> 
@@ -105,6 +106,7 @@ const NavBar = React.memo(() => {
                   </span>
                 </Nav.Link>
                 :
+                null:
                 null}
 
 {/*              {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
@@ -215,11 +217,11 @@ const NavBar = React.memo(() => {
                       />
                     </span>
                       <span id="username" className="d-none d-lg-inline-block">
-                      {user.name || user.preferred_username || ""}
+                      {user?.name || user?.preferred_username || ""}
                   </span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                      <Dropdown.Item> {user.name || user.preferred_username}<br/>
+                      <Dropdown.Item> {user?.name || user?.preferred_username || ""}<br/>
                         <i className="fa fa-users fa-fw"/>
                         <b>{getUserRoleName(userRoles)}</b></Dropdown.Item>
                       <Dropdown.Divider/>
