@@ -339,3 +339,9 @@
 .tab-text-padding {
   padding-left: 5px;
 }
+.navbar-toggler-icon {
+  filter: invert(1) brightness(1);
+}
+.dropdown-item.active, .dropdown-item:active {
+  background-color: transparent !important;
+}
