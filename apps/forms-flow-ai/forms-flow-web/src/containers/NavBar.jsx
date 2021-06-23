@@ -70,13 +70,12 @@ const NavBar = React.memo(() => {
               <Nav.Link eventKey="1" as={Link} to='/form'  className={`main-nav nav-item ${
                 pathname.match(/^\/form/) ? "" : "inactive-tab"
               }`}>  
-                <img
-                  className={`header-forms-icon 
-                              ${pathname.match(/^\/form/) ? "active-tab" : ""}`
-                            } 
-                  src="/webfonts/fa-wpforms.svg"
-                  alt="Header Form Icon"
-                />
+                <i
+                  className={`fa fa-wpforms fa-lg
+                      ${pathname.match(/^\/form/) ? "active-tab-text" : ""}
+                  `}
+                >
+                </i>
                 <span 
                   className={`tab-text-padding 
                               ${pathname.match(/^\/form/) ? "active-tab-text" : ""}`

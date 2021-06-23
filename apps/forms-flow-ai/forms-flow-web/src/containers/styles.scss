@@ -342,6 +342,6 @@
 .navbar-toggler-icon {
   filter: invert(1) brightness(1);
 }
-.dropdown-item:active {
-  background-color: transparent;
+.dropdown-item.active, .dropdown-item:active {
+  background-color: transparent !important;
 }
