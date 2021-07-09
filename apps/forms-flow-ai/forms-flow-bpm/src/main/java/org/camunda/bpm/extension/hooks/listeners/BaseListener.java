@@ -33,8 +33,7 @@ public class BaseListener implements IMessageEvent {
         throw new RuntimeException(ExceptionUtils.getRootCause(e));
     }
 
-    private void handleTaskException(Exception e) {
-        LOGGER.log(Level.SEVERE, "Exception Occurred" , e);
+    private void handleTaskException(Exception e) { throw new RuntimeException(ExceptionUtils.getRootCause(e));
     }
 
 
