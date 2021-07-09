@@ -344,4 +344,8 @@
 }
 .dropdown-item.active, .dropdown-item:active {
   background-color: transparent !important;
+  color: #705410 !important;
+}
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #212529 !important;
 }
