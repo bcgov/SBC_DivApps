@@ -222,7 +222,7 @@ const NavBar = React.memo(() => {
                   </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item eventKey="5" as={Link}> {user?.name || user?.preferred_username || ""}<br/>
+                  <Dropdown.Item disabled eventKey="5"> {user?.name || user?.preferred_username || ""}<br/>
                     <i className="fa fa-users fa-fw"/>
                     <b>{getUserRoleName(userRoles)}</b></Dropdown.Item>
                   <Dropdown.Divider/>
