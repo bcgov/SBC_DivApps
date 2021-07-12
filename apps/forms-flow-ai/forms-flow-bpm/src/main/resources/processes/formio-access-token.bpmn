@@ -13,7 +13,7 @@
       <bpmn:incoming>SequenceFlow_1pfx1rr</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_10e1lhm</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0jhoxkd">
-        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 45 3 ? * * *</bpmn:timeCycle>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 45 0/3 ? * * *</bpmn:timeCycle>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1pfx1rr" sourceRef="Task_1tmwrci" targetRef="IntermediateThrowEvent_0foh1un" />
@@ -21,7 +21,7 @@
     <bpmn:startEvent id="StartEvent_0haqt8v">
       <bpmn:outgoing>SequenceFlow_1o2htg0</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0eod03m">
-        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 4 ? * * *</bpmn:timeCycle>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 50 0/3 ? * * *</bpmn:timeCycle>
       </bpmn:timerEventDefinition>
     </bpmn:startEvent>
     <bpmn:endEvent id="EndEvent_1mp4b14">
