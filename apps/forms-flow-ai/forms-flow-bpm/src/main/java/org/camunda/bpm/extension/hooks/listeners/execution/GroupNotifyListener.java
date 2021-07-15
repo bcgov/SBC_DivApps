@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  * @author yichun.zhao@aot-technologies.com, sumathi.thirumani@aot-technologies.com
  */
 @Component
-public class NotifyListener implements ExecutionListener, IMessageEvent {
+public class GroupNotifyListener implements ExecutionListener, IMessageEvent {
 
-    private static final Logger LOGGER = Logger.getLogger(NotifyListener.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GroupNotifyListener.class.getName());
 
     private Expression messageId;
     private Expression category;
