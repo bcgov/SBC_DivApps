@@ -1,5 +1,7 @@
 package org.camunda.bpm.extension.keycloak.showcase.rest;
 
+
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.spin.Spin;
 import org.camunda.spin.SpinList;
@@ -72,7 +74,8 @@ public class KeycloakAuthenticationFilter implements Filter {
 		if(Spin.JSON(claims).hasProp("groups")) {
 			SpinList<SpinJsonNode> groups = Spin.JSON(claims).prop("groups").elements();
 			for(SpinJsonNode entry : groups) {
-				groupIds.add(entry.stringValue());
+				String groupName = StringUtils.contains(entry.stringValue(),"/") ? StringUtils.substringAfter(entry.stringValue(), "/") : entry.stringValue();
+				groupIds.add(groupName);
 			}
 		} else {
 			identityService.createGroupQuery().groupMember(userId).list()
