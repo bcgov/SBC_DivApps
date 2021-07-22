@@ -147,7 +147,13 @@ security:
     hsts: domain
 
 
-logging.level.root: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+logging:
+  level:
+    org.springframework.security: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.springframework.web: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.springframework.jdbc: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.camunda: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.camunda.bpm.extension: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
 
 
 # Camunda Rest API
@@ -180,6 +186,7 @@ websocket:
     origin: ${WEBSOCKET_SECURITY_ORIGIN}
     secretKey: ${WEBSOCKET_ENCRYPT_KEY}
   messageType: ${WEBSOCKET_MESSAGE_TYPE:TASK_EVENT}
+  messageEvents: ${WEBSOCKET_MESSAGE_EVENTS:DEFAULT}
   messageBroker:
     host: ${WEBSOCKET_BROKER_HOST}
     port: ${WEBSOCKET_BROKER_PORT}
