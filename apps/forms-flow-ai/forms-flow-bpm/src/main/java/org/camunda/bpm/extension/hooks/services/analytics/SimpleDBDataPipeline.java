@@ -56,10 +56,10 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
 
             }
         }
-        LOGGER.info("Post transformation:"+ dataMap);
         if (dataMap.containsKey("poc_submit_date_time")) {
             dataMap.remove("ed_complete_date_time");
         }
+        LOGGER.info("Post transformation:"+ dataMap);
         return dataMap;
     }
 
