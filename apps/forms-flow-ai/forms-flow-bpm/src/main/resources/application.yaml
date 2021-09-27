@@ -149,10 +149,11 @@ security:
 
 logging:
   level:
-    org.springframework.security: ${CAMUNDA_APP_ROOT_LOG_FLAG:error}
-    org.springframework.web: ${CAMUNDA_APP_ROOT_LOG_FLAG:error}
-    org.springframework.jdbc: ${CAMUNDA_APP_ROOT_LOG_FLAG:error}
-    org.camunda.bpm: ${CAMUNDA_APP_ROOT_LOG_FLAG:error}
+    org.springframework.security: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.springframework.web: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.springframework.jdbc: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.camunda: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
+    org.camunda.bpm.extension: ${CAMUNDA_APP_ROOT_LOG_FLAG:ERROR}
 
 
 # Camunda Rest API
@@ -180,11 +181,14 @@ plugin.identity.keycloak:
   
 app.security.origin: ${APP_SECURITY_ORIGIN}
 
+# Allowed possible values for WEBSOCKET_MESSAGE_EVENTS:  DEFAULT, ALL or filtered values from (create,update,assignment,timeout,complete) as comma separated
+# DEFAULT maps to events: create,assignment,complete
 websocket:
   security:
     origin: ${WEBSOCKET_SECURITY_ORIGIN}
     secretKey: ${WEBSOCKET_ENCRYPT_KEY}
   messageType: ${WEBSOCKET_MESSAGE_TYPE:TASK_EVENT}
+  messageEvents: ${WEBSOCKET_MESSAGE_EVENTS:DEFAULT}
   messageBroker:
     host: ${WEBSOCKET_BROKER_HOST}
     port: ${WEBSOCKET_BROKER_PORT}

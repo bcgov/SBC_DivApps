@@ -36,18 +36,23 @@ public class CamundaEventListener implements ITaskEvent {
 
     @Value("${websocket.messageType}")
     private String messageCategory;
+	
+	@Value("${websocket.messageEvents}")
+    private String messageEvents;
 
 
     @EventListener
     public void onTaskEventListener(DelegateTask taskDelegate) {
         LOGGER.info("Event triggered:"+taskDelegate.getId() +"-"+ taskDelegate.getEventName() + "-"+ taskDelegate.getProcessInstanceId());
         try {
-            if(isAllowed(EventCategory.TASK_EVENT_DETAILS.name())) {
-                this.stringRedisTemplate.convertAndSend(getTopicNameForTaskDetail(),  getObjectMapper().writeValueAsString(getTaskMessage(taskDelegate)));
-            }
-            if(isAllowed(EventCategory.TASK_EVENT.name())) {
-                this.stringRedisTemplate.convertAndSend(getTopicNameForTask(),  getObjectMapper().writeValueAsString(getTaskEventMessage(taskDelegate)));
-            }
+			if (isRegisteredEvent(taskDelegate.getEventName())) {
+				if(isAllowed(EventCategory.TASK_EVENT_DETAILS.name())) {
+					this.stringRedisTemplate.convertAndSend(getTopicNameForTaskDetail(),  getObjectMapper().writeValueAsString(getTaskMessage(taskDelegate)));
+				}
+				if(isAllowed(EventCategory.TASK_EVENT.name())) {
+					this.stringRedisTemplate.convertAndSend(getTopicNameForTask(),  getObjectMapper().writeValueAsString(getTaskEventMessage(taskDelegate)));
+				}
+			}
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -69,6 +74,18 @@ public class CamundaEventListener implements ITaskEvent {
     private boolean isAllowed(String category) {
         return Arrays.asList(StringUtils.split(messageCategory,",")).contains(category);
     }
+	
+	private boolean isRegisteredEvent(String eventName) {
+        if("ALL".equalsIgnoreCase(messageEvents)) { return true;}
+        return getRegisteredEvents().contains(eventName);
+    }
+
+    private List<String> getRegisteredEvents() {
+        if ("DEFAULT".equalsIgnoreCase(messageEvents)) {
+            return Arrays.asList(StringUtils.split(getDefaultRegisteredEvent(),","));
+        }
+        return Arrays.asList(StringUtils.split(messageEvents,","));
+    }
 
     private Map<String,Object> getVariables(DelegateTask taskDelegate) {
         List<String> configMap =getElements();
@@ -83,6 +100,10 @@ public class CamundaEventListener implements ITaskEvent {
 
     private List<String> getElements() {
         return new ArrayList<>(Arrays. asList("applicationId", "formUrl", "applicationStatus"));
+    }
+	
+	private String getDefaultRegisteredEvent() {
+        return "create,assignment,complete";
     }
 
     private ObjectMapper getObjectMapper() {
