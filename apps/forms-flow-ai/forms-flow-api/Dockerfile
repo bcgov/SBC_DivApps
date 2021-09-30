@@ -7,10 +7,9 @@ RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /api/
 
 WORKDIR /forms-flow-api/app
 RUN cp -r /api/forms-flow-api/* /forms-flow-api/app
-
+RUN USER 1001
 RUN pip install --upgrade pip
-RUN pip install psycopg2
-
+RUN pip install nltk
 RUN pip install -e .
 
 RUN mkdir /nltk_data && chmod 777 /nltk_data
