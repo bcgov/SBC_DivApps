@@ -4,7 +4,6 @@ RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /api/
 WORKDIR /forms-flow-api/app
 RUN cp -r /api/forms-flow-api/* /forms-flow-api/app
 
-COPY requirements.txt .
 ENV PATH=/venv/bin:$PATH
 
 RUN : \
