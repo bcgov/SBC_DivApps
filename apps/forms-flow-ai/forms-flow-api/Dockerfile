@@ -12,11 +12,8 @@ RUN : \
     && pip install -r requirements.txt 
 
 ADD . /forms-flow-api/app
-RUN pip install nltk
-RUN pip install .
 
-RUN mkdir /nltk_data && chmod 777 /nltk_data
-RUN python -m nltk.downloader punkt vader_lexicon subjectivity
+RUN pip install .
 
 EXPOSE 5000
 
