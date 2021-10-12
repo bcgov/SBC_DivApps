@@ -103,7 +103,7 @@ public class CamundaEventListener implements ITaskEvent {
     }
 	
 	private String getDefaultRegisteredEvent() {
-        return "create,assignment,complete";
+        return "create,update,complete";
     }
 
     private ObjectMapper getObjectMapper() {
