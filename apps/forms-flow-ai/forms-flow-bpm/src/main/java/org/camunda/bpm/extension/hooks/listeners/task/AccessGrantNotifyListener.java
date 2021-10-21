@@ -57,7 +57,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
                 notifyGrp.addAll(getEmailsForGroup(delegateTask.getExecution(), entry));
             }
         }
-
+        LOGGER.info("notifyGrp size="+notifyGrp.size()+"accessGroupList size=" + accessGroupList.size());
         if(CollectionUtils.isNotEmpty(notifyGrp)) {
             if(CollectionUtils.isNotEmpty(accessGroupList)) {
                 delegateTask.getExecution().setVariable(getTrackVariable(delegateTask),modifedGroupStr);
@@ -68,6 +68,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
 
     private void sendEmailNotification(DelegateExecution execution, List<String> toEmails, String taskId, String category) {
         String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
+        LOGGER.info("toAddress=" + toAddress);
         if(StringUtils.isNotEmpty(toAddress)) {
             Map<String, Object> emailAttributes = new HashMap<>();
             emailAttributes.put("to", toAddress);
