@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.StringValue;
+import org.camunda.bpm.extension.hooks.exceptions.ApplicationServiceException;
 import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +68,13 @@ public class FormBuilderPipelineController {
             if(status == false) {
                 //Email the form to support group for manual processing
                 sendEmail(formXML,request.getParameter("document"),null);
+                throw new ApplicationServiceException("Unable to create process instance");
             }
         } catch (Exception ex) {
             sendEmail(formXML,request.getParameter("document"), null);
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
+            throw new ApplicationServiceException("Unable to parse the XML from orbeon");
         }
-
     }
 
     private void sendEmail(String formXML,String documentId, String exceptionTrace){
