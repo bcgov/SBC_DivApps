@@ -8,10 +8,14 @@ import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -38,19 +42,9 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
     public void notify(DelegateTask delegateTask) {
         LOGGER.info("\n\nAccessGrantNotify listener invoked! " + delegateTask.getId());
         List<String> notifyGrp = new ArrayList<>();
-        String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
-                String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
-        List<String> exclusionGroupList = new ArrayList<>();
-        if(StringUtils.isNotBlank(excludeGroupValue)) {exclusionGroupList.add(excludeGroupValue.trim());}
-        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
-            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
-            if(StringUtils.isNotBlank(tmpData)) {
-                exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
-            }
-        }
-        List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
+        List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, Collections.emptyList());
         String modifedGroupStr = String.join("|",accessGroupList);
-        LOGGER.info("Current Group="+excludeGroupValue+"|Modified GroupData=" + modifedGroupStr);
+        LOGGER.info("Modified GroupData=" + modifedGroupStr);
 
         if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(accessGroupList)) {
             for (String entry : accessGroupList) {
@@ -58,6 +52,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
             }
         }
 
+        LOGGER.info("Emailing following groups:notifyGrp.size()::" + notifyGrp.size());
         if(CollectionUtils.isNotEmpty(notifyGrp)) {
             if(CollectionUtils.isNotEmpty(accessGroupList)) {
                 delegateTask.getExecution().setVariable(getTrackVariable(delegateTask),modifedGroupStr);
