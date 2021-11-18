@@ -7,13 +7,13 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.StringValue;
-import org.camunda.bpm.extension.hooks.exceptions.ApplicationServiceException;
 import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
@@ -50,6 +51,10 @@ public class FormBuilderPipelineController {
     @Autowired
     private Properties clientCredentialProperties;
 
+    /**
+     * Creates a camunda process instance for the orbeon form data given.
+     * @param request The request object containing the CCII form data.
+     */
     @PostMapping(value = "/orbeon/data",consumes = MediaType.APPLICATION_XML_VALUE)
     public void createProcess(HttpServletRequest request) {
         LOGGER.info("Inside Data transformation controller" +request.getParameterMap());
@@ -68,12 +73,12 @@ public class FormBuilderPipelineController {
             if(status == false) {
                 //Email the form to support group for manual processing
                 sendEmail(formXML,request.getParameter("document"),null);
-                throw new ApplicationServiceException("Unable to create process instance");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create process instance");
             }
         } catch (Exception ex) {
             sendEmail(formXML,request.getParameter("document"), null);
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
-            throw new ApplicationServiceException("Unable to parse the XML from orbeon");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to parse the XML from orbeon");
         }
     }
 
