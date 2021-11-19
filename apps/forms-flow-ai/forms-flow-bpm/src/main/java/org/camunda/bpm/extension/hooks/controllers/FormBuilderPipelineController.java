@@ -73,10 +73,12 @@ public class FormBuilderPipelineController {
             if(status == false) {
                 //Email the form to support group for manual processing
                 sendEmail(formXML,request.getParameter("document"),null);
+                LOGGER.log(Level.SEVERE,"Unable to create process instance");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create process instance");
             }
         } catch (Exception ex) {
             sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE,"Unable to parse the XML from orbeon");
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to parse the XML from orbeon");
         }
