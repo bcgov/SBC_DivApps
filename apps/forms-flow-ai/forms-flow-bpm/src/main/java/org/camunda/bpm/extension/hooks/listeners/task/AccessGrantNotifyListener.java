@@ -46,10 +46,12 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
                 String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
         List<String> exclusionGroupList = new ArrayList<>();
+        LOGGER.info("excludeGroupValue::" + excludeGroupValue);
         if(StringUtils.isNotBlank(excludeGroupValue)) {exclusionGroupList.add(excludeGroupValue.trim());}
         if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
             String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
             if(StringUtils.isNotBlank(tmpData)) {
+                LOGGER.info("Adding tmpData to exclusion::" + tmpData);
                 exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
             }
         }
@@ -57,10 +59,17 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         String modifedGroupStr = String.join("|",accessGroupList);
         LOGGER.info("Modified GroupData=" + modifedGroupStr);
         LOGGER.info("getAssignee::" + StringUtils.isBlank(delegateTask.getAssignee()));
+
+        for(String s: accessGroupList) {
+            LOGGER.info("accessGroupList strings::" + s);
+        }
         LOGGER.info("accessGroupList size::" + accessGroupList.size());
         if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(accessGroupList)) {
             for (String entry : accessGroupList) {
                 List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
+                for (String s: emailsForGroup) {
+                    LOGGER.info("emailsForGroup emails::" + s);
+                }
                 LOGGER.info("Group::" +  entry + " EmailsForGroup::" + emailsForGroup.size());
                 notifyGrp.addAll(emailsForGroup);
             }
