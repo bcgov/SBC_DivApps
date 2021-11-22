@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,38 +45,36 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
                 String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
         List<String> exclusionGroupList = new ArrayList<>();
-        LOGGER.info("excludeGroupValue::" + excludeGroupValue);
-        if(StringUtils.isNotBlank(excludeGroupValue)) {exclusionGroupList.add(excludeGroupValue.trim());}
+        LOGGER.info("Excluded group::" + excludeGroupValue);
+        if(StringUtils.isNotBlank(excludeGroupValue)) {
+            exclusionGroupList.add(excludeGroupValue.trim());
+        }
         if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
             String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
             if(StringUtils.isNotBlank(tmpData)) {
-                LOGGER.info("Adding tmpData to exclusion::" + tmpData);
                 exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
             }
         }
         List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
         String modifedGroupStr = String.join("|",accessGroupList);
         LOGGER.info("Modified GroupData=" + modifedGroupStr);
-        LOGGER.info("getAssignee::" + StringUtils.isBlank(delegateTask.getAssignee()));
-
-        for(String s: accessGroupList) {
-            LOGGER.info("accessGroupList strings::" + s);
-        }
-        LOGGER.info("accessGroupList size::" + accessGroupList.size());
+        accessGroupList.forEach((accessGroup -> LOGGER.info("Emailing group::" + accessGroup)));
         for (String entry : accessGroupList) {
             List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
-            for (String s: emailsForGroup) {
-                LOGGER.info("emailsForGroup emails::" + s);
-            }
-            LOGGER.info("Group::" +  entry + " EmailsForGroup::" + emailsForGroup.size());
             notifyGrp.addAll(emailsForGroup);
         }
-        LOGGER.info("Emailing following groups:notifyGrp.size()::" + notifyGrp.size());
         if(CollectionUtils.isNotEmpty(notifyGrp)) {
             sendEmailNotification(delegateTask.getExecution(), notifyGrp, delegateTask.getId(), getCategory(delegateTask.getExecution()));
         }
     }
 
+    /**
+     * Sends an email.
+     * @param execution The current execution instance.
+     * @param toEmails The recipients.
+     * @param taskId The task id.
+     * @param category The email category for the DMN.
+     */
     private void sendEmailNotification(DelegateExecution execution, List<String> toEmails, String taskId, String category) {
         String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
         if(StringUtils.isNotEmpty(toAddress)) {
@@ -94,14 +91,18 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
     }
 
     /**
-     *
-     * @param execution
-     * @return
+     * @param execution The current execution instance
+     * @return Returns the message category
      */
     private String getCategory(DelegateExecution execution){
         return String.valueOf(this.category.getValue(execution));
     }
 
+    /**
+     * @param delegateTask The task instance to send an email for.
+     * @param exclusionGroup The groups to be excluded from the emails.
+     * @return The list of groups after removing the excluded groups.
+     */
     private List<String> getModifiedGroupsForTask(DelegateTask delegateTask, List<String> exclusionGroup) {
         Set<IdentityLink> identityLinks = delegateTask.getCandidates();
         List<String> newGroupsAdded = new ArrayList<>();
