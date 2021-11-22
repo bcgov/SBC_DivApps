@@ -129,6 +129,8 @@ camunda.bpm:
   metrics:
     enabled: ${CAMUNDA_METRICS_FLAG:true}
 server:
+  error:
+    include-message: always
   port: 8080
   servlet.context-path: /camunda
   session:
