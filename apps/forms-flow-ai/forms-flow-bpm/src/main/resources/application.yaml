@@ -181,6 +181,7 @@ plugin.identity.keycloak:
   useGroupPathAsCamundaGroupId: true
   administratorGroupName: camunda-admin
   disableSSLCertificateValidation: true
+  maxResultSize: 500
   
 app.security.origin: ${APP_SECURITY_ORIGIN}
 
