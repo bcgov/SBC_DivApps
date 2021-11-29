@@ -64,6 +64,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         } catch (Exception e) {
             LOGGER.warning("Unable to insert record into analytics DB");
             notifyForAttention(execution, e);
+            throw e; // Throw the exception so that the instance is available in the cockpit.
         }
     }
 
@@ -88,6 +89,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         } catch (Exception e) {
             LOGGER.warning("Unable to insert record into analytics DB");
             notifyForAttention(execution, e);
+            throw e; // Throw the exception so that the instance is available in the cockpit.
         }
     }
 
