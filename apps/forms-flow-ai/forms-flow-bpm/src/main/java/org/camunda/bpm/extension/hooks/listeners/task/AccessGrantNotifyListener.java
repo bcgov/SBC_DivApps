@@ -49,6 +49,8 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         if(StringUtils.isNotBlank(excludeGroupValue)) {
             exclusionGroupList.add(excludeGroupValue.trim());
         }
+        LOGGER.info("delegateTask.getEventName()::" + delegateTask.getEventName());
+        LOGGER.info("delegateTask.getExecution().getEventName()::" + delegateTask.getExecution().getEventName());
         if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
             String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
             if(StringUtils.isNotBlank(tmpData)) {

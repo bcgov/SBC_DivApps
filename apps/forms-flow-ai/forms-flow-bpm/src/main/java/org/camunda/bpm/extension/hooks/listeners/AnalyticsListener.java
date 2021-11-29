@@ -1,26 +1,27 @@
 package org.camunda.bpm.extension.hooks.listeners;
 
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.camunda.bpm.engine.delegate.*;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.ExecutionListener;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.FileValue;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.camunda.bpm.extension.hooks.services.analytics.IDataPipeline;
 import org.camunda.bpm.extension.hooks.services.analytics.SimpleDBDataPipeline;
-
+import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -54,8 +55,16 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                 + ", executionId=" + task.getId()
                 + ", variables=" + task.getVariables()
                 + " \n\n");
-        Map<String,Object> rspVariableMap = dbdatapipeline.execute(injectAdditionalProcessingFields(task.getExecution(),task.getExecution().getVariables()));
-        notifyForAttention(task.getExecution(),rspVariableMap);
+        DelegateExecution execution = task.getExecution();
+        try {
+            Map<String,Object> rspVariableMap = dbdatapipeline.execute(injectAdditionalProcessingFields(execution,execution.getVariables()));
+            if (IDataPipeline.ResponseStatus.FAILURE.name().equals(rspVariableMap.get("code"))) {
+                notifyForAttention(execution,rspVariableMap);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("Unable to insert record into analytics DB");
+            notifyForAttention(execution, e);
+        }
     }
 
     /**
@@ -71,8 +80,15 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                 + ", executionId=" + execution.getId()
                 + ", variables=" + execution.getVariables()
                 + " \n\n");
-        Map<String,Object> rspVariableMap = dbdatapipeline.execute(injectAdditionalProcessingFields(execution,execution.getVariables()));
-        notifyForAttention(execution,rspVariableMap);
+        try {
+            Map<String,Object> rspVariableMap = dbdatapipeline.execute(injectAdditionalProcessingFields(execution,execution.getVariables()));
+            if (IDataPipeline.ResponseStatus.FAILURE.name().equals(rspVariableMap.get("code"))) {
+                notifyForAttention(execution,rspVariableMap);
+            }
+        } catch (Exception e) {
+            LOGGER.warning("Unable to insert record into analytics DB");
+            notifyForAttention(execution, e);
+        }
     }
 
     /**
@@ -142,6 +158,22 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
             }
         }
         return variables;
+    }
+
+    private void notifyForAttention(DelegateExecution execution, Exception exception){
+        Map<String,Object> variables = new HashMap<>();
+        try {
+            Map<String,Object> exVarMap = new HashMap<>();
+            //Additional Response Fields - BEGIN
+            exVarMap.put("pid",execution.getId());
+            exVarMap.put("subject",("Exception for ".concat(execution.getId())));
+            exVarMap.put("category","analytics_service_exception");
+            //Additional Response Fields - END
+            sendMessage(execution,exVarMap,getMessageName());
+            LOGGER.info("\n\nMessage sent! " + "\n\n");
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
+        }
     }
 
     private void notifyForAttention(DelegateExecution execution,Map<String,Object> rspVariableMap){
