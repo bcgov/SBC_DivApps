@@ -86,11 +86,21 @@ public class FormBuilderPipelineController {
                 LOGGER.log(Level.SEVERE,"Unable to create process instance");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create process instance");
             }
-        } catch (Exception ex) {
+        } catch (IOException exception) {
             sendEmail(formXML,request.getParameter("document"), null);
             LOGGER.log(Level.SEVERE,"Unable to parse the XML from orbeon");
-            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(exception));
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to parse the XML from orbeon");
+        } catch (ResponseStatusException exception) {
+            sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE,exception.getMessage());
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(exception));
+            throw exception;
+        } catch (Exception ex) {
+            sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE, ex.getMessage());
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
     }
 
