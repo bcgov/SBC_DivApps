@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -69,6 +71,14 @@ public class FormBuilderPipelineController {
             }
             LOGGER.info("Received XML Document-------->"+formXML);
             Map<String,Object> processVariables = prepareRequestVariableMap(formXML);
+            for (String key: processVariables.keySet()) {
+                if(StringUtils.endsWith(key,"_date") || StringUtils.endsWith(key,"_date_time")) {
+                    String value = (String) processVariables.get(key);
+                    if(!isDateValid(value)) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The value for " + key + " is invalid");
+                    }
+                }
+            }
             Boolean status = createProcessInstance(processVariables);
             if(status == false) {
                 //Email the form to support group for manual processing
@@ -109,6 +119,20 @@ public class FormBuilderPipelineController {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ExceptionUtils.exceptionStackTraceAsString(ex));
         }
+    }
+
+    private boolean isDateValid(String dateStr) {
+        if (dateStr == null) {
+            return false;
+        }
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setLenient(false);
+            simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     private Boolean createProcessInstance(Map<String,Object> processVariables) throws JsonProcessingException {
