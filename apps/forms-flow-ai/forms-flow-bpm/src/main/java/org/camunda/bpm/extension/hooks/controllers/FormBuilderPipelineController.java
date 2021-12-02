@@ -73,8 +73,8 @@ public class FormBuilderPipelineController {
             Map<String,Object> processVariables = prepareRequestVariableMap(formXML);
             for (String key: processVariables.keySet()) {
                 if(StringUtils.endsWith(key,"_date") || StringUtils.endsWith(key,"_date_time")) {
-                    String value = (String) processVariables.get(key);
-                    if(!isDateValid(value)) {
+                    VariableData valueVariableData = (VariableData) processVariables.get(key);
+                    if(!isDateValid((String) valueVariableData.getValue())) {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The value for " + key + " is invalid");
                     }
                 }
