@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -20,11 +21,14 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -49,6 +53,10 @@ public class FormBuilderPipelineController {
     @Autowired
     private Properties clientCredentialProperties;
 
+    /**
+     * Creates a camunda process instance for the orbeon form data given.
+     * @param request The request object containing the CCII form data.
+     */
     @PostMapping(value = "/orbeon/data",consumes = MediaType.APPLICATION_XML_VALUE)
     public void createProcess(HttpServletRequest request) {
         LOGGER.info("Inside Data transformation controller" +request.getParameterMap());
@@ -63,16 +71,37 @@ public class FormBuilderPipelineController {
             }
             LOGGER.info("Received XML Document-------->"+formXML);
             Map<String,Object> processVariables = prepareRequestVariableMap(formXML);
+            for (String key: processVariables.keySet()) {
+                if(StringUtils.endsWith(key,"_date") || StringUtils.endsWith(key,"_date_time")) {
+                    VariableData valueVariableData = (VariableData) processVariables.get(key);
+                    if(!isDateValid((String) valueVariableData.getValue())) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The value for " + key + " is invalid");
+                    }
+                }
+            }
             Boolean status = createProcessInstance(processVariables);
             if(status == false) {
                 //Email the form to support group for manual processing
                 sendEmail(formXML,request.getParameter("document"),null);
+                LOGGER.log(Level.SEVERE,"Unable to create process instance");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to create process instance");
             }
+        } catch (IOException exception) {
+            sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE,"Unable to parse the XML from orbeon");
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(exception));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unable to parse the XML from orbeon");
+        } catch (ResponseStatusException exception) {
+            sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE,exception.getMessage());
+            LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(exception));
+            throw exception;
         } catch (Exception ex) {
             sendEmail(formXML,request.getParameter("document"), null);
+            LOGGER.log(Level.SEVERE, ex.getMessage());
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ ExceptionUtils.exceptionStackTraceAsString(ex));
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
         }
-
     }
 
     private void sendEmail(String formXML,String documentId, String exceptionTrace){
@@ -100,6 +129,20 @@ public class FormBuilderPipelineController {
         } catch (Exception ex) {
             LOGGER.log(Level.SEVERE,"Exception occurred:"+ExceptionUtils.exceptionStackTraceAsString(ex));
         }
+    }
+
+    private boolean isDateValid(String dateStr) {
+        if (dateStr == null) {
+            return false;
+        }
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            simpleDateFormat.setLenient(false);
+            simpleDateFormat.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     private Boolean createProcessInstance(Map<String,Object> processVariables) throws JsonProcessingException {
