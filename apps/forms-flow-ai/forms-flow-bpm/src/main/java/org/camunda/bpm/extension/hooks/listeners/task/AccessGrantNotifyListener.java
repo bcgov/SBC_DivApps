@@ -8,10 +8,14 @@ import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -41,7 +45,12 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
                 String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
         List<String> exclusionGroupList = new ArrayList<>();
-        if(StringUtils.isNotBlank(excludeGroupValue)) {exclusionGroupList.add(excludeGroupValue.trim());}
+        LOGGER.info("Excluded group::" + excludeGroupValue);
+        if(StringUtils.isNotBlank(excludeGroupValue)) {
+            exclusionGroupList.add(excludeGroupValue.trim());
+        }
+        LOGGER.info("delegateTask.getEventName()::" + delegateTask.getEventName());
+        LOGGER.info("delegateTask.getExecution().getEventName()::" + delegateTask.getExecution().getEventName());
         if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
             String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
             if(StringUtils.isNotBlank(tmpData)) {
@@ -50,22 +59,24 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         }
         List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
         String modifedGroupStr = String.join("|",accessGroupList);
-        LOGGER.info("Current Group="+excludeGroupValue+"|Modified GroupData=" + modifedGroupStr);
-
-        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(accessGroupList)) {
-            for (String entry : accessGroupList) {
-                notifyGrp.addAll(getEmailsForGroup(delegateTask.getExecution(), entry));
-            }
+        LOGGER.info("Modified GroupData=" + modifedGroupStr);
+        accessGroupList.forEach((accessGroup -> LOGGER.info("Emailing group::" + accessGroup)));
+        for (String entry : accessGroupList) {
+            List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
+            notifyGrp.addAll(emailsForGroup);
         }
-
         if(CollectionUtils.isNotEmpty(notifyGrp)) {
-            if(CollectionUtils.isNotEmpty(accessGroupList)) {
-                delegateTask.getExecution().setVariable(getTrackVariable(delegateTask),modifedGroupStr);
-            }
             sendEmailNotification(delegateTask.getExecution(), notifyGrp, delegateTask.getId(), getCategory(delegateTask.getExecution()));
         }
     }
 
+    /**
+     * Sends an email.
+     * @param execution The current execution instance.
+     * @param toEmails The recipients.
+     * @param taskId The task id.
+     * @param category The email category for the DMN.
+     */
     private void sendEmailNotification(DelegateExecution execution, List<String> toEmails, String taskId, String category) {
         String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
         if(StringUtils.isNotEmpty(toAddress)) {
@@ -82,14 +93,18 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
     }
 
     /**
-     *
-     * @param execution
-     * @return
+     * @param execution The current execution instance
+     * @return Returns the message category
      */
     private String getCategory(DelegateExecution execution){
         return String.valueOf(this.category.getValue(execution));
     }
 
+    /**
+     * @param delegateTask The task instance to send an email for.
+     * @param exclusionGroup The groups to be excluded from the emails.
+     * @return The list of groups after removing the excluded groups.
+     */
     private List<String> getModifiedGroupsForTask(DelegateTask delegateTask, List<String> exclusionGroup) {
         Set<IdentityLink> identityLinks = delegateTask.getCandidates();
         List<String> newGroupsAdded = new ArrayList<>();
