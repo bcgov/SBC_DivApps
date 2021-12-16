@@ -41,7 +41,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
      */
     public void notify(DelegateTask delegateTask) {
         LOGGER.info("\n\nAccessGrantNotify listener invoked! " + delegateTask.getId());
-        List<String> notifyGrp = new ArrayList<>();
+        List<String> notifyGroup = new ArrayList<>();
         String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
                 String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
         List<String> exclusionGroupList = new ArrayList<>();
@@ -51,22 +51,23 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         }
         LOGGER.info("delegateTask.getEventName()::" + delegateTask.getEventName());
         LOGGER.info("delegateTask.getExecution().getEventName()::" + delegateTask.getExecution().getEventName());
-        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
-            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
-            if(StringUtils.isNotBlank(tmpData)) {
-                exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
-            }
-        }
+//        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
+//            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
+//            if(StringUtils.isNotBlank(tmpData)) {
+//                exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
+//            }
+//        }
         List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
         String modifedGroupStr = String.join("|",accessGroupList);
         LOGGER.info("Modified GroupData=" + modifedGroupStr);
         accessGroupList.forEach((accessGroup -> LOGGER.info("Emailing group::" + accessGroup)));
         for (String entry : accessGroupList) {
             List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
-            notifyGrp.addAll(emailsForGroup);
+            emailsForGroup.forEach((email) -> LOGGER.info("Group::" + entry + " email::" + email));
+            notifyGroup.addAll(emailsForGroup);
         }
-        if(CollectionUtils.isNotEmpty(notifyGrp)) {
-            sendEmailNotification(delegateTask.getExecution(), notifyGrp, delegateTask.getId(), getCategory(delegateTask.getExecution()));
+        if(CollectionUtils.isNotEmpty(notifyGroup)) {
+            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
         }
     }
 
