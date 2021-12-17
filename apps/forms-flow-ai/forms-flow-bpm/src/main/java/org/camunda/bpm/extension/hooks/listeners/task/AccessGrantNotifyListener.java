@@ -63,6 +63,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         accessGroupList.forEach((accessGroup -> LOGGER.info("Emailing group::" + accessGroup)));
         for (String entry : accessGroupList) {
             List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
+            LOGGER.info("group::" + entry + "emailsForGroup size::" + emailsForGroup.size());
             emailsForGroup.forEach((email) -> LOGGER.info("Group::" + entry + " email::" + email));
             notifyGroup.addAll(emailsForGroup);
         }
