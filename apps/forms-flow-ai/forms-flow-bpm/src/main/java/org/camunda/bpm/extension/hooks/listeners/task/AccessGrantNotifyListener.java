@@ -11,8 +11,8 @@ import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,7 +82,8 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
      * @param category The email category for the DMN.
      */
     private void sendEmailNotification(DelegateExecution execution, List<String> toEmails, String taskId, String category) {
-        String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
+        Set<String> emails = new HashSet<>(toEmails);
+        String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(emails,",") : null;
         if(StringUtils.isNotEmpty(toAddress)) {
             Map<String, Object> emailAttributes = new HashMap<>();
             emailAttributes.put("to", toAddress);
