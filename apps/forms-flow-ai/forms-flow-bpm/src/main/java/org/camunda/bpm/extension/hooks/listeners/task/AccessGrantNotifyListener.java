@@ -50,7 +50,6 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
             exclusionGroupList.add(excludeGroupValue.trim());
         }
         LOGGER.info("delegateTask.getEventName()::" + delegateTask.getEventName());
-        LOGGER.info("delegateTask.getExecution().getEventName()::" + delegateTask.getExecution().getEventName());
 //        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
 //            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
 //            if(StringUtils.isNotBlank(tmpData)) {
@@ -69,9 +68,17 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         }
         LOGGER.info("StringUtils.isBlank(delegateTask.getAssignee())::" + StringUtils.isBlank(delegateTask.getAssignee()));
         LOGGER.info("delegateTask.getAssignee()::" + delegateTask.getAssignee());
-        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(notifyGroup)) {
-            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
+        if (StringUtils.isBlank(delegateTask.getAssignee())) {
+            if (CollectionUtils.isNotEmpty(notifyGroup)) {
+                sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
+                delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), modifedGroupStr);
+            }
+        } else {
+            delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), "");
         }
+//        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(notifyGroup)) {
+//            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
+//        }
     }
 
     /**
@@ -117,6 +124,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
             for (IdentityLink entry : identityLinks) {
                 String grpId = entry.getGroupId().trim();
                 if (!exclusionGroup.contains(grpId)) {
+                    LOGGER.info("Adding to Modified group::" + entry.getGroupId().trim());
                     newGroupsAdded.add(entry.getGroupId().trim());
                 }
             }
