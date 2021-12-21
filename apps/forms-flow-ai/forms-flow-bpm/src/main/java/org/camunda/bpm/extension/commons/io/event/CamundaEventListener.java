@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.DelegateTask;
+import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.extension.commons.io.ITaskEvent;
 import org.camunda.bpm.extension.commons.io.socket.message.TaskEventMessage;
 import org.camunda.bpm.extension.commons.io.socket.message.TaskMessage;
@@ -82,7 +83,7 @@ public class CamundaEventListener implements ITaskEvent {
 
     private List<String> getRegisteredEvents() {
         if ("DEFAULT".equalsIgnoreCase(messageEvents)) {
-            return Arrays.asList(StringUtils.split(getDefaultRegisteredEvent(),","));
+            return getDefaultRegisteredEvents();
         }
         return Arrays.asList(StringUtils.split(messageEvents,","));
     }
@@ -101,10 +102,17 @@ public class CamundaEventListener implements ITaskEvent {
     private List<String> getElements() {
         return new ArrayList<>(Arrays. asList("applicationId", "formUrl", "applicationStatus"));
     }
-	
-	private String getDefaultRegisteredEvent() {
-        return "create,update,complete";
+
+    private List<String> getDefaultRegisteredEvents() {	
+        return Arrays.asList(TaskListener.EVENTNAME_CREATE
+            TaskListener.EVENTNAME_UPDATE,
+            TaskListener.EVENTNAME_COMPLETE
+        );	
     }
+
+	// private String getDefaultRegisteredEvent() {
+    //     return "create,update,complete";
+    // }
 
     private ObjectMapper getObjectMapper() {
         return new ObjectMapper();

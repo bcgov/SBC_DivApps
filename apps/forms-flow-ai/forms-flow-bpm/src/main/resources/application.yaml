@@ -41,6 +41,11 @@ formsflow.ai:
       accessTokenUri: ${FORMIO_URL}/user/login
       username: ${FORMIO_ROOT_EMAIL}
       password: ${FORMIO_ROOT_PASSWORD}
+  camunda:
+    spring:
+      webclient:
+        maxInMemorySize: ${DATA_BUFFER_SIZE}
+        connectionTimeout: 5000
 
 
 spring:
@@ -74,7 +79,7 @@ info:
   app:
     name: "Camunda"
     description: "formsflow.ai Engine"
-    version: "7.13"
+    version: "7.15"
   java:
     version: "11"
 
@@ -183,6 +188,7 @@ plugin.identity.keycloak:
   useGroupPathAsCamundaGroupId: true
   administratorGroupName: camunda-admin
   disableSSLCertificateValidation: true
+  maxResultSize: ${IDENTITY_PROVIDER_MAX_RESULT_SIZE}
   
 app.security.origin: ${APP_SECURITY_ORIGIN}
 
