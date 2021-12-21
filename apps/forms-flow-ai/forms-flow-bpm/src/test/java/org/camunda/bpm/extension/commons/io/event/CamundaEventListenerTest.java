@@ -106,20 +106,5 @@ public class CamundaEventListenerTest {
 				captor.getAllValues().get(0));
 		assertEquals("{\"id\":null,\"eventName\":\"create\"}", captor.getAllValues().get(1));
 	}
-	
-	/**
-	 * Negetive test case. 
-	 * Test perform with no events on onTaskEventListener
-	 */
-	@Test
-	public void onTaskEventListener_with_no_registeredEvents() {
-		DelegateTask delegateTask = mock(DelegateTask.class);
-		when(delegateTask.getEventName())
-				.thenReturn("create");
-
-		camundaEventListener.onTaskEventListener(delegateTask);
-		ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-		verify(template, times(0)).convertAndSend(anyString(), captor.capture());
-	}
     
 }
