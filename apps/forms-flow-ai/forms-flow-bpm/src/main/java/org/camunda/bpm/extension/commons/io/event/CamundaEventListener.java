@@ -104,10 +104,10 @@ public class CamundaEventListener implements ITaskEvent {
     }
 
     private List<String> getDefaultRegisteredEvents() {	
-        return Arrays.asList(TaskListener.EVENTNAME_CREATE
+        return Arrays.asList(TaskListener.EVENTNAME_CREATE,
             TaskListener.EVENTNAME_UPDATE,
             TaskListener.EVENTNAME_COMPLETE
-        );	
+        );
     }
 
 	// private String getDefaultRegisteredEvent() {
