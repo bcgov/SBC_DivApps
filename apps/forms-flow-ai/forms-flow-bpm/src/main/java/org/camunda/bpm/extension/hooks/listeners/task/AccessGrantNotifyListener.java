@@ -68,22 +68,17 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         LOGGER.info("StringUtils.isBlank(delegateTask.getAssignee())::" + StringUtils.isBlank(delegateTask.getAssignee()));
         LOGGER.info("delegateTask.getAssignee()::" + delegateTask.getAssignee());
         LOGGER.info("delegateTask.getExecution().getCurrentActivityName()::" + delegateTask.getExecution().getCurrentActivityName());;
-        // Trying setting assignee to null
-        try {
-            delegateTask.setAssignee(null);
-        } catch (Exception e) {
-            LOGGER.warning("Exception occurred setting assignee to null");
-            LOGGER.warning(e.getMessage());
-        }
-        
-        if (StringUtils.isBlank(delegateTask.getAssignee())) {
+
+        if (!StringUtils.isBlank(delegateTask.getAssignee())) {
             if (CollectionUtils.isNotEmpty(notifyGroup)) {
                 sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
                 delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), modifedGroupStr);
+                delegateTask.setAssignee(null);
             }
-        } else {
-            delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), "");
         }
+//        else {
+//            delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), "");
+//        }
 //        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(notifyGroup)) {
 //            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
 //        }
