@@ -22,7 +22,7 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 public class ApplicationAccessHandler implements IAccessHandler {
 
     // private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
-    private final Logger LOGGER = Logger.getLogger(AccessGrantNotifyListener.class.getName());
+    private final Logger LOGGER = Logger.getLogger(ApplicationAccessHandler.class.getName());
 
     @Autowired
     private WebClient webClient;
