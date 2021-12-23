@@ -1,8 +1,9 @@
 package org.camunda.bpm.extension.commons.connector.support;
 
 import com.google.gson.JsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+import java.util.logging.Logger;
+// import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 @Service("applicationAccessHandler")
 public class ApplicationAccessHandler implements IAccessHandler {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
+    // private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
+    private final Logger LOGGER = Logger.getLogger(AccessGrantNotifyListener.class.getName());
 
     @Autowired
     private WebClient webClient;
