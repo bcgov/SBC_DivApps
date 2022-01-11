@@ -69,10 +69,11 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         LOGGER.info("delegateTask.getAssignee()::" + delegateTask.getAssignee());
         LOGGER.info("delegateTask.getExecution().getCurrentActivityName()::" + delegateTask.getExecution().getCurrentActivityName());;
         
-        if (StringUtils.isBlank(delegateTask.getAssignee())) {
+        if (isNotify(delegateTask) && StringUtils.isBlank(delegateTask.getAssignee())) {
             if (CollectionUtils.isNotEmpty(notifyGroup)) {
                 sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
                 delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), modifedGroupStr);
+                delegateTask.getExecution().setVariable("isNotify", false);
             }
         } else {
             delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), "");
@@ -80,6 +81,13 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
 //        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(notifyGroup)) {
 //            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
 //        }
+    }
+
+    private boolean isNotify(DelegateTask delegateTask) {
+        Object shouldSendEmail = delegateTask.getExecution().getVariable("isNotify");
+        boolean value = shouldSendEmail != null && (boolean) shouldSendEmail;
+        LOGGER.info("shouldSendEmail != null && (boolean) shouldSendEmail::" + value );
+        return value;
     }
 
     /**
