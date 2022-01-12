@@ -49,45 +49,30 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         if(StringUtils.isNotBlank(excludeGroupValue)) {
             exclusionGroupList.add(excludeGroupValue.trim());
         }
-//        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
-//            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
-//            if(StringUtils.isNotBlank(tmpData)) {
-//                exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
-//            }
-//        }
         List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
-        String modifedGroupStr = String.join("|",accessGroupList);
-        LOGGER.info("Modified GroupData=" + modifedGroupStr);
-//        accessGroupList.forEach((accessGroup -> LOGGER.info("Emailing group::" + accessGroup)));
+        String accessGroupListString = String.join("|",accessGroupList);
+        LOGGER.info("Modified GroupData=" + accessGroupListString);
         for (String entry : accessGroupList) {
             List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
-            LOGGER.info("group::" + entry + "emailsForGroup size::" + emailsForGroup.size());
-            emailsForGroup.forEach((email) -> LOGGER.info("Group::" + entry + " email::" + email));
             notifyGroup.addAll(emailsForGroup);
         }
-        LOGGER.info("StringUtils.isBlank(delegateTask.getAssignee())::" + StringUtils.isBlank(delegateTask.getAssignee()));
-        LOGGER.info("delegateTask.getAssignee()::" + delegateTask.getAssignee());
-        LOGGER.info("delegateTask.getExecution().getCurrentActivityName()::" + delegateTask.getExecution().getCurrentActivityName());;
-        
-        if (isNotify(delegateTask) && StringUtils.isBlank(delegateTask.getAssignee())) {
+        if (isNotify(delegateTask)) {
             if (CollectionUtils.isNotEmpty(notifyGroup)) {
                 sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
-                delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), modifedGroupStr);
                 delegateTask.getExecution().removeVariable("isNotify");
+                delegateTask.setAssignee(null);
             }
-        } else {
-            delegateTask.getExecution().setVariable(getTrackVariable(delegateTask), "");
         }
-//        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(notifyGroup)) {
-//            sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
-//        }
     }
 
+    /**
+     * Check if the current update event is a result of Notify action
+     * @param delegateTask The current task in context
+     * @return true - if the update event is a result of Notify; false - else
+     */
     private boolean isNotify(DelegateTask delegateTask) {
         Object shouldSendEmail = delegateTask.getExecution().getVariable("isNotify");
-        boolean value = shouldSendEmail != null && (boolean) shouldSendEmail;
-        LOGGER.info("shouldSendEmail != null && (boolean) shouldSendEmail::" + value );
-        return value;
+        return shouldSendEmail != null && (boolean) shouldSendEmail;
     }
 
     /**
@@ -141,6 +126,11 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         return newGroupsAdded;
     }
 
+    /**
+     * Get the name of the variable that keeps track of who the email has been sent to previously
+     * @param delegateTask The current task
+     * @return The variable name
+     */
     private String getTrackVariable(DelegateTask delegateTask) {
         return delegateTask.getTaskDefinitionKey()+"_notify_sent_to";
     }
