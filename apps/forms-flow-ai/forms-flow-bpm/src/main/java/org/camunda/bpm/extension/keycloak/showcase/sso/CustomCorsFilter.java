@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.keycloak.sso;
+package org.camunda.bpm.extension.keycloak.showcase.sso;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,18 +63,18 @@ public class CustomCorsFilter implements Filter {
         // response.setHeader("Access-Control-Allow-Headers", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
 
-        if ("OPTIONS".equalsIgnoreCase(requestMethod) && isEngineRestRequest(request)) {
+        if ("OPTIONS".equalsIgnoreCase(requestMethod) && isEngineRestRequest(request) == true) {
             if(isWebSocketRequest(request)) {
                 response.setHeader("Access-Control-Allow-Credentials", "true");
             }
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
-            if (isWebSocketRequest(request)) {
+            if (isWebSocketRequest(request) == true) {
                 response.setHeader("Access-Control-Allow-Credentials", "true");
                 CustomHttpRequestWrapper customHttpRequestWrapper = new CustomHttpRequestWrapper(request);
 
                 if (StringUtils.isNotBlank(request.getQueryString())) {
-                    String[] queryParams = request.getQueryString().split("&");
+                    List<String> queryParams = Arrays.asList(request.getQueryString().split("&"));
                     for (String param : queryParams) {
                         if ("accesstoken".equals(StringUtils.substringBefore(param, "="))) {
                             String decryptedToken = aesUtils.decryptText(StringUtils.substringAfter(param, "="), socketSecretKey);
