@@ -56,12 +56,11 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
             List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
             notifyGroup.addAll(emailsForGroup);
         }
-        if (isNotify(delegateTask)) {
+        if (isNotify(delegateTask) && StringUtils.isBlank(delegateTask.getAssignee())) {
             if (CollectionUtils.isNotEmpty(notifyGroup)) {
                 LOGGER.info("Sending an email::" + isNotify(delegateTask));
                 sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
                 delegateTask.getExecution().removeVariable("isNotify");
-                delegateTask.setAssignee(null);
             }
         }
     }
