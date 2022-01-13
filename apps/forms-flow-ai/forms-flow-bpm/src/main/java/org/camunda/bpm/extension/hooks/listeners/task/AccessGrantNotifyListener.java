@@ -58,6 +58,7 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         }
         if (isNotify(delegateTask)) {
             if (CollectionUtils.isNotEmpty(notifyGroup)) {
+                LOGGER.info("Sending an email::" + isNotify(delegateTask));
                 sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
                 delegateTask.getExecution().removeVariable("isNotify");
                 delegateTask.setAssignee(null);
