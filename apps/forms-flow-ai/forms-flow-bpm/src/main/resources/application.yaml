@@ -160,7 +160,7 @@ spring:
             provider: keycloak
             client-id: ${keycloak.clientId}
             client-secret: ${keycloak.clientSecret}
-            authorizationGrantType: client_credentials
+            authorizationGrantType: client_credentials password
         provider:
           keycloak:
             authorization-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/auth
