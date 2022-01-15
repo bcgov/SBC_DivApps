@@ -3,10 +3,10 @@ import {Navbar, Dropdown, Container, Nav, NavDropdown} from "react-bootstrap";
 import {Link, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import UserService from "../services/UserService";
-import {getUserRoleName, getUserRolePermission} from "../helper/user";
+import {getUserRoleName, getUserRolePermission, getUserInsightsPermission} from "../helper/user";
 
 import "./styles.scss";
-import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME} from "../constants/constants";
+import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME, STAFF_DESIGNER} from "../constants/constants";
 import ServiceFlowFilterListDropDown from "../components/ServiceFlow/filter/ServiceTaskFilterListDropDown";
 import {push} from "connected-react-router";
 
@@ -84,6 +84,26 @@ const NavBar = React.memo(() => {
                   Forms
                 </span>
               </Nav.Link>
+              {(getUserRolePermission(userRoles, STAFF_DESIGNER)) ?
+                (<Nav.Link eventKey="10" as={Link} to='/admin'  className={`main-nav nav-item ${
+                  pathname.match(/^\/admin/) ? "" : "inactive-tab"
+                }`}>
+                  <i
+                    className={`fa fa-list-alt fa-fw fa-lg
+                        ${pathname.match(/^\/admin/) ? "active-tab-text" : ""}`
+                    }
+                  >
+                  </i> 
+                  <span 
+                    className={`tab-text-padding 
+                                ${pathname.match(/^\/admin/) ? "active-tab-text" : ""}`
+                              }
+                  >
+                    Admin
+                  </span>
+                </Nav.Link>)
+                :null
+              }
 
               {showApplications?(getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT)) ?
                 <Nav.Link eventKey="2" as={Link} to='/application'  className={`main-nav nav-item ${
@@ -188,23 +208,26 @@ const NavBar = React.memo(() => {
                       Metrics
                     </span>
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    eventKey="4"
-                    as={Link} to='/insights'
-                    className={`main-nav nav-item 
-                    ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : ""}
-                    `}
-                  >
-                    <i
-                      class={`fa fa-lightbulb-o dashboard-dropdown-options
-                      ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}
+                  {
+                    getUserInsightsPermission() &&
+                    <NavDropdown.Item
+                      eventKey="4"
+                      as={Link} to='/insights'
+                      className={`main-nav nav-item 
+                      ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : ""}
                       `}
-                      aria-hidden="true"
-                    ></i>
-                    <span className={`${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}`}>
-                      Insights
-                    </span>
-                  </NavDropdown.Item>
+                    >
+                      <i
+                        class={`fa fa-lightbulb-o dashboard-dropdown-options
+                        ${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}
+                        `}
+                        aria-hidden="true"
+                      ></i>
+                      <span className={`${pathname.match(/^\/insights/) ? "dropdown-option-selected" : "black-text"}`}>
+                        Insights
+                      </span>
+                    </NavDropdown.Item>
+                  }
               </NavDropdown>:null}
             </Nav>
             <Nav className="ml-auto">
