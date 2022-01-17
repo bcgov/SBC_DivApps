@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -54,8 +53,9 @@ public class KeycloakAuthenticationFilter implements Filter {
 		if (authentication instanceof JwtAuthenticationToken) {
 			LOG.debug("authentication instanceof JwtAuthenticationToken");
 			try {
-				UserDetails uss = (UserDetails) authentication.getPrincipal();
-				LOG.debug(uss.getUsername());
+				String preferred_username = ((JwtAuthenticationToken) authentication).getToken().getClaimAsString("preferred_username");
+				
+				LOG.debug("preferred_username:: {}", preferred_username);
 			} catch (Exception e) {
 				LOG.debug("Caught exception {}", e.getMessage());
 			}
