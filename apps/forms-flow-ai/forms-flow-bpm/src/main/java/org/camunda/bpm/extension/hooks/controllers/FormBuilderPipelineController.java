@@ -175,7 +175,7 @@ public class FormBuilderPipelineController {
         resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("accessTokenUri"));
         resourceDetails.setUsername(getAPIClientUsername());
         resourceDetails.setPassword(getAPIClientPassword());
-        resourceDetails.setGrantType("password");
+        resourceDetails.setGrantType("client_credentials");
         return new OAuth2RestTemplate(resourceDetails);
     }
 
