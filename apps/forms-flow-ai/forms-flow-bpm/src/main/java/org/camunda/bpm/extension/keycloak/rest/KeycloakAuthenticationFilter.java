@@ -51,15 +51,7 @@ public class KeycloakAuthenticationFilter implements Filter {
 		String userId = null;
 		Map<String, Object> claims;
 		if (authentication instanceof JwtAuthenticationToken) {
-			LOG.debug("authentication instanceof JwtAuthenticationToken");
-			try {
-				String preferred_username = ((JwtAuthenticationToken) authentication).getToken().getClaimAsString("preferred_username");
-				
-				LOG.debug("preferred_username:: {}", preferred_username);
-			} catch (Exception e) {
-				LOG.debug("Caught exception {}", e.getMessage());
-			}
-			userId = ((JwtAuthenticationToken)authentication).getName();
+			userId = ((JwtAuthenticationToken) authentication).getToken().getClaimAsString("preferred_username");
 			claims = ((JwtAuthenticationToken)authentication).getToken().getClaims();
 		} else if (authentication.getPrincipal() instanceof OidcUser) {
 			userId = ((OidcUser)authentication.getPrincipal()).getPreferredUsername();
