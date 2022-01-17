@@ -54,7 +54,7 @@ public class KeycloakAuthenticationFilter implements Filter {
 			userId = ((JwtAuthenticationToken)authentication).getName();
 			claims = ((JwtAuthenticationToken)authentication).getToken().getClaims();
 		} else if (authentication.getPrincipal() instanceof OidcUser) {
-			userId = ((OidcUser)authentication.getPrincipal()).getName();
+			userId = ((OidcUser)authentication.getPrincipal()).getPreferredUsername();
 			claims = ((OidcUser)authentication.getPrincipal()).getClaims();
 		} else {
 			throw new ServletException("Invalid authentication request token");
