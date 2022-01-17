@@ -150,6 +150,7 @@ spring:
             provider: keycloak
             client-id: ${keycloak.clientId}
             client-secret: ${keycloak.clientSecret}
+            token-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/token
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             scope:
               - openid
