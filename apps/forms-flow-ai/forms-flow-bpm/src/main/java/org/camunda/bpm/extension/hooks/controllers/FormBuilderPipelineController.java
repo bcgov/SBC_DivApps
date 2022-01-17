@@ -172,7 +172,7 @@ public class FormBuilderPipelineController {
         ResourceOwnerPasswordResourceDetails  resourceDetails = new ResourceOwnerPasswordResourceDetails ();
         resourceDetails.setClientId(clientCredentialProperties.getProperty("client-id"));
         resourceDetails.setClientSecret(clientCredentialProperties.getProperty("client-secret"));
-        resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("accessTokenUri"));
+        resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("token-uri"));
         resourceDetails.setUsername(getAPIClientUsername());
         resourceDetails.setPassword(getAPIClientPassword());
         resourceDetails.setGrantType("client_credentials");
