@@ -85,15 +85,6 @@ info:
 #  maximumPoolSize: ${CAMUNDA_SESSION_HIKARI_MAX_POOLSIZE:10}
 #  validationTimeout: ${CAMUNDA_SESSION_HIKARI_VALID_TIMEOUT:5000}
 
-
-# Redis Session Cache not yet in use
-#  session:
-#    store-type: ${SESSION_STORE_TYPE:none}
-#    redis.flush-mode: immediate
-#  redis:
-#    host: ${REDIS_HOST:localhost}
-#    port: ${REDIS_PORT:6379}
-
 camunda.bpm:
   history-level: ${CAMUNDA_BPM_HISTORY_LEVEL:none}
   authorization:
