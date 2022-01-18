@@ -170,9 +170,10 @@ public class FormBuilderPipelineController {
 
     private OAuth2RestTemplate getOAuth2RestTemplate() {
         ResourceOwnerPasswordResourceDetails  resourceDetails = new ResourceOwnerPasswordResourceDetails ();
-        resourceDetails.setClientId(clientCredentialProperties.getProperty("client-id"));
-        resourceDetails.setClientSecret(clientCredentialProperties.getProperty("client-secret"));
-        resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("accessTokenUri"));
+        resourceDetails.setClientId(clientCredentialProperties.getProperty("registration.keycloak.client-id"));
+        resourceDetails.setClientSecret(clientCredentialProperties.getProperty("registration.keycloak.client-secret"));
+        resourceDetails.setAccessTokenUri(clientCredentialProperties.getProperty("registration.keycloak.token-uri"));
+        LOGGER.info("token-uri::" + clientCredentialProperties.getProperty("registration.keycloak.token-uri"));
         resourceDetails.setUsername(getAPIClientUsername());
         resourceDetails.setPassword(getAPIClientPassword());
         resourceDetails.setGrantType("password");

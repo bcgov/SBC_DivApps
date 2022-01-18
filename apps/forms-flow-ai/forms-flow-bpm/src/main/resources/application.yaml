@@ -85,15 +85,6 @@ info:
 #  maximumPoolSize: ${CAMUNDA_SESSION_HIKARI_MAX_POOLSIZE:10}
 #  validationTimeout: ${CAMUNDA_SESSION_HIKARI_VALID_TIMEOUT:5000}
 
-
-# Redis Session Cache not yet in use
-#  session:
-#    store-type: ${SESSION_STORE_TYPE:none}
-#    redis.flush-mode: immediate
-#  redis:
-#    host: ${REDIS_HOST:localhost}
-#    port: ${REDIS_PORT:6379}
-
 camunda.bpm:
   history-level: ${CAMUNDA_BPM_HISTORY_LEVEL:none}
   authorization:
@@ -150,6 +141,7 @@ spring:
             provider: keycloak
             client-id: ${keycloak.clientId}
             client-secret: ${keycloak.clientSecret}
+            token-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/token
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             scope:
               - openid
@@ -160,7 +152,7 @@ spring:
             provider: keycloak
             client-id: ${keycloak.clientId}
             client-secret: ${keycloak.clientSecret}
-            authorizationGrantType: client_credentials
+            authorizationGrantType: refresh_token client_credentials password
         provider:
           keycloak:
             authorization-uri: ${keycloak.url}/auth/realms/${keycloak.url.realm}/protocol/openid-connect/auth
