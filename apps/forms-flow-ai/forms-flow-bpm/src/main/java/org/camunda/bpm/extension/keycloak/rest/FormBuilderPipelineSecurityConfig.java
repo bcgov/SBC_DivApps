@@ -12,7 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
-@Order(SecurityProperties.BASIC_AUTH_ORDER - 20)
+@Order(SecurityProperties.BASIC_AUTH_ORDER - 18)
 public class FormBuilderPipelineSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
