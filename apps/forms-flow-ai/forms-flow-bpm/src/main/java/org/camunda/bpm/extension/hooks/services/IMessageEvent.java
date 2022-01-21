@@ -24,7 +24,6 @@ public interface IMessageEvent extends IUser {
         Map<String,Object> eMessageVariables = new HashMap<>();
         eMessageVariables.putAll(messageVariables);
         eMessageVariables.putAll(injectFormDataInLightMode(execution));
-        log.info("messageId:: " + messageId);
         runtimeService.startProcessInstanceByMessage(messageId,eMessageVariables);
         log.info("\n\nMessage sent! " + eMessageVariables+ "\n\n");
     }

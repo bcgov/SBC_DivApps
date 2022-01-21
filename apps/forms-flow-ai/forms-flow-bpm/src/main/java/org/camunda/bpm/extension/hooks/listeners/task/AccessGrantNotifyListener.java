@@ -117,7 +117,6 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
             for (IdentityLink entry : identityLinks) {
                 String grpId = entry.getGroupId().trim();
                 if (!exclusionGroup.contains(grpId)) {
-                    LOGGER.info("Adding to Modified group::" + entry.getGroupId().trim());
                     newGroupsAdded.add(entry.getGroupId().trim());
                 }
             }
