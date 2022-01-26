@@ -8,10 +8,14 @@ import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.task.IdentityLink;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -37,37 +41,49 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
      */
     public void notify(DelegateTask delegateTask) {
         LOGGER.info("\n\nAccessGrantNotify listener invoked! " + delegateTask.getId());
-        List<String> notifyGrp = new ArrayList<>();
+        List<String> notifyGroup = new ArrayList<>();
         String excludeGroupValue = this.excludeGroup != null && this.excludeGroup.getValue(delegateTask.getExecution()) != null ?
                 String.valueOf(this.excludeGroup.getValue(delegateTask.getExecution())) : null;
         List<String> exclusionGroupList = new ArrayList<>();
-        if(StringUtils.isNotBlank(excludeGroupValue)) {exclusionGroupList.add(excludeGroupValue.trim());}
-        if(delegateTask.getExecution().getVariables().containsKey(getTrackVariable(delegateTask))) {
-            String tmpData = String.valueOf(delegateTask.getExecution().getVariable(getTrackVariable(delegateTask)));
-            if(StringUtils.isNotBlank(tmpData)) {
-                exclusionGroupList.addAll(Arrays.asList(StringUtils.split(tmpData, "|")));
-            }
+        LOGGER.info("Excluded group::" + excludeGroupValue);
+        if(StringUtils.isNotBlank(excludeGroupValue)) {
+            exclusionGroupList.add(excludeGroupValue.trim());
         }
         List<String> accessGroupList = getModifiedGroupsForTask(delegateTask, exclusionGroupList);
-        String modifedGroupStr = String.join("|",accessGroupList);
-        LOGGER.info("Current Group="+excludeGroupValue+"|Modified GroupData=" + modifedGroupStr);
-
-        if(StringUtils.isBlank(delegateTask.getAssignee()) && CollectionUtils.isNotEmpty(accessGroupList)) {
-            for (String entry : accessGroupList) {
-                notifyGrp.addAll(getEmailsForGroup(delegateTask.getExecution(), entry));
-            }
+        String accessGroupListString = String.join("|",accessGroupList);
+        for (String entry : accessGroupList) {
+            List<String> emailsForGroup = getEmailsForGroup(delegateTask.getExecution(), entry);
+            notifyGroup.addAll(emailsForGroup);
         }
-
-        if(CollectionUtils.isNotEmpty(notifyGrp)) {
-            if(CollectionUtils.isNotEmpty(accessGroupList)) {
-                delegateTask.getExecution().setVariable(getTrackVariable(delegateTask),modifedGroupStr);
+        if (isNotify(delegateTask) && StringUtils.isBlank(delegateTask.getAssignee())) {
+            if (CollectionUtils.isNotEmpty(notifyGroup)) {
+                LOGGER.info("Sending an email to ::" + accessGroupListString);
+                sendEmailNotification(delegateTask.getExecution(), notifyGroup, delegateTask.getId(), getCategory(delegateTask.getExecution()));
+                delegateTask.getExecution().removeVariable("isNotify");
             }
-            sendEmailNotification(delegateTask.getExecution(), notifyGrp, delegateTask.getId(), getCategory(delegateTask.getExecution()));
         }
     }
 
+    /**
+     * Check if the current update event is a result of Notify action
+     * @param delegateTask The current task in context
+     * @return true - if the update event is a result of Notify; false - else
+     */
+    private boolean isNotify(DelegateTask delegateTask) {
+        Object shouldSendEmail = delegateTask.getExecution().getVariable("isNotify");
+        return shouldSendEmail != null && (boolean) shouldSendEmail;
+    }
+
+    /**
+     * Sends an email.
+     * @param execution The current execution instance.
+     * @param toEmails The recipients.
+     * @param taskId The task id.
+     * @param category The email category for the DMN.
+     */
     private void sendEmailNotification(DelegateExecution execution, List<String> toEmails, String taskId, String category) {
-        String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(toEmails,",") : null;
+        Set<String> emails = new HashSet<>(toEmails);
+        String toAddress = CollectionUtils.isNotEmpty(toEmails) ? StringUtils.join(emails,",") : null;
         if(StringUtils.isNotEmpty(toAddress)) {
             Map<String, Object> emailAttributes = new HashMap<>();
             emailAttributes.put("to", toAddress);
@@ -82,14 +98,18 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
     }
 
     /**
-     *
-     * @param execution
-     * @return
+     * @param execution The current execution instance
+     * @return Returns the message category
      */
     private String getCategory(DelegateExecution execution){
         return String.valueOf(this.category.getValue(execution));
     }
 
+    /**
+     * @param delegateTask The task instance to send an email for.
+     * @param exclusionGroup The groups to be excluded from the emails.
+     * @return The list of groups after removing the excluded groups.
+     */
     private List<String> getModifiedGroupsForTask(DelegateTask delegateTask, List<String> exclusionGroup) {
         Set<IdentityLink> identityLinks = delegateTask.getCandidates();
         List<String> newGroupsAdded = new ArrayList<>();
@@ -104,6 +124,11 @@ public class AccessGrantNotifyListener implements TaskListener, IMessageEvent {
         return newGroupsAdded;
     }
 
+    /**
+     * Get the name of the variable that keeps track of who the email has been sent to previously
+     * @param delegateTask The current task
+     * @return The variable name
+     */
     private String getTrackVariable(DelegateTask delegateTask) {
         return delegateTask.getTaskDefinitionKey()+"_notify_sent_to";
     }
