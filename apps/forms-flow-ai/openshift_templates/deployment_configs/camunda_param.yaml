@@ -1,0 +1,14 @@
+IMAGE_TAG: latest
+TOOLS_WORKSPACE: formsflow-tools
+KEYCLOAK_URL: https://<keycloak server>
+SMTP_SERVER: smpt.<your outbound smtp domain>
+DATABASE_SERVICE_NAME: <postgres service name>
+DATABASE_NAME: ffa-bpm
+FORMSFLOW_API_URL: https://formsflow-api.<opemshiftdomain>
+FORMIO_URL: https://formsflow-forms.<opemshiftdomain>
+CAMUNDA_URL: formsflow-bpm.<opemshiftdomain>
+WEBSOCKET_ENCRYPT_KEY: 12345
+WEBSOCKET_SECURITY_ORIGIN: https://formsflow.<opemshiftdomain>
+# From your HA Redis instance
+WEBSOCKET_BROKER_HOST: redis-formio
+WEBSOCKET_BROKER_PASSCODE: 

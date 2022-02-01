@@ -1,0 +1,3 @@
+IMAGE_NAMESPACE: formsflow-tools
+TAG_NAME: latest
+FFA_FORMS_URL: formsflow-forms.<opemshiftdomain>

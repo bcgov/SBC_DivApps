@@ -1,0 +1,24 @@
+IMAGE_NAMESPACE: formsflow-tools
+TAG_NAME: latest
+# Main URL for Formsflow
+FFAWEB_URL: formsflow.<openshiftdomain>
+# Assuming you buld formsflow-forms first, go to https://github.com/AOT-Technologies/forms-flow-ai/tree/master/forms-flow-forms#using-curl-command to get the information below.
+REACT_APP_CLIENT_ID: 6172fbbe55a90e865f897703
+REACT_APP_STAFF_REVIEWER_ID: 6172fbbe55a90e1860897702
+REACT_APP_STAFF_DESIGNER_ID: 6172fbbe55a90e5df78976ff
+REACT_APP_USER_RESOURCE_FORM_ID: 6172fbbe55a90e076e897704
+REACT_APP_ANONYMOUS_ID: 6172fbbe55a90e1deb897701
+
+# Formsflow API URL
+REACT_APP_API_BASE_URL=https://formsflow-api.<opemshiftdomain>
+# Formsflow BPM URL
+REACT_APP_CAMUNDA_API_URI=https://formsflow-bpm.<opemshiftdomain>/camunda
+# Formsflow FORMS URL
+REACT_APP_FORMS_SERVER_URL=https://formsflow-forms.<opemshiftdomain>
+# Keycloak Realm
+REALM: <myrealm>
+REACT_APP_WEBSOCKET_ENCRYPT_KEY: 12345
+REACT_APP_APPLICATION_NAME: FormsFlow
+# Root URL for Keycloak Server
+REACT_APP_KEYCLOAK_URL=https://<mykeycloakURL>
+REACT_APP_FORMIO_JWT_SECRET: 12345

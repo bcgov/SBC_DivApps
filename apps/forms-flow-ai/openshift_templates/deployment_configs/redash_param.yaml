@@ -1,0 +1,11 @@
+IMAGE_NAMESPACE: formsflow-tools
+TAG_NAME: latest
+FFA_ANALYTICS_URL: formsflow-analytics.<opemshiftdomain>
+POSTGRES_PASSWORD: 
+REDASH_DATABASE_URL: postgresql://<postgresuser>:<postgresspassword>@postgres_service:5432/ffa-analytics
+#Standard Redis instance for Analytics as Redash doesn't currently support clustered Redis
+REDASH_HOST: redis-redashdev
+REDASH_REDIS_URL: redis://<user>:<password>@redis-redashdev:6379/0
+REDASH_CORS_ACCESS_CONTROL_ALLOW_ORIGIN: "formsflow.<opemshiftdomain>"
+REDASH_MAIL_SERVER: smtp.<OutboundSMPTdomain>
+REDASH_MAIL_DEFAULT_SENDER: ffa_alerts_donotreply@<yourmaildomain>
