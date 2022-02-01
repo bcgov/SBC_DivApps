@@ -11,7 +11,7 @@ Features include changes to look and feel as well as additional components to al
 The yaml files in the deployment_configs folder are to deploy images build in the tools area to dev/test/production workspaces.
 <br><br>
 Example command: <br/>
-oc process -f camunda_dc.yaml --param-file=camunda_param.yaml | wf-dev apply -f -
+oc process -f camunda_dc.yaml --param-file=camunda_param.yaml | oc apply -f -
 <br><br>
 These templates are based on information provided in this repo: https://github.com/AOT-technologies/forms-flow-ai
 <br><br>
