@@ -12,3 +12,7 @@ WEBSOCKET_SECURITY_ORIGIN: https://formsflow.<opemshiftdomain>
 # From your HA Redis instance
 WEBSOCKET_BROKER_HOST: redis-formio
 WEBSOCKET_BROKER_PASSCODE: 
+# SBC Specific servers to save data to analtyics server
+CAMUNDA_ANALYTICS_JDBC_DRIVER: org.postgresql.Driver
+CAMUNDA_ANALYTICS_JDBC_URL: jdbc:postgresql://<database service name>:5432/<databasname>
+CAMUNDA_FORMBUILDER_PIPELINE_BPM_URL: https://username:password@formsflow-bpm.<openshiftdomain>/camunda
