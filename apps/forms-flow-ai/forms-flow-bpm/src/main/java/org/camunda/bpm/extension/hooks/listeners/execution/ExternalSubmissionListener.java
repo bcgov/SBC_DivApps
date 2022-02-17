@@ -50,7 +50,7 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
         try {
             String formUrl = getFormUrl(execution);
             String submissionData = formSubmissionService.createFormSubmissionData(execution.getVariables());
-            LOGGER.log("submissionData:: \n " + submissionData);
+            LOGGER.info("submissionData:: \n " + submissionData);
             String submissionId = formSubmissionService.createSubmission(formUrl, submissionData);
             if(StringUtils.isNotBlank(submissionId)){
                 execution.setVariable("formUrl", formUrl+"/"+submissionId);
