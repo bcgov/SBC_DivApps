@@ -11,8 +11,10 @@ import org.camunda.bpm.extension.commons.connector.HTTPServiceInvoker;
 import org.camunda.bpm.extension.hooks.exceptions.ApplicationServiceException;
 import org.camunda.bpm.extension.hooks.listeners.BaseListener;
 import org.camunda.bpm.extension.hooks.services.FormSubmissionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,8 @@ import java.util.Map;
 @Named("ExternalSubmissionListener")
 public class ExternalSubmissionListener extends BaseListener implements ExecutionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExternalSubmissionListener.class);
+    // private static final Logger LOGGER = LoggerFactory.getLogger(ExternalSubmissionListener.class);
+    private final Logger LOGGER = Logger.getLogger(ExternalSubmissionListener.class.getName());
 
     @Autowired
     private FormSubmissionService formSubmissionService;
@@ -47,7 +50,7 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
         try {
             String formUrl = getFormUrl(execution);
             String submissionData = formSubmissionService.createFormSubmissionData(execution.getVariables());
-            LOGGER.info("submissionData:: \n " + submissionData);
+            LOGGER.log("submissionData:: \n " + submissionData);
             String submissionId = formSubmissionService.createSubmission(formUrl, submissionData);
             if(StringUtils.isNotBlank(submissionId)){
                 execution.setVariable("formUrl", formUrl+"/"+submissionId);
@@ -88,7 +91,7 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
             execution.setVariable("applicationId", applicationId);
         } else {
             if(retryOnce) {
-                LOGGER.warn("Retrying the application create once more due to previous failure");
+                // LOGGER.warn("Retrying the application create once more due to previous failure");
                 createApplication(execution, false);
             } else {
                 throw new ApplicationServiceException("Unable to create application " + ". Message Body: " +
