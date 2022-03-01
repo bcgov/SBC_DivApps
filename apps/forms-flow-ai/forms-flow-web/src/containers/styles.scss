@@ -345,3 +345,8 @@
 .dropdown-item.disabled, .dropdown-item:disabled {
   color: #212529 !important;
 }
+
+.dropdown-menu.show {
+  max-height: 300px;
+  overflow-y: scroll;
+}
