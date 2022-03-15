@@ -22,8 +22,8 @@ public interface IMessageEvent extends IUser {
     default void sendMessage(DelegateExecution execution, Map<String,Object> messageVariables,String messageId){
         RuntimeService runtimeService = execution.getProcessEngineServices().getRuntimeService();
         Map<String,Object> eMessageVariables = new HashMap<>();
-        eMessageVariables.putAll(messageVariables);
         eMessageVariables.putAll(injectFormDataInLightMode(execution));
+        eMessageVariables.putAll(messageVariables);
         runtimeService.startProcessInstanceByMessage(messageId,eMessageVariables);
         log.info("\n\nMessage sent! " + eMessageVariables+ "\n\n");
     }
