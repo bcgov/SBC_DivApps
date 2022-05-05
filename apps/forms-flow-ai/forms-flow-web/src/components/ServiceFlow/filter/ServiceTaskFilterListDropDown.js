@@ -35,7 +35,7 @@ const ServiceFlowFilterListDropDown = React.memo(() => {
                 >
                   {filter?.name}
                 </span>
-              {/*{`(${filter?.itemCount})`}*/}
+                {`(${ filter.itemCount || 0})`}
             </NavDropdown.Item>
             )
           )}
