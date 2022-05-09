@@ -36,6 +36,8 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
     private Expression fields;
     private Expression copyDataIndicator;
 
+    private static final Logger LOGGER = Logger.getLogger(FormConnectorListener.class.getName());
+
     @Autowired
     private FormSubmissionService formSubmissionService;
 
