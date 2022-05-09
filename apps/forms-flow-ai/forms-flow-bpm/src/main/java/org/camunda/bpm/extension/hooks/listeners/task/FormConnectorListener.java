@@ -70,6 +70,10 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
         for(String entry : supFields) {
             superVariables.put(entry, delegateTask.getExecution().getVariables().get(entry));
         }
+        LOGGER.info("Invoking FormConnectorListener for applicationId::" +
+                delegateTask.getExecution().getVariables().get("applicationId")
+                + " process_pid::" +
+                delegateTask.getExecution().getVariables().get("process_pid"));
         return  formSubmissionService.createSubmission(targetFormUrl, createFormSubmissionData(submission, superVariables, getPropogateData(delegateTask)));
     }
 
