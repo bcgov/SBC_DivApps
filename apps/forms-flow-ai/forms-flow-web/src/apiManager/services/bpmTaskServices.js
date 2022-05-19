@@ -166,7 +166,7 @@
  
  export const fetchFilterList = (...rest) => {
    const done = rest.length ? rest[0] : () => {};
-   const getTaskFiltersAPI = `${API.GET_BPM_FILTERS}?resourceType=Task`
+   const getTaskFiltersAPI = `${API.GET_BPM_FILTERS}?resourceType=Task&itemCount=true`
    return (dispatch) => {
      httpGETRequest(getTaskFiltersAPI, {}, UserService.getToken())
        .then((res) => {
@@ -340,10 +340,7 @@
    return (dispatch) => {
      httpPOSTRequest(apiUrlClaimTask, { userId: user })
        .then((res) => {
-         // if (res.status === 200) {
-         //TODO REMOVE
          done(null, res.data);
-         // }
        })
        .catch((error) => {
          console.log("Error", error);
@@ -449,25 +446,3 @@
    };
  };
  
- /*export const completeTask = (id, reviewStatus, ...rest) => {
-   const done = rest.length ? rest[0] : () => {};
-   const data = {
-     variables: {
-       action: {
-         value: reviewStatus,
-       },
-     },
-   };
-   return (dispatch) => {
-     httpPOSTRequest(`${API.GET_TASK_API}/${id}/complete`, data)
-       .then((res) => {
-         /!*dispatch(getTaskDetail(id));
-         done(null, res);*!/
-       })
-       .catch((error) => {
-         console.log("Error", error);
-         done(error);
-         dispatch(serviceActionError(error));
-       });
-   };
- };*/
