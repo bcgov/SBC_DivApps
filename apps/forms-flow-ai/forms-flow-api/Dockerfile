@@ -1,4 +1,4 @@
-FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.9
+FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.9-slim-buster
 
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /api/
 WORKDIR /forms-flow-api/app
