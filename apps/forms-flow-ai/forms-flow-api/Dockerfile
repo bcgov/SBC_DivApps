@@ -1,4 +1,4 @@
-FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.8
+FROM docker-remote.artifacts.developer.gov.bc.ca/python:3.9
 
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /api/
 WORKDIR /forms-flow-api/app

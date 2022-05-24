@@ -4,7 +4,7 @@
 
 # Use Node image, maintained by Docker:
 # hub.docker.com/r/_/node/
-FROM docker-remote.artifacts.developer.gov.bc.ca/node:12.2.0-alpine
+FROM docker-remote.artifacts.developer.gov.bc.ca/node:lts-alpine3.10
 
 # set working directory
 WORKDIR /forms/
