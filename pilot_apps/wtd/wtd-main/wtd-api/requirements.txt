@@ -17,5 +17,5 @@ flask-migrate
 flask-script
 marshmallow
 flask-bcrypt
-pyjwt==1.7.1
+pyjwt==2.4.0
 requests_ntlm
