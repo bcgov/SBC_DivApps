@@ -9,15 +9,15 @@ parameters:
   - name: SOURCE_REPOSITORY_URL
     displayName: Git Repository URL
     description: The URL of the repository with your application source code.
-    value: https://github.com/AOT-Technologies/forms-flow-ai
+    value: https://github.com/AOT-Technologies/forms-flow-ai.git
   - name: SOURCE_REPOSITORY_REF
     displayName: Git Reference
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: v4.0.0-alpha
+    value: v4.0.5
   - name: SOURCE_CONTEXT_DIR
     displayName: Git context directory
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: /forms-flow-forms
+    value: forms-flow-forms
 objects:
 -
   apiVersion: build.openshift.io/v1
@@ -36,11 +36,21 @@ objects:
       to:
         kind: ImageStreamTag
         name: 'forms-flow-forms:latest'
+    resources:
+      limits:
+        cpu: 500m
+        memory: 8Gi
+      requests:
+        cpu: 500m
+        memory: 4Gi
     strategy:
       type: Docker
       dockerStrategy:
         pullSecret:
           name: docker-creds
+        env:
+          - name: JWT_EXPIRE_TIME
+            value: '480'
         dockerfilePath: Dockerfile
     triggers:
       - type: ImageChange

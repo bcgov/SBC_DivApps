@@ -9,14 +9,21 @@ parameters:
   - name: SOURCE_REPOSITORY_URL
     displayName: Git Repository URL
     description: The URL of the repository with your application source code.
-    value: https://github.com/AOT-Technologies/forms-flow-ai
+    value: https://github.com/bcgov/SBC_DivApps
   - name: SOURCE_REPOSITORY_REF
     displayName: Git Reference
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
+    value: master
   - name: SOURCE_CONTEXT_DIR
     displayName: Git context directory
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: /forms-flow-web
+    value: apps/forms-flow-ai/forms-flow-web
+  - name: FORMIO_SOURCE_REPO_BRANCH
+    description: AOT branch/version of firmio from which the app is built.
+    value: v4.0.5
+  - name: FORMIO_SOURCE_REPO_URL
+    description: AOT formsflow git repository reference .
+    value: https://github.com/AOT-Technologies/forms-flow-ai.git
 objects:
 -
   apiVersion: build.openshift.io/v1
@@ -46,6 +53,13 @@ objects:
     strategy:
       type: Docker
       dockerStrategy:
+        pullSecret:
+          name: artifactory-creds
+        env:
+          - name: FORMIO_SOURCE_REPO_URL
+            value: ${FORMIO_SOURCE_REPO_URL}
+          - name: FORMIO_SOURCE_REPO_BRANCH
+            value: ${FORMIO_SOURCE_REPO_BRANCH}
         dockerfilePath: Dockerfile
     triggers:
       - type: ImageChange

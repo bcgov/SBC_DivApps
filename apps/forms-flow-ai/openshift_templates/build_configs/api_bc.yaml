@@ -1,10 +1,10 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: forms-flow-webapi
+  name: forms-flow-api
   annotations:
     description: ""
-    tags: forms-flow-webapi
+    tags: forms-flow-api
 parameters:
   - name: SOURCE_REPOSITORY_URL
     displayName: Git Repository URL
@@ -13,18 +13,26 @@ parameters:
   - name: SOURCE_REPOSITORY_REF
     displayName: Git Reference
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
+    value: master
   - name: SOURCE_CONTEXT_DIR
     displayName: Git context directory
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: /forms-flow-api
+    value: forms-flow-api
+  - name: FORMIO_SOURCE_REPO_BRANCH
+    description: AOT branch/version of firmio from which the app is built.
+    value: v4.0.5
+  - name: FORMIO_SOURCE_REPO_URL
+    description: AOT formsflow git repository reference .
+    value: https://github.com/AOT-Technologies/forms-flow-ai.git
+
 objects:
 -
   apiVersion: build.openshift.io/v1
   kind: BuildConfig
   metadata:
-    name: forms-flow-webapi
+    name: forms-flow-api
     labels:
-      app: forms-flow-webapi
+      app: forms-flow-api
   spec:
     resources:
       limits:
@@ -42,10 +50,17 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: 'forms-flow-webapi:latest'
+        name: 'forms-flow-api:latest'
     strategy:
       type: Docker
       dockerStrategy:
+        pullSecret:
+          name: docker-creds
+        env:
+          - name: FORMIO_SOURCE_REPO_URL
+            value: ${FORMIO_SOURCE_REPO_URL}
+          - name: FORMIO_SOURCE_REPO_BRANCH
+            value: ${FORMIO_SOURCE_REPO_BRANCH}
         dockerfilePath: Dockerfile
     triggers:
       - type: ImageChange
@@ -56,4 +71,4 @@ objects:
   apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
-    name: forms-flow-webapi
+    name: forms-flow-api
