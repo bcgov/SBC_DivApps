@@ -1,8 +1,0 @@
-{
-  "REGISTRY_URL": "https://dev.bcregistry.ca",
-  "WTD_API_URL": "http://d-yyj0002.vic.cgi.com:5000/wtd/api/v1",
-  "EDIT_GROUP": "formsflow-designer",
-  "AUTH_URL": "https://dev.oidc.gov.bc.ca/auth/",
-  "AUTH_API_URL": "https://dev.oidc.gov.bc.ca/auth/vtkayq4c",
-  "KEYCLOAK_CONFIG_PATH": "http://d-yyj0002.vic.cgi.com:5000/wtd/api/v1/config/keycloak.json"
-}
