@@ -20,9 +20,12 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 @Qualifier("formSubmissionService")
@@ -81,8 +84,8 @@ public class FormSubmissionService {
         ObjectMapper objectMapper = new ObjectMapper();
         ResponseEntity<String> response =  httpServiceInvoker.execute(submissionUrl, HttpMethod.PUT, submission);
         if(response.getStatusCode().value() != HttpStatus.OK.value()) {
-            LOGGER.log(Level.SEVERE,"Unable to update submission for "+submissionUrl + 
-                " Response code::" + response.getStatusCode().value());
+            LOGGER.log(Level.SEVERE,"Unable to update submission for "+submissionUrl +
+                    " Response code::" + response.getStatusCode().value());
             throw new FormioServiceException("Unable to update submission for: "+ submissionUrl + ". Message Body: " +
                     response.getBody());
         }
