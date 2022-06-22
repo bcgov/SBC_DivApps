@@ -169,6 +169,15 @@ public class FormSubmissionService {
     }
 
     public String createFormSubmissionData(Map<String,Object> bpmVariables) throws IOException {
+        List<String> fileKeys = bpmVariables.keySet().stream()
+                .filter((key) -> key.endsWith("_file"))
+                .collect(Collectors.toList());
+        for (String fileKey: fileKeys) {
+            InputStream file = (InputStream) bpmVariables.get(fileKey);
+            byte[] bytes = IOUtils.toByteArray(file);
+            String fileString = new String(bytes, StandardCharsets.UTF_8);
+            bpmVariables.put(fileKey, fileString);
+        }
         Map<String, Map<String,Object>> data = new HashMap<>();
         data.put("data",bpmVariables);
         return getObjectMapper().writeValueAsString(data);
