@@ -4,6 +4,10 @@ keycloak.url: ${KEYCLOAK_URL}
 keycloak.url.realm: ${KEYCLOAK_URL_REALM}
 keycloak.clientId: ${KEYCLOAK_CLIENTID}
 keycloak.clientSecret: ${KEYCLOAK_CLIENTSECRET}
+analytics:
+  nifi:
+    url: ${ANALYTICS_NIFI_URL}
+    accesstoken: ${ANALYTICS_NIFI_TOKEN}
 
 formbuilder.pipeline.service.username: ${CAMUNDA_FORMBUILDER_PIPELINE_USERNAME}
 formbuilder.pipeline.service.password: ${CAMUNDA_FORMBUILDER_PIPELINE_PASSWORD}
