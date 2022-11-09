@@ -49,7 +49,7 @@ public class NifiListener extends BaseListener implements TaskListener, Executio
         } catch (Exception e) {
             handleException(execution, BaseListener.ExceptionSource.EXECUTION, e);
             notifyForAttention(execution);
-            execution.createIncident("Nifi-HTTP", "", "Unable to connect with Nifi");
+            execution.createIncident("Nifi-HTTP", execution.getId(), "Unable to connect with Nifi");
         }
     }
 
