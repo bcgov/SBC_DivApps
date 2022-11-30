@@ -59,6 +59,12 @@
 				<version>${version.camundaKeycloak}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.nimbusds</groupId>
+				<artifactId>oauth2-oidc-sdk</artifactId>
+				<version>10.1</version>
+				<scope>runtime</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
