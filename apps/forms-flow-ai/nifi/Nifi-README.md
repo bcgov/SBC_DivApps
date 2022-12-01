@@ -6,9 +6,16 @@ Outline:
 
 ### Nifi Configuration
 
-#### Controllers
+#### Controller Services
+![Controller Services](./images/Controller%20Services.png)
 
-#### Services
+#### Parameter Context
+![Parameter Context](./images/Parameter%20Context.png)
+
+![Parameter Context](./images/Parameters.png)
+
+Following are the parameters
+- 
 
 ### Camunda POSTGRES setup
 
@@ -38,8 +45,11 @@ Prior to starting this processor,
 
 Because this is exclusive for debugging, a nifi_entry_id  is not set up. To allow time for Stopping the processor, the processor is configured to execute only every 10 minutes which should allow you to verify read and stop execution.
 
-
-
 ### Nifi Registry
+
+![Home/Controller Settings](./images/Home%20-%20Hamburger%20Menu.png)
+
+![Setting up Registry Client](./images/Registry%20Clients.png)
+
 
 ### Logging
