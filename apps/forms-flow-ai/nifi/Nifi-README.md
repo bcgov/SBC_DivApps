@@ -7,12 +7,12 @@ Outline:
 ### Nifi Configuration
 
 #### Controller Services
-![Controller Services](/images/Controller%20Services.png)
+![Controller Services](images/Controller%20Services.png)
 
 #### Parameter Context
-![Parameter Context](/images/Parameter%20Context.png)
+![Parameter Context](images/Parameter%20Context.png)
 
-![Parameter Context](/images/Parameters.png)
+![Parameter Context](images/Parameters.png)
 
 Following are the parameters
 - 
@@ -47,9 +47,9 @@ Because this is exclusive for debugging, a nifi_entry_id  is not set up. To allo
 
 ### Nifi Registry
 
-![Home/Controller Settings](/images/Home%20-%20Hamburger%20Menu.png)
+![Home/Controller Settings](images/Home%20-%20Hamburger%20Menu.png)
 
-![Setting up Registry Client](/images/Registry%20Clients.png)
+![Setting up Registry Client](images/Registry%20Clients.png)
 
 
 ### Logging
