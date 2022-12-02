@@ -4,49 +4,51 @@ Outline:
 
 The nifi implementation reads data from camunda postgres database and writes them to the analytics database.
 
-## Table of Content
+## **Table of Contents**
 1. [Setup](#setup)
    * [Nifi Configuration](#nifi-Configuration)
         * [Controller Services](#controller-Services)
         * [Parameter Context and Parameters](#parameter-Context)
         * [Controller Services](#controller-Services)
    * [Camunda POSTGRES setup](#camunda-POSTGRES-setup)
-        * [Step 1: Create analytics tables:](#create-analytics-tables)
-2. [Nifi Flow Description](#nifi-Flow-Description)  
-3. [Failure Notifications](#failure-Notifications)
-4. [How to debug?](#how-to-debug?)
-5. [Nifi Registry](#nifi-Registry)
+        * [Step 1: Create analytics tables](#step-1-create-analytics-tables)
+        * [Step 2: Add column nifi_entry_id](#step-2-add-column-nifi_entry_id)
+2. [Nifi Flow Description](#nifi-flow-description)  
+3. [Failure Notifications](#failure-notifications)
+4. [How to debug?](#how-to-debug)
+5. [Nifi Registry](#nifi-registry)
 6. [Logging](#logging)
 
-## Setup
+## **Setup**
 
-### Nifi Configuration
+### **Nifi Configuration**
 
-#### Controller Services
+#### **Controller Services**
 ![Controller Services](images/Controller%20Services.png)
 
-#### Parameter Context
-![Parameter Context](images/Parameter%20Context.png)
+#### **Parameter Context**
 
-![Parameters](images/Parameters.png)
+A parameter context is set up so that several parameters that enable this flow can be added. The parameters basically act like environment variables and the parameter context ensures that these parameters are only accessible from processors using this context.
+
+![Parameter Context](images/Parameter%20Context.png)
 
 Following are the parameters:
 
-#### Camunda Database:
+**Camunda Database:**
 
 - PG_DRIVER_LOCATION: /opt/nifi/data/extensions/
 - PG_BC_HOST_PORT: formsflowai-rw.e69aae-test.svc:5432
 - PG_BC_DATABASE: `<camunda database>`
 - PG_BC_USERNAME: `<Postgres username>`
 
-#### Analytics Database:
+**Analytics Database:**
 - MSSQL_DRIVER_LOCATION: /opt/nifi/data/extensions/mssql-jdbc-10.2.0.jre8.jar
 - MSSQL_USERNAME: `<Analytics Username>`
 - MSSQL_DATABASE: `<Analytics database name>`
 - MSSQL_HOST_PORT: `<IP ADDRESS and PORT>`
 - MSSQL_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
-#### Email notifications:
+**Email notifications:**
 - SMTP_USERNAME: dotnotreply@gov.bc.ca
 - SMTP_HOST: `<value>`
 - SMTP_PORT: 25
@@ -54,23 +56,29 @@ Following are the parameters:
 - SMTP_NOTIFICATION_EMAIL: `<comma separated emails>`
 - SMTP_FROM_EMAIL: donotreply@gov.bc.ca
 
-#### Teams notifications:
+**Teams notifications:**
 - MICROSOFT_TEAMS_NOTIFICATION_ENABLED: true
-- MST_NOTIFICATION_WEBHOOK: `<Teams Webhook>`
+- MST_NOTIFICATION_WEBHOOK: `<Teams Webhook URL>`
 
-#### Others:
+**Others:**
 - CACHE_LOCATION: ./data/cache
 - ERROR_NOTIFICATION_TITLE: Nifi: (test) Message from pipeline
 
-#### Passwords:
-The database passwords must be added to the database controllers. They are not set up in the parameters to avoid exposure.
+![Parameters](images/Parameters.png)
 
-### Camunda POSTGRES setup
+**Passwords:**
+The database passwords must be entered into the password field of the database controllers. They are not set up in the parameters to avoid exposure.
 
-#### Step 1: Create analytics tables:
+![Database Password](images/Database%20Password.png)
+
+---
+
+### **Camunda POSTGRES setup**
+
+#### **Step 1: Create analytics tables:**
 Every analytics table in use must have a corresponding table in the camunda database. This can be done by generating the DDL from analytics and setting up the necessary tables in postgres.
 
-#### Step 2: Add column `nifi_entry_id`
+#### **Step 2: Add column `nifi_entry_id`**
 Every table must have a new column called nifi_entry_id. The datatype in postgres for this column is `serial`. Use the following query to alter the table structure:
 
 ```
@@ -83,20 +91,20 @@ add column nifi_entry_id serial;
 This is an autoincrementing column which is used by the `QueryDatabaseRecord` processor to keep track of which row was last read so that the same row does not keep getting read repeatedly.
 
 
-### Nifi Flow Description
+### **Nifi Flow Description**
 
-The fundamental steps for this nifi flow involves just three stages:
-- Read data from camunda table (identified uniquely by the pid (process id))
+The fundamental steps for this nifi flow involves just four stages:
+- Read data from camunda table (identified uniquely by the `pid` (process id))
     - This stage includes datatype conversions required.
-- Check if the pid already exists in the analytics table
-    - `INSERT`, If the pid does not exist
-    - `UPDATE`, If the pid exists
+- Check if the `pid` already exists in the analytics table
+    - `INSERT`, If the `pid` does not exist
+    - `UPDATE`, If the `pid` exists
 - Write the data to the analytics table
-- Delete from the camunda table the row corresponding to pid
+- Delete from the camunda table the row corresponding to `pid`
 
-### Failure Notifications
+### **Failure Notifications**
 
-### How to debug?
+### **How to debug?**
 
 To simplify debugging, the failures are classified into two:
 - Data has not been written to analytics
@@ -104,7 +112,7 @@ To simplify debugging, the failures are classified into two:
 
 The error notification email and Teams post contain both `pid` and `table` fields which can be used as input.
 
-#### *Case 1: Database has not been written to Analytics:*
+#### ***Database has not been written to Analytics:***
 
 Use the `QueryDatabaseTable` processor with the title `(Debug Workflow) Query Any Table - Edit before execution`
 
@@ -120,10 +128,10 @@ Refer the following image to locate the `pid` and `table name` fields.
 Debugging Steps:
 
     1. Update the Table Name field
-    2. Update the pid in the Additional WHERE clause field.
+    2. Update the `pid` in the Additional WHERE clause field.
     3. Run the processor once (Right Click -> Run Once)
     4. Stop the processor after the data is read (If not already)
-    5. Clear out the Table name and pid (with a placeholder)
+    5. Clear out the Table name and `pid` (with a placeholder)
 
 **NOTE:**
 
@@ -135,7 +143,7 @@ For debugging, `nifi_entry_id` is not configured into the processor which keeps 
 
 To allow time for obeserving the flow, the processor is scheduled to execute only once every 10 minutes. This allows sufficient time to stop the processor. 
 
-#### *Case 2: Data has been written to analytics*
+#### ***Data has been written to analytics***
 
 The only failure possible here is failure to delete data from the camunda table.
 
@@ -146,14 +154,18 @@ Debugging Steps:
     1. Enter the `tablename` and `pid` values
     2. Run the processor once (Right Click -> Run Once)
     3. Stop the processor (if not already)
-    4. Clear out the Table name and pid (with a placeholder)
+    4. Clear out the Table name and `pid` (with a placeholder)
 
+### **Nifi Registry**
 
-### Nifi Registry
+Nifi registry is used for version control of the flow. This can be set up by going to the `Controller Settings` as shown in the image below.
 
 ![Home/Controller Settings](images/Home%20-%20Hamburger%20Menu.png)
 
 ![Setting up Registry Client](images/Registry%20Clients.png)
 
+---
 
-### Logging
+### **Logging**
+
+TBD
