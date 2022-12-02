@@ -6,17 +6,17 @@ The nifi implementation reads data from camunda postgres database and writes the
 
 ## Table of Content
 1. [Setup](#setup)
-   * [Nifi Configuration](#Nifi-Configuration)
-        * [Controller Services](#Controller-Services)
-        * [Parameter Context and Parameters](#Parameter-Context)
-        * [Controller Services](#Controller-Services)
-   * [Camunda POSTGRES setup](#Camunda-POSTGRES-setup)
-        * [Step 1: Create analytics tables:](#Create-analytics-tables)
-2. [Nifi Flow Description](#Nifi-Flow-Description)  
-3. [Failure Notifications](#Failure-Notifications)
-4. [How to debug?](#How-to-debug?)
-5. [Nifi Registry](#Nifi-Registry)
-6. [Logging](#Logging)
+   * [Nifi Configuration](#nifi-Configuration)
+        * [Controller Services](#controller-Services)
+        * [Parameter Context and Parameters](#parameter-Context)
+        * [Controller Services](#controller-Services)
+   * [Camunda POSTGRES setup](#camunda-POSTGRES-setup)
+        * [Step 1: Create analytics tables:](#create-analytics-tables)
+2. [Nifi Flow Description](#nifi-Flow-Description)  
+3. [Failure Notifications](#failure-Notifications)
+4. [How to debug?](#how-to-debug?)
+5. [Nifi Registry](#nifi-Registry)
+6. [Logging](#logging)
 
 ## Setup
 
