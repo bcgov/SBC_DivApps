@@ -143,7 +143,7 @@ Process ID (pid): <pid value>
 table: <table name>
 Error Overview: <An overview of the error indicating what went wrong>
 Nifi Processor: <The nifi processor that failed>
-Error Description: <A detail description of the error to help understand the execution context>
+Error Description: <A detailed description of the error to help understand the execution context>
 Possible Actions: <One or more steps one could take to debug the issue>
 Technical Error: <Exception message or stack if available; otherwise N/A>
 ```
@@ -206,4 +206,4 @@ Debugging Steps:
 
 ## **Logging**
 
-TBD
+Logs are located in `logs\nifi-app.log` file. Once every hour, the `nifi-app.log` file gets rolled over with filename pattern `logs\nifi-app_{yyyy}-{MM}-{dd}_{hh}.0.log` (e.g. `nifi-app_2022-12-05_12.0.log` )
