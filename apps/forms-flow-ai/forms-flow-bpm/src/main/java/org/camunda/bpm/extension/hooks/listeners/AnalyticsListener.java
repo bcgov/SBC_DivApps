@@ -1,13 +1,11 @@
 package org.camunda.bpm.extension.hooks.listeners;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
 import org.camunda.bpm.engine.variable.Variables;
-import org.camunda.bpm.engine.variable.value.FileValue;
 import org.camunda.bpm.engine.variable.value.StringValue;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.camunda.bpm.extension.hooks.services.analytics.IDataPipeline;
@@ -16,8 +14,6 @@ import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.inject.Named;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -107,6 +103,20 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
         try {
             // Handles file & authenticated user information.
             for(Map.Entry<String,Object> entry : variables.entrySet()) {
+                if(entry.getKey().endsWith("_idir")) {
+                    String idir = entry.getValue() != null ? String.valueOf(entry.getValue()) : null;
+                    if (StringUtils.isNotEmpty(idir) &&
+                            !execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"))) {
+                        String idirName = getName(execution, idir);
+                        execution.setVariable(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"), idirName);
+                        prcMap.put(entry.getKey(),entry.getValue());
+                        prcMap.put(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"),idirName);
+                    }
+                } else if(!StringUtils.endsWith(entry.getKey(),"_file")) {
+                    prcMap.put(entry.getKey(),entry.getValue());
+                }
+                // Commenting out the file handling for analytics listener.
+                /**
                 if(StringUtils.endsWith(entry.getKey(),"_file")) {
                     if(!execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(),"_file").concat("_stream_id"))) {
                         String filePrefix = StringUtils.substringBefore(entry.getKey(), "_file");
@@ -139,9 +149,9 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                     }
                 } else {
                     prcMap.put(entry.getKey(),entry.getValue());
-                }
+                } */
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return prcMap;
