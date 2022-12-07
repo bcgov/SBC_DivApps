@@ -143,6 +143,17 @@ The following files are slated to be removed because we can leverage the open so
 
 ```
 
+### forms-flow-bpm files catalog
+
+| File | Reason why it exists | Can it be removed? |
+| ----------- | ----------- | ----------- |
+| AnalyticsMSSQLConnectionPool | DBCPConnectionPool | Provides DB connection pool for Analytics |
+| PostGresConnectionPool  | DBCPConnectionPool | Provides DB connection pool for Camunda |
+| JsonRecordSetWriter  | JsonRecordSetWriter | Used for selecting by pid from analytics DB |
+| PostgresToAnalyticsCacheServer  | DistributedMapCacheServer | Provides cache server |
+| PostgresToAnalyticsCacheClient  | DistributedMapCacheClientService | Provides cache client |
+| JsonTreeReader  | JsonTreeReader | Used for Delete from Postgres |
+
 ## **Guidelines for formsflow upgrades**
 
 Upon a new release of open source, care should be taken to keep all the files aligned with open source without removing the customizations. The best way to deal with merges is by using the git blame tool to identify the commit history and changes prior to that and use a diff checker tool narrow down the scope for changes.
