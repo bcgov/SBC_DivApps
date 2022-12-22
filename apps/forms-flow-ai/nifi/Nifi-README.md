@@ -105,7 +105,7 @@ Under `Registry Clients`, click on the `plus` icon at the right hand side and ad
 #### **Step 1: Create analytics tables**
 Every analytics table in use must have a corresponding table in the camunda database. This can be done by generating the DDL from analytics and setting up the necessary tables in postgres.
 
-#### **Step 2: Add column `nifi_entry_id`**
+#### **Step 2: Add column `nifi_entry_id` and make it the primary key**
 Every table must have a new column called nifi_entry_id. The datatype in postgres for this column is `serial`. Use the following query to alter the table structure:
 
 ```
@@ -118,6 +118,9 @@ add column nifi_entry_id serial;
 This is an autoincrementing column which is used by the `QueryDatabaseRecord` processor to keep track of which row was last read so that the same row does not keep getting read repeatedly.
 
 ---
+
+#### **Step 3: Remove `pid` as primary key**
+During testing, there were situations when the camunda postgres would throw a `DuplicateKeyException` when a task is quickly escalated from one level to another. Since `nifi_entry_id` is unique too, it can be made the primary key.
 
 ## **Nifi Flow Description**
 

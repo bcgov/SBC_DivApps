@@ -7,11 +7,13 @@ The following documentation gives an account of all the formsflow files present 
     * [Required files](#required-files)
     * [Current structure](#current-structure)
     * [Files to be removed](#files-to-be-removed)
-2. [forms-flow-web](#forms-flow-web)
-    * [Required files](#required-files)
-    * [Current structure](#current-structure)
-    * [Files to be removed](#files-to-be-removed)
+2. [forms-flow-bpm](#forms-flow-bpm)
+    * [Required files](#required-files-1)
+    * [Current structure](#current-structure-1)
+    * [File catalog](#forms-flow-bpm-files-catalog)
+    * [Listeners readme](#forms-flow-bpm-listeners)
 3. [Guidelines for formsflow upgrades](#guidelines-for-formsflow-upgrades)
+    * [Listeners readme](#most-diverged-files)
 
 ---
 
