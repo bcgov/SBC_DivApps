@@ -16,6 +16,9 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
 
 /**
  * This class serves as gateway for all application service interactions.
+ * This customization exists because the authentication mechanisms has changed between
+ * forsmflow open source and service bc's implementation. Once Service BC's authentication
+ * mechanisms are updated, this file can be removed.
  *
  * @author sumathi.thirumani@aot-technologies.com
  */

@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 
 /**
  * This class is intended to perform the data transformation from different source systems.
- * Supported sources : Orbeon
+ * Supported sources : Orbeon - Customer Feedback Form
  *
  * @author sumathi.thirumani@aot-technologies.com
  */

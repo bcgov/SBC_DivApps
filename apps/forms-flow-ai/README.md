@@ -12,10 +12,6 @@ The following documentation gives an account of all the formsflow files present 
     * [Current structure](#current-structure)
     * [Files to be removed](#files-to-be-removed)
 3. [Guidelines for formsflow upgrades](#guidelines-for-formsflow-upgrades)
-4. [How to debug?](#how-to-debug)
-    * [Data has not been written to analytics](#data-has-not-been-written-to-analytics)
-    * [Data has been written to analytics](#data-has-been-written-to-analytics)
-5. [Logging](#logging)
 
 ---
 
@@ -147,12 +143,35 @@ The following files are slated to be removed because we can leverage the open so
 
 | File | Reason why it exists | Can it be removed? |
 | ----------- | ----------- | ----------- |
-| AnalyticsMSSQLConnectionPool | DBCPConnectionPool | Provides DB connection pool for Analytics |
-| PostGresConnectionPool  | DBCPConnectionPool | Provides DB connection pool for Camunda |
-| JsonRecordSetWriter  | JsonRecordSetWriter | Used for selecting by pid from analytics DB |
-| PostgresToAnalyticsCacheServer  | DistributedMapCacheServer | Provides cache server |
-| PostgresToAnalyticsCacheClient  | DistributedMapCacheClientService | Provides cache client |
-| JsonTreeReader  | JsonTreeReader | Used for Delete from Postgres |
+| ApplicationAccessHandler | The authentication in formsflow open source changed between 4.0.3 and 4.0.4 releases with breaking changes. Hence this class exists to support the older way of authentication. | Yes with authentication upgrades, otherwise no. |
+| CamundaEventListener  | Needed for brokering connection between BPM pods; uses redis | No |
+| TaskEventTopicListener  | Needed for brokering connection between BPM pods; uses redis | No |
+| TaskEventMessageService  | Needed for brokering connection between BPM pods; uses redis | No |
+| RedisConfig  | Needed for brokering connection between BPM pods; uses redis | No |
+| WebSocketConfig  | Needed for brokering connection between BPM pods; uses redis | No |
+| ITaskEvent  | Needed for brokering connection between BPM pods; uses redis | No |
+| DataReaderController  | To be deleted. Previously useful for querying the analytics database | Yes |
+| FormBuilderPipelineController  | Needed for capturing data from orbeon forms for customer feedback | No |
+| FormConnectorListener  | Captures data from orbeon forms for customer feedback | No |
+| application.yaml  | Needed for specifying custom config like `authenticationGrantType` used for authentication | No |
+
+### forms-flow-bpm Listeners
+
+   Name | Type | How it Works |
+ --- | --- | --- |
+ | `AutoCloseListener`| Execution Listener |This component can be used on any event of execution listener. It takes a SELECT query as input and closes the process instances which result from the select query.|
+| `AnalyticsListener`| Task/Execution Listener |This component can be used on any event of task/execution listener. This is used to commit task data to the analytics database.|
+| `ActiveDirectoryListener`| Execution Listener |This component can be used on any event of task/execution listener. It is used for searching a user on ldap.|
+ |`GroupAttributesListener`| Execution Listener |This component can be used on any event of execution listener. It is used to inject the region and group attributes corresponding to a task.|
+ |`GroupNotifyListener (currently not used)`| Execution Listener |This component can be used on a **CREATE** event of execution listener. It is used to send emails when a task is created to additional groups of interest.|
+ |`FormConnectorListener`| Task Listener |This component can be used on **CREATE** event of task listener. This serves to associate a form with task.|
+| `ExternalSubmissionListener`| Execution Listener |This component allows direct integration from any external system and does offline sync-up within formsflow.ai i.e creates submission in formio.|
+ |`BPMFormDataPipelineListener`| Task/Execution Listener |This component can be used on any event of task/execution listener. It is used for populating CAM Variables into formio data.|
+
+ ### Listeners from the open source:
+
+ [listeners-readme.md on forms-flow-ai](https://github.com/AOT-Technologies/forms-flow-ai/blob/master/forms-flow-bpm/starter-examples/listeners/listeners-readme.md)
+          
 
 ## **Guidelines for formsflow upgrades**
 
