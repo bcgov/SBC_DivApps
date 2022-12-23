@@ -14,6 +14,8 @@ The following documentation gives an account of all the formsflow files present 
     * [Listeners readme](#forms-flow-bpm-listeners)
 3. [Guidelines for formsflow upgrades](#guidelines-for-formsflow-upgrades)
     * [Listeners readme](#most-diverged-files)
+4. [The Q](#the-q)
+    * [Files in the q](#files-in-the-q)
 
 ---
 
@@ -191,3 +193,22 @@ Upon a new release of open source, care should be taken to keep all the files al
 - `*src/*.java` 
     - The customized files generally do not need any updates during formsflow upgrades since those files do not exist in open source. However, dependency upgrades may cause compilation or runtime errors.
     - Those files that do exist in open source should be merged correctly upon a new formsflow release.
+
+### **Serviceflow in the Q**
+
+Serviceflow in The Q is a vue component that is integrated with the queue-management system through the frontend component. It makes use of the 
+[Formsflow Vue Component](https://github.com/AOT-Technologies/forms-flow-ai-extensions/tree/master/camunda-formio-tasklist-vue) that is developed by AOT Technologies.
+
+In order to make changes, raise a PR to the queue-management git from a fork. Every change to the vue component will have to be released in order to properly be absorbed into the queue system.
+
+#### Files in the q
+
+- `package.json`: Pulls in the `camunda-formio-tasklist-vue` dependency.
+- `package-lock.json`: Execute `npm install` and commit the changes to `package-lock.json` too.
+- `frontend/src/views/Tasklist.vue`: The vue component that adds the formsflow vue component into the queue frontend.
+- `frontend/src/assets/css/service-flow.css`: Contains the css.
+- `frontend/src/views/FormView.vue`: Pulls in the forms set up in formsflow.
+
+**Less frequently used files**
+- `frontend/src/MainApp.vue`: Some css styles
+- `frontend/src/components/ServeCitizen/serve-citizen.vue`: Some bug fixes formsflow needs
