@@ -59,7 +59,12 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                         DateTime ts = new DateTime(String.valueOf(entry.getValue()));
                         dataMap.put(entry.getKey(), new Timestamp((ts.getMillis())));
                     }
-                } else {
+                }
+                // to handle boolean values coming as string and not getting inserted
+                else if(entry.getValue() == "true" || entry.getValue() == "false") {
+                    dataMap.put(entry.getKey(), Boolean.parseBoolean(entry.getValue().toString()));
+                } 
+                else {
                     dataMap.put(entry.getKey(), entry.getValue());
                 }
 
