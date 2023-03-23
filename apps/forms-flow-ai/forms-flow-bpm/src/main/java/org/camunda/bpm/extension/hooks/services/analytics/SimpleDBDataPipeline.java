@@ -63,6 +63,7 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                 // to handle boolean values coming as string and not getting inserted
                 else if(entry.getValue().toString().toLowerCase() == "true" || entry.getValue().toString().toLowerCase() == "false") {
                     dataMap.put(entry.getKey(), Boolean.parseBoolean(entry.getValue().toString()));
+                    LOGGER.info("Boolean value "+entry.getKey()+" "+entry.getValue()+" type: "+entry.getValue().getClass());
                 } 
                 else {
                     dataMap.put(entry.getKey(), entry.getValue());
@@ -129,6 +130,7 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
             //Non-lob objects block
             String query = getQuery(String.valueOf(nonLobMap.get("entity_key")),nonLobMap,"pid",getIdentityKey(data));
             LOGGER.info("Non-lob query:"+ query);
+            LOGGER.info("Data to be inserted:"+ nonLobMap);
             analyticsJdbcTemplate.update(query,nonLobMap);
             // Lob objects
             handleFileObject(lobMap);
