@@ -219,8 +219,8 @@ public class FormBuilderPipelineController {
     public class VariableData {
         private Object value;
         VariableData(Object value) {
-            LOGGER.info("Val "+value+" Type "+value.getClass()+" Length "+value.toString().length());
-            if(value!=null && (value.toString().toLowerCase() == "true" || value.toString().toLowerCase() == "false")) {
+            // To handle incoming boolean parameters as string values
+            if(value!=null && (value.toString().toLowerCase().equals("true") || value.toString().toLowerCase().equals("false"))) {
                 this.value = Boolean.parseBoolean(value.toString());
             }else {
                 this.value=value;   
