@@ -219,7 +219,12 @@ public class FormBuilderPipelineController {
     public class VariableData {
         private Object value;
         VariableData(Object value) {
-            this.value=value;
+            LOGGER.info("Val "+value+" Type "+value.getClass());
+            if(value!=null && (value.toString().toLowerCase() == "true" || value.toString().toLowerCase() == "false")) {
+                this.value = Boolean.parseBoolean(value.toString());
+            }else {
+                this.value=value;   
+            }
         }
         public Object getValue() { return value; }
         public void setValue(Object value) { this.value = value; }
