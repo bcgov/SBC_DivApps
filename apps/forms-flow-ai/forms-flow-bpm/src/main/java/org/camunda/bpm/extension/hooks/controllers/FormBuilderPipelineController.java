@@ -197,6 +197,11 @@ public class FormBuilderPipelineController {
             variables.put("files_entity_key", new VariableData("cciifiles"));
             variables.put("submit_date_time", new VariableData(new DateTime().toString()));
             variables.put("entered_by", new VariableData("orbeon"));
+            // Check if Orbeon is submitted with a value for "mobile-location" 
+            if(variables.containsKey("mobile_location") && variables.get("mobile_location") != null) {
+                // Set location parameter to "Mobile Outreach"
+                variables.put("location", "Mobile Outreach");
+            }
         }
         return variables;
     }
