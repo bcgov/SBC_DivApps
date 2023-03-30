@@ -28,7 +28,9 @@ import java.util.logging.Logger;
 
 /**
  * This class has been written specific to process, and to be enhanced to give generic behavior.
- *
+ * This listener can be used to autoclose process instances if they qualify to be closed based on
+ * the process definition's rules. A query is to be passed as an input to this listener.
+ * 
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Named("autocloseDelegate")
