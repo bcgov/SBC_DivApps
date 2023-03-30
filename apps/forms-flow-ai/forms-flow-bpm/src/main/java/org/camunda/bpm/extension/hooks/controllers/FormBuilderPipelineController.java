@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 
 /**
  * This class is intended to perform the data transformation from different source systems.
- * Supported sources : Orbeon
+ * Supported sources : Orbeon - Customer Feedback Form
  *
  * @author sumathi.thirumani@aot-technologies.com
  */
@@ -188,6 +188,7 @@ public class FormBuilderPipelineController {
             ObjectMapper mapper = new ObjectMapper();
             Map<String,Object> values = mapper.readValue(node.get("Main").toString(), HashMap.class);
             for(Map.Entry<String, Object> entry : values.entrySet()) {
+                LOGGER.info("KEY: "+entry.getKey()+" VALUE : "+entry.getValue().toString());
                 variables.put(entry.getKey(),new VariableData(entry.getValue()));
             }
             //Inject custom attributes
@@ -197,6 +198,13 @@ public class FormBuilderPipelineController {
             variables.put("files_entity_key", new VariableData("cciifiles"));
             variables.put("submit_date_time", new VariableData(new DateTime().toString()));
             variables.put("entered_by", new VariableData("orbeon"));
+            variables.put("service_channel", new VariableData("Service BC Location"));
+            // Check if Orbeon is submitted with a value for "mobile-location" 
+            if(variables.containsKey("mobile_location")) {
+                // Set location parameter to "Mobile Outreach"
+                variables.put("location", new VariableData("Mobile Outreach"));
+                LOGGER.info("Mobile Location Found: "+variables);
+            }
         }
         return variables;
     }
@@ -219,7 +227,12 @@ public class FormBuilderPipelineController {
     public class VariableData {
         private Object value;
         VariableData(Object value) {
-            this.value=value;
+            // To handle incoming boolean parameters as string values
+            if(value!=null && (value.toString().toLowerCase().equals("true") || value.toString().toLowerCase().equals("false"))) {
+                this.value = Boolean.parseBoolean(value.toString());
+            }else {
+                this.value=value;   
+            }
         }
         public Object getValue() { return value; }
         public void setValue(Object value) { this.value = value; }

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class supports creation of submission for instances created from external system
+ * This listener supports creation of form.io submission for instances created from external system
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Named("ExternalSubmissionListener")
@@ -42,6 +42,13 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
 
     private Expression formName;
 
+    /**
+     * Communicates with the form.io system to create a submission
+     * Also, if an applicationId is not available, an applicationId will be created
+     * and the same will be communicated to the form.io submission.
+     * 
+     * @param execution The current execution instance
+     */
     @Override
     public void notify(DelegateExecution execution) {
         try {

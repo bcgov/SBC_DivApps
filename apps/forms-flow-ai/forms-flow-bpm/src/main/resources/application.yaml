@@ -21,15 +21,15 @@ spring.datasource:
   validationTimeout: ${CAMUNDA_HIKARI_VALID_TIMEOUT:5000}
 
 analytics.datasource:
-  jdbc-url: ${CAMUNDA_ANALYTICS_JDBC_URL}
-  username: ${CAMUNDA_ANALYTICS_JDBC_USER}
-  password: ${CAMUNDA_ANALYTICS_JDBC_PASSWORD}
-  driverClassName: ${CAMUNDA_ANALYTICS_JDBC_DRIVER}
+  jdbc-url: ${CAMUNDA_JDBC_URL}
+  username: ${CAMUNDA_JDBC_USER}
+  password: ${CAMUNDA_JDBC_PASSWORD}
+  driverClassName: ${CAMUNDA_JDBC_DRIVER}
   type: com.zaxxer.hikari.HikariDataSource
-  connectionTimeout: ${CAMUNDA_ANALYTICS_HIKARI_CONN_TIMEOUT:30000}
-  idleTimeout: ${CAMUNDA_ANALYTICS_HIKARI_IDLE_TIMEOUT:600000}
-  maximumPoolSize: ${CAMUNDA_ANALYTICS_HIKARI_MAX_POOLSIZE:10}
-  validationTimeout: ${CAMUNDA_ANALYTICS_HIKARI_VALID_TIMEOUT:5000}
+  connectionTimeout: ${CAMUNDA_HIKARI_CONN_TIMEOUT:30000}
+  idleTimeout: ${CAMUNDA_HIKARI_IDLE_TIMEOUT:600000}
+  maximumPoolSize: ${CAMUNDA_HIKARI_MAX_POOLSIZE:10}
+  validationTimeout: ${CAMUNDA_HIKARI_VALID_TIMEOUT:5000}
 
 
 formsflow.ai:
