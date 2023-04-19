@@ -108,7 +108,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                     if (StringUtils.isNotEmpty(idir)) {
                         prcMap.put(entry.getKey(),entry.getValue());
                         if(!execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name")))  {
-                            String idirName = getName(execution, idir);
+                            String idirName = getName(execution, variables.get("provider_idir_userid").toString());
                             execution.setVariable(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"), idirName);
                             prcMap.put(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"),idirName);
                         }
