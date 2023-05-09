@@ -20,16 +20,17 @@ import java.util.Set;
 public interface IUser {
 
     default String getName(DelegateExecution execution, String userId) {
-        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
+        User user = getUser(execution, userId);
         return user.getFirstName()+" "+user.getLastName();
     }
 
     default String getEmail(DelegateExecution execution, String userId) {
-        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
+        User user = getUser(execution, userId);
         return user.getEmail();
     }
 
     default User getUser(DelegateExecution execution, String userId) {
+        userId = execution.getVariable("provider_idir_userid").toString();
         return execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
     }
 
