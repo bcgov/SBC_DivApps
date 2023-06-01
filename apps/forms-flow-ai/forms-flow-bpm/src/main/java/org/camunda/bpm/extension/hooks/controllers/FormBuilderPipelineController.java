@@ -198,12 +198,19 @@ public class FormBuilderPipelineController {
             variables.put("files_entity_key", new VariableData("cciifiles"));
             variables.put("submit_date_time", new VariableData(new DateTime().toString()));
             variables.put("entered_by", new VariableData("orbeon"));
+            VariableData serviceMethodData = (VariableData)variables.get("service_method");
+            variables.put("engagement_source", new VariableData(serviceMethodData.getValue().toString()));
+            VariableData serviceChannelData = (VariableData)variables.get("service_channel");
+            if(serviceChannelData.getValue().toString().equals("Service BC Location")){
+                variables.put("service_location_type", new VariableData("service_centre"));
+            }else if(serviceChannelData.getValue().equals("Mobile Outreach Location")){
+                variables.put("service_location_type", new VariableData("mobile_outreach"));
+            }
             variables.put("service_channel", new VariableData("Service BC Location"));
             // Check if Orbeon is submitted with a value for "mobile-location" 
             if(variables.containsKey("mobile_location")) {
                 // Set location parameter to "Mobile Outreach"
                 variables.put("location", new VariableData("Mobile Outreach"));
-                LOGGER.info("Mobile Location Found: "+variables);
             }
         }
         return variables;
