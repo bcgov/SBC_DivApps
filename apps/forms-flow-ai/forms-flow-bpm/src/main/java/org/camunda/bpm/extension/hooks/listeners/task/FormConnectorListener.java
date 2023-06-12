@@ -17,7 +17,7 @@ import org.camunda.bpm.model.bpmn.instance.camunda.CamundaProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -26,18 +26,22 @@ import java.util.logging.Logger;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
+
 /**
+ * Form Connector Listener.
  * This class associates form for user task.
- *
+ * 
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Component
 public class FormConnectorListener extends BaseListener implements TaskListener {
-
+    private final Logger LOGGER = Logger.getLogger(FormConnectorListener.class.getName());
     private Expression fields;
     private Expression copyDataIndicator;
 
-    private static final Logger LOGGER = Logger.getLogger(FormConnectorListener.class.getName());
+    @Resource(name = "bpmObjectMapper")
+    private ObjectMapper bpmObjectMapper;
 
     @Autowired
     private FormSubmissionService formSubmissionService;
@@ -45,71 +49,77 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
     @Override
     public void notify(DelegateTask delegateTask) {
         try {
-            String submissionId = createSubmission(getFormUrl(delegateTask),getNewFormSubmissionUrl(delegateTask), delegateTask);
-            if(StringUtils.isNotBlank(submissionId)) {
-                delegateTask.getExecution().setVariable("formUrl", getModifiedFormUrl(delegateTask,submissionId));
+            String submissionId = createSubmission(getFormUrl(delegateTask), getNewFormSubmissionUrl(delegateTask),
+                    delegateTask);
+            if (StringUtils.isNotBlank(submissionId)) {
+                delegateTask.getExecution().setVariable(FORM_URL, getModifiedFormUrl(delegateTask, submissionId));
             }
         } catch (IOException e) {
-           handleException(delegateTask.getExecution(), ExceptionSource.TASK, e);
+            handleException(delegateTask.getExecution(), ExceptionSource.TASK, e);
         }
-
     }
 
     /**
-     *
+     * 
      * @param sourceFormUrl
      * @param targetFormUrl
      * @param delegateTask
      * @return
      * @throws JsonProcessingException
      */
-    private String createSubmission(String sourceFormUrl, String targetFormUrl,DelegateTask delegateTask) throws IOException {
+    private String createSubmission(String sourceFormUrl, String targetFormUrl, DelegateTask delegateTask)
+            throws IOException {
         String submission = formSubmissionService.readSubmission(sourceFormUrl);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String,Object> superVariables = new HashMap<>();
-        List<String> supFields =  this.fields != null && this.fields.getValue(delegateTask) != null ?
-                objectMapper.readValue(String.valueOf(this.fields.getValue(delegateTask)),List.class): null;
 
-        for(String entry : supFields) {
+        Map<String, Object> superVariables = new HashMap<>();
+        List<String> supFields = this.fields != null && this.fields.getValue(delegateTask) != null
+                ? bpmObjectMapper.readValue(String.valueOf(this.fields.getValue(delegateTask)), List.class)
+                : null;
+
+        for (String entry : supFields) {
             superVariables.put(entry, delegateTask.getExecution().getVariables().get(entry));
         }
         LOGGER.info("Invoking FormConnectorListener for applicationId::" +
                 delegateTask.getExecution().getVariables().get("applicationId")
                 + " process_pid::" +
                 delegateTask.getExecution().getVariables().get("process_pid"));
-        return  formSubmissionService.createSubmission(targetFormUrl, createFormSubmissionData(submission, superVariables, getPropogateData(delegateTask)));
+
+        return formSubmissionService.createSubmission(targetFormUrl,
+                createFormSubmissionData(submission, superVariables, getPropogateData(delegateTask)));
     }
 
     /**
-     *
+     * 
      * @param submission
      * @param superVariables
      * @param propogateData
      * @return
      */
-    private String createFormSubmissionData(String submission, Map<String,Object> superVariables, String propogateData) {
+    private String createFormSubmissionData(String submission, Map<String, Object> superVariables,
+            String propogateData) {
         try {
-            JsonNode submissionNode = getObjectMapper().readTree(submission);
-            JsonNode dataNode =submissionNode.get("data");
-            if("Y".equals(propogateData)) {
-                for(Map.Entry<String,Object> entry : superVariables.entrySet()) {
-                    ((ObjectNode)dataNode).put(entry.getKey(), getObjectMapper().convertValue(entry.getValue(), JsonNode.class));
+            JsonNode submissionNode = bpmObjectMapper.readTree(submission);
+            JsonNode dataNode = submissionNode.get("data");
+            if ("Y".equals(propogateData)) {
+                for (Map.Entry<String, Object> entry : superVariables.entrySet()) {
+                    ((ObjectNode) dataNode).put(entry.getKey(),
+                            bpmObjectMapper.convertValue(entry.getValue(), JsonNode.class));
                 }
-                return getObjectMapper().writeValueAsString(new FormSubmission(dataNode));
+                return bpmObjectMapper.writeValueAsString(new FormSubmission(dataNode));
             } else {
-                return getObjectMapper().writeValueAsString(new FormSubmission(getObjectMapper().convertValue(superVariables, JsonNode.class)));
+                return bpmObjectMapper.writeValueAsString(
+                        new FormSubmission(bpmObjectMapper.convertValue(superVariables, JsonNode.class)));
             }
-
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return  null;
+        return null;
     }
 
     /**
      * Get the formID for associated name.
-     *
+     * 
      * @param delegateTask
      * @return
      */
@@ -119,25 +129,28 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
                 .getExtensionElements()
                 .getElementsQuery()
                 .filterByType(CamundaProperties.class).singleResult();
-
         List<CamundaProperty> userTaskExtensionProperties = camundaProperties.getCamundaProperties()
                 .stream()
-                .filter(camundaProperty ->
-                        camundaProperty.getCamundaName()
-                                .equals(getFormIdProperty()))
+                .filter(camundaProperty -> camundaProperty.getCamundaName()
+                        .equals(getFormIdProperty()))
                 .collect(Collectors.toList());
 
+        if (CollectionUtils.isNotEmpty(userTaskExtensionProperties)) {
 
-        if(CollectionUtils.isNotEmpty(userTaskExtensionProperties)) {
             String formName = userTaskExtensionProperties.get(0).getCamundaValue();
-            return formSubmissionService.getFormIdByName(StringUtils.substringBefore(getFormUrl(delegateTask),"/form/")+"/"+formName);
+            if (StringUtils.startsWith(formName, "$")) {
+                formName = String.valueOf(
+                        delegateTask.getExecution().getVariable(StringUtils.substringBetween(formName, "${", "}")));
+            }
+            return formSubmissionService
+                    .getFormIdByName(StringUtils.substringBefore(getFormUrl(delegateTask), "/form/") + "/" + formName);
         }
-
         return null;
     }
 
     /**
      * Defines the form ID property.
+     * 
      * @return
      */
     private String getFormIdProperty() {
@@ -146,12 +159,12 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
 
     /**
      * Returns the data propagation property value.
-     *
+     * 
      * @param delegateTask
      * @return
      */
-    private String getPropogateData(DelegateTask delegateTask){
-        if(this.copyDataIndicator != null &&
+    private String getPropogateData(DelegateTask delegateTask) {
+        if (this.copyDataIndicator != null &&
                 StringUtils.isNotBlank(String.valueOf(this.copyDataIndicator.getValue(delegateTask)))) {
             return String.valueOf(this.copyDataIndicator.getValue(delegateTask));
         }
@@ -159,27 +172,20 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
     }
 
     /**
-     * Returns Object Mapper Instance
-     * @return
-     */
-    private ObjectMapper getObjectMapper(){
-        return new ObjectMapper();
-    }
-
-    /**
      * Returns new URL for submission.
-     *
+     * 
      * @param delegateTask
      * @return
      */
     private String getNewFormSubmissionUrl(DelegateTask delegateTask) throws IOException {
         String formUrl = getFormUrl(delegateTask);
-        return StringUtils.replace(formUrl, StringUtils.substringBetween(formUrl, "form/", "/submission"), getFormId(delegateTask));
+        return StringUtils.replace(formUrl, StringUtils.substringBetween(formUrl, "form/", "/submission"),
+                getFormId(delegateTask));
     }
 
     /**
      * Returns the formURl from execution context
-     *
+     * 
      * @param delegateTask
      * @return
      */
@@ -189,14 +195,13 @@ public class FormConnectorListener extends BaseListener implements TaskListener 
 
     /**
      * Returns the updated formUrl with new submission ID.
-     *
+     * 
      * @param delegateTask
      * @param submissionId
      * @return
      */
     private String getModifiedFormUrl(DelegateTask delegateTask, String submissionId) throws IOException {
-        String formUrl = StringUtils.substringBefore(getFormUrl(delegateTask),"/form/");
-        return formUrl+ "/form/" + getFormId(delegateTask) + "/submission/" + submissionId;
+        String formUrl = StringUtils.substringBefore(getFormUrl(delegateTask), "/form/");
+        return formUrl + "/form/" + getFormId(delegateTask) + "/submission/" + submissionId;
     }
-
 }

@@ -1,6 +1,6 @@
 package org.camunda.bpm.extension.commons.io.event;
 
-import org.camunda.bpm.extension.commons.io.socket.message.service.TaskEventMessageService;
+import org.camunda.bpm.extension.commons.io.message.service.TaskEventMessageService;
 import org.camunda.bpm.extension.commons.io.socket.message.TaskMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
