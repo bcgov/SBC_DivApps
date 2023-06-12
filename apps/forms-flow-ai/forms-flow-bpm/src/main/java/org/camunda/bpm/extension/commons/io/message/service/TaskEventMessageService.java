@@ -1,4 +1,4 @@
-package org.camunda.bpm.extension.commons.io.socket.message.service;
+package org.camunda.bpm.extension.commons.io.message.service;
 
 import org.camunda.bpm.extension.commons.io.socket.message.TaskMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,8 @@ public class TaskEventMessageService {
         try {
             template.convertAndSend("/topic/task-event", objectMapper.writeValueAsString(message));
         } catch (JsonProcessingException e) {
-            LOGGER.log(Level.SEVERE,"Exception Occured in preparing message", e);
+            LOGGER.log(Level.SEVERE, "Exception Occured in preparing message", e);
         }
     }
-
 
 }
