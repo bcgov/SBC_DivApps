@@ -13,7 +13,7 @@ parameters:
   - name: SOURCE_REPOSITORY_REF
     displayName: Git Reference
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
-    value: v4.0.5
+    value: v5.1.0
   - name: SOURCE_CONTEXT_DIR
     displayName: Git context directory
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.

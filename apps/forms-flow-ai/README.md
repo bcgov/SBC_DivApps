@@ -66,7 +66,7 @@ The following files are slated to be removed because we can leverage the open so
 
 ### **Required files:**
 
-- `pom-docker.xml`
+- `pom-docker.xml` (renamed pom.xml with v5.1.0 upgrade)
     - Needed for redis dependency; otherwise, the dependencies are largely identical to open source.
 - `src/main/resources/application.yaml`
     - Useful to have application.yaml in this repo as it is used for customizing camunda.
@@ -186,7 +186,7 @@ Upon a new release of open source, care should be taken to keep all the files al
 - All files under `src` folder.
 
 *forms-flow-bpm*
-- `pom-docker.xml`
+- `pom-docker.xml` (renamed pom.xml with v5.1.0 upgrade)
     - Java dependencies' versions may be different.
 - `application.yaml`
     - should be checked for updates as well but not all changes are applicable to service BC. Changes should be done on a case by case basis based on Changelog documentation.
