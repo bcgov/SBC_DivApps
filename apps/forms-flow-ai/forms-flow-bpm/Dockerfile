@@ -1,7 +1,7 @@
 # Modified by Yichun Zhao and Walter Moar
 
 # Maven build
-FROM artifacts.developer.gov.bc.ca/docker-remote/maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
+FROM artifacts.developer.gov.bc.ca/docker-remote/maven:3.8.1-openjdk-17-slim AS MAVEN_TOOL_CHAIN
 
 RUN apt-get update \
     && apt-get install -y git
@@ -19,6 +19,7 @@ WORKDIR /tmp/
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
 RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
+RUN mvn -s /usr/share/maven/ref/settings-docker.xml package -P default
 
 ARG CUSTOM_SRC_DIR=src/
 
@@ -29,10 +30,10 @@ RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
-FROM artifacts.developer.gov.bc.ca/docker-remote/adoptopenjdk/openjdk11:jdk-11.0.3_7-alpine
+FROM artifacts.developer.gov.bc.ca/docker-remote/openjdk:17-jdk-alpine
 
-ENV JAVA_VERSION jdk-11.0.3+7
-ENV JAVA_HOME=/opt/java/openjdk \
+ENV JAVA_VERSION=17-ea+14
+ENV JAVA_HOME=/opt/java/openjdk-17 \
     PATH="/opt/java/openjdk/bin:$PATH"
 
 EXPOSE 8080
