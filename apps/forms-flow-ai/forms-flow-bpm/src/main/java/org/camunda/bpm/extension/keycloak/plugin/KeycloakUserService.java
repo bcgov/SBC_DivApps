@@ -23,11 +23,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
-import org.springframework.util.StringUtils;
-
-import java.util.logging.Logger;
-
-
+//import org.springframework.util.StringUtils;
+//import java.util.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -170,31 +167,6 @@ public class KeycloakUserService  extends org.camunda.bpm.extension.keycloak.Key
             throw new IdentityProviderException("Unable to query roles for client " + webClientId, rce);
         }
         return userList;
-    }
-
-
-    /**
-     * Gets the Keycloak internal ID of client.
-     *
-     * @param clientId the client ID
-     * @return the Keycloak internal ID
-     * @throws KeycloakUserNotFoundException in case the user cannot be found
-     * @throws RestClientException           in case of technical errors
-     */
-    protected String getKeycloakClientID(String clientId) throws KeycloakUserNotFoundException, RestClientException {
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    keycloakConfiguration.getKeycloakAdminUrl() + "/clients?clientId="+clientId, HttpMethod.GET,
-                    String.class);
-            JsonArray resultList = parseAsJsonArray(response.getBody());
-            JsonObject result = resultList.get(0).getAsJsonObject();
-            if (result != null) {
-                return getJsonString(result, "id");
-            }
-            throw new KeycloakUserNotFoundException(clientId + ": Client Not found");
-        } catch (JsonException je) {
-            throw new KeycloakUserNotFoundException(clientId + ": Client Not found");
-        }
     }
 
     private UserEntity transformUser(JsonObject result, String prefix) throws JsonException {
