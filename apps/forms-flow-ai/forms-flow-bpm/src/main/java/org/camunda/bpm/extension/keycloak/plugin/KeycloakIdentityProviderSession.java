@@ -1,12 +1,15 @@
+/**
+ * 
+ */
 package org.camunda.bpm.extension.keycloak.plugin;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.camunda.bpm.engine.identity.Group;
-import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.identity.Tenant;
 import org.camunda.bpm.engine.identity.TenantQuery;
+import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.extension.keycloak.*;
 import org.camunda.bpm.extension.keycloak.cache.QueryCache;
@@ -15,8 +18,8 @@ import org.camunda.bpm.extension.keycloak.util.KeycloakPluginLogger;
 import org.springframework.util.StringUtils;
 
 /**
- * @author aot
- *
+ * Keycloak Identity Provider Session.
+ * Class for Keycloack identity provider session.
  */
 public class KeycloakIdentityProviderSession
 		extends org.camunda.bpm.extension.keycloak.KeycloakIdentityProviderSession {
@@ -25,28 +28,31 @@ public class KeycloakIdentityProviderSession
 	private TenantService tenantService;
 	protected QueryCache<CacheableKeycloakTenantQuery, List<Tenant>> tenantQueryCache;
 
-	public KeycloakIdentityProviderSession(KeycloakConfiguration keycloakConfiguration, 
+	public KeycloakIdentityProviderSession(KeycloakConfiguration keycloakConfiguration,
 			KeycloakRestTemplate restTemplate, KeycloakContextProvider keycloakContextProvider,
-			QueryCache<CacheableKeycloakUserQuery, List<User>> userQueryCache, 
+			QueryCache<CacheableKeycloakUserQuery, List<User>> userQueryCache,
 			QueryCache<CacheableKeycloakGroupQuery, List<Group>> groupQueryCache,
-			QueryCache<CacheableKeycloakTenantQuery, List<Tenant>> tenantQueryCache,
+			QueryCache<CacheableKeycloakTenantQuery, List<Tenant>> tenantQueryCache, 
 			QueryCache<CacheableKeycloakCheckPasswordCall, Boolean> checkPasswordCache, CustomConfig config) {
-			
 		super(keycloakConfiguration, restTemplate, keycloakContextProvider, userQueryCache, groupQueryCache, checkPasswordCache);
 		this.config = config;
-		this.groupService = new KeycloakGroupService(keycloakConfiguration, restTemplate, keycloakContextProvider, config);
-        this.userService = new KeycloakUserService(keycloakConfiguration, restTemplate, keycloakContextProvider, config);
+		this.groupService = new KeycloakGroupService(keycloakConfiguration, restTemplate, keycloakContextProvider,
+				config);
+		this.userService = new KeycloakUserService(keycloakConfiguration, restTemplate, keycloakContextProvider,
+				config);
 		this.tenantService = new TenantService(restTemplate, keycloakContextProvider, config);
 		this.tenantQueryCache = tenantQueryCache;
 	}
 
 	/**
-	 * Get the group ID of the configured admin group. Enable configuration using group path as well.
-	 * This prevents common configuration pitfalls and makes it consistent to other configuration options
-	 * like the flag 'useGroupPathAsCamundaGroupId'.
+	 * Get the group ID of the configured admin group. Enable configuration using
+	 * group path as well. This prevents common configuration pitfalls and makes it
+	 * consistent to other configuration options like the flag
+	 * 'useGroupPathAsCamundaGroupId'.
 	 * 
 	 * @param configuredAdminGroupName the originally configured admin group name
-	 * @return the corresponding keycloak group ID to use: either internal keycloak ID or path, depending on config
+	 * @return the corresponding keycloak group ID to use: either internal keycloak
+	 *         ID or path, depending on config
 	 * 
 	 * @see org.camunda.bpm.extension.keycloak.KeycloakGroupService#getKeycloakAdminGroupId(java.lang.String)
 	 */
@@ -54,7 +60,7 @@ public class KeycloakIdentityProviderSession
 		return groupService.getKeycloakAdminGroupId(configuredAdminGroupName);
 	}
 
-    /**
+	/**
 	 *
 	 * @param userQuery
 	 * @return
@@ -76,7 +82,7 @@ public class KeycloakIdentityProviderSession
 		return processedUsers;
 	}
 
-    /**
+	/**
 	 *
 	 * @param userQuery
 	 * @return
@@ -87,7 +93,7 @@ public class KeycloakIdentityProviderSession
 				this.userService.requestUsersWithoutGroupId(userQuery);
 	}
 
-		/**
+	/**
 	 * find groups meeting given group query criteria (with cache lookup and post
 	 * processing).
 	 * 
