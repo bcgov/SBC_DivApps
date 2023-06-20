@@ -13,6 +13,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.util.StringUtils;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+
 import java.util.logging.Logger;
 
 import org.springframework.http.ResponseEntity;
@@ -27,6 +32,7 @@ import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+
 import static org.camunda.bpm.extension.keycloak.json.JsonUtil.*;
 
 /**
@@ -40,12 +46,19 @@ public class KeycloakUserService  extends org.camunda.bpm.extension.keycloak.Key
 
     private String webClientId;
     private boolean enableClientAuth;
+	private boolean enableMultiTenancy;
+    private TenantService tenantService;
 
     public KeycloakUserService(KeycloakConfiguration keycloakConfiguration, KeycloakRestTemplate restTemplate,
-                               KeycloakContextProvider keycloakContextProvider,String webClientId,boolean enableClientAuth) {
+                               KeycloakContextProvider keycloakContextProvider, CustomConfig config) {
         super(keycloakConfiguration, restTemplate, keycloakContextProvider);
-        this.webClientId = webClientId;
-        this.enableClientAuth = enableClientAuth;
+
+        this.webClientId = config.getWebClientId();
+        this.enableClientAuth = config.isEnableClientAuth();
+        this.enableMultiTenancy = config.isEnableMultiTenancy();
+        if (this.enableMultiTenancy) {
+            this.tenantService = new TenantService(restTemplate, keycloakContextProvider, config);
+        }
     }
 
     @Override
@@ -120,4 +133,3 @@ public class KeycloakUserService  extends org.camunda.bpm.extension.keycloak.Key
         user.setLastName(lastName);
         return user;
     }
-}
