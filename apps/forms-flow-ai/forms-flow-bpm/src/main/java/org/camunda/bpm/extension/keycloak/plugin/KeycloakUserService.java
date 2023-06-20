@@ -133,3 +133,4 @@ public class KeycloakUserService  extends org.camunda.bpm.extension.keycloak.Key
         user.setLastName(lastName);
         return user;
     }
+}
