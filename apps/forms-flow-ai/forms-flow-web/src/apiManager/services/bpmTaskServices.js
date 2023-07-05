@@ -87,8 +87,8 @@
    return (dispatch) => {
      httpGETRequest(API.GET_BPM_PROCESS_LIST, {}, UserService.getToken())
        .then((res) => {
-         if (res.data) {
-           dispatch(setBPMProcessList(res.data));
+         if (res?.data) {
+           dispatch(setBPMProcessList([]));
            //dispatch(setBPMLoader(false));
            done(null, res.data);
          } else {
@@ -109,7 +109,7 @@
  export const fetchUserList = (...rest) => {
    const done = rest.length ? rest[0] : () => {};
    /*TODO search with query /user?lastNameLike=%${lastName}%&memberOfGroup=${group}*/
-   const getReviewerUserListApi = `${API.GET_BPM_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
+   const getReviewerUserListApi = `${API.GET_API_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
    return (dispatch) => {
      httpGETRequest(getReviewerUserListApi, {}, UserService.getToken())
        .then((res) => {
@@ -136,14 +136,14 @@
    const done = rest.length ? rest[0] : () => {};
    const paramData={memberOfGroup:REVIEWER_GROUP};
    /*TODO search with query /user?lastNameLike=%${lastName}%&memberOfGroup=${group}*/
-   //let getReviewerUserListApi = `${API.GET_BPM_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
+   //let getReviewerUserListApi = `${API.GET_API_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
    if(searchType && query){
      //getReviewerUserListApi = `${getReviewerUserListApi}&${searchType}=%${query||""}%`
-     paramData[searchType]=`%${query}%`;
+     paramData[searchType] = `${query}`;
    }
  
    return (dispatch) => {
-     httpGETRequest(API.GET_BPM_USER_LIST, paramData, UserService.getToken())
+     httpGETRequest(API.GET_API_USER_LIST, paramData, UserService.getToken())
        .then((res) => {
          if (res.data) {
            dispatch(setBPMUserList(res.data));
@@ -166,7 +166,7 @@
  
  export const fetchFilterList = (...rest) => {
    const done = rest.length ? rest[0] : () => {};
-   const getTaskFiltersAPI = `${API.GET_BPM_FILTERS}?resourceType=Task&itemCount=true`
+   const getTaskFiltersAPI = `${API.GET_BPM_FILTERS}?resourceType=Task&itemCount=true`;
    return (dispatch) => {
      httpGETRequest(getTaskFiltersAPI, {}, UserService.getToken())
        .then((res) => {
@@ -217,8 +217,11 @@
            let taskDetail=responses[0].data;
            if(responses[1]?.data){
              let taskDetailUpdates = responses[1]?.data;
-             taskDetail = {...taskDetail,...taskDetailVariableDataFormatter(taskDetailUpdates)};
-           }
+             taskDetail = {
+              ...taskDetailVariableDataFormatter(taskDetailUpdates),
+              ...taskDetail,
+            };
+          }
  
            dispatch(setBPMTaskDetail(taskDetail));
            dispatch(setBPMTaskDetailLoader(false));
@@ -247,7 +250,7 @@
  
    return (dispatch) => {
      httpGETRequest(`${apiUrlgetGroups}?type=candidate`)
-       .then(responses => {
+       .then((responses) => {
              if (responses?.data){
                const groups = responses.data;
                dispatch(updateBPMTaskGroups(groups));
@@ -277,7 +280,7 @@
  
    return (dispatch) => {
      httpPOSTRequest(apiUrlDeleteGroup, group)
-       .then(responses => {
+       .then((responses) => {
            if (responses?.data){
              dispatch(setBPMTaskDetailLoader(false));
              dispatch(setBPMTaskDetailUpdating(false));
