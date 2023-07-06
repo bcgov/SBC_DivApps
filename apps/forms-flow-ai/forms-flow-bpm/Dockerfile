@@ -1,7 +1,8 @@
 # Modified by Yichun Zhao and Walter Moar
 
 # Maven build
-FROM artifacts.developer.gov.bc.ca/docker-remote/maven:3.8.1-openjdk-17-slim AS MAVEN_TOOL_CHAIN
+# FROM artifacts.developer.gov.bc.ca/docker-remote/maven:3.8.1-openjdk-17-slim AS MAVEN_TOOL_CHAIN
+FROM maven:3.8.1-openjdk-17-slim AS MAVEN_TOOL_CHAIN
 
 RUN apt-get update \
     && apt-get install -y git
@@ -10,9 +11,11 @@ RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 
 # RUN cp /bpm/forms-flow-bpm/pom.xml /tmp/pom.xml
 # RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
-COPY ./pom.xml /tmp/pom.xml
-COPY ./pom-default.xml /tmp/pom-default.xml
-COPY ./settings-docker.xml /usr/share/maven/ref/
+# COPY ./pom.xml /tmp/pom.xml
+# COPY ./pom-default.xml /tmp/pom-default.xml
+COPY pom*.xml /tmp/
+COPY settings-docker.xml /usr/share/maven/ref/
+# COPY ./settings-docker.xml /usr/share/maven/ref/
 
 WORKDIR /tmp/
 
@@ -30,7 +33,8 @@ COPY ./${CUSTOM_SRC_DIR}/  /tmp/${CUSTOM_SRC_DIR}/
 
 
 # Final custom slim java image (for apk command see jdk-11.0.3_7-alpine-slim)
-FROM artifacts.developer.gov.bc.ca/docker-remote/openjdk:17-jdk-alpine
+# FROM artifacts.developer.gov.bc.ca/docker-remote/openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 ENV JAVA_VERSION=17-ea+14
 ENV JAVA_HOME=/opt/java/openjdk-17 \
@@ -45,4 +49,5 @@ COPY --from=MAVEN_TOOL_CHAIN /tmp/target/forms-flow-bpm.jar ./app
 RUN chmod a+rwx -R /app
 WORKDIR /app
 VOLUME /tmp
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
+# ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dpolyglot.js.nashorn-compat=true", "-Dpolyglot.engine.WarnInterpreterOnly=false", "-jar","/app/forms-flow-bpm.jar"]
