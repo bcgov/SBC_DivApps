@@ -11,6 +11,7 @@ RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 #RUN cp /bpm/forms-flow-bpm/pom.xml /tmp/pom.xml
 RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
 COPY ./pom.xml /tmp/pom.xml
+COPY ./pom-default.xml /tmp/pom-default.xml
 # COPY ./settings-docker.xml /usr/share/maven/ref/
 
 WORKDIR /tmp/
