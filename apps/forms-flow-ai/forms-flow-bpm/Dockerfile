@@ -8,11 +8,12 @@ RUN apt-get update \
 
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 
-#RUN cp /bpm/forms-flow-bpm/pom.xml /tmp/pom.xml
-RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
-COPY ./pom.xml /tmp/pom.xml
-COPY ./pom-default.xml /tmp/pom-default.xml
-# COPY ./settings-docker.xml /usr/share/maven/ref/
+# RUN cp /bpm/forms-flow-bpm/pom.xml /tmp/pom.xml
+# RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+# COPY ./pom.xml /tmp/pom.xml
+# COPY ./pom-default.xml /tmp/pom-default.xml
+COPY pom*.xml /tmp/
+COPY settings-docker.xml /usr/share/maven/ref/
 
 WORKDIR /tmp/
 
@@ -25,7 +26,7 @@ ARG CUSTOM_SRC_DIR=src/
 
 # Override these files they have custom changes in the sbc_divapps directory
 COPY ./${CUSTOM_SRC_DIR}/  /tmp/${CUSTOM_SRC_DIR}/
-RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
+# RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
 
@@ -34,7 +35,7 @@ FROM artifacts.developer.gov.bc.ca/docker-remote/openjdk:17-jdk-alpine
 
 ENV JAVA_VERSION=17-ea+14
 ENV JAVA_HOME=/opt/java/openjdk-17 \
-    PATH="/opt/java/openjdk/bin:$PATH"
+    PATH="/opt/java/openjdk-17/bin:$PATH"
 
 EXPOSE 8080
 # OpenShift has /app in the image, but it's missing when doing local development - Create it when missing
@@ -45,4 +46,5 @@ COPY --from=MAVEN_TOOL_CHAIN /tmp/target/forms-flow-bpm.jar ./app
 RUN chmod a+rwx -R /app
 WORKDIR /app
 VOLUME /tmp
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
+# ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dpolyglot.js.nashorn-compat=true", "-Dpolyglot.engine.WarnInterpreterOnly=false", "-jar","/app/forms-flow-bpm.jar"]
