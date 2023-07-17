@@ -1,3 +1,5 @@
+//style.scss
+
 @charset "UTF-8";
 
 @import url(https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap);
@@ -5,7 +7,6 @@
 @import url(https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css);
 @import url(https://cdn.jsdelivr.net/npm/formiojs@4.13.1/dist/formio.full.min.css);
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css);
-
 
 $white: #fff;
 $grey: #6c757d;
@@ -20,7 +21,7 @@ $gray-800: #373a3c;
 $gray-900: #212529;
 $black: #000;
 
-$blue: #4D61FC;
+$blue: #2780e3;
 $indigo: #6610f2;
 $purple: #613d7c;
 $pink: #e83e8c;
@@ -54,6 +55,32 @@ $dark: $gray-800;
   padding-right: 0;
   //height: 100vh;
   height: 100%;
+}
+.overflow-x-auto{
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.overflow-y-auto{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.text-primary{
+  color: $primary;
+}
+.footer-text{
+  font-size: 18px;
+}
+.btn-primary{
+  background-color: $primary;
+  }
+.btn-outline-primary:not(:disabled){
+  border-color: #0071EB;
+  color: #0071EB;
+  &:hover{
+    color: #ffffff;
+    background-color: $primary;
+  }
 }
 .task-container{
   height: 100% !important;
@@ -110,7 +137,7 @@ body {
   background-color: #f8f8f8bf;
 }
 .formio-component-panel {
-  border: 1px solid#eeeeee;
+  border: 1px solid #eeeeee;
 
   .panel-heading {
     background-color: #eeeeee;
@@ -158,6 +185,7 @@ i.fa.fa-question-circle.text-muted {
 .btn.signature-pad-refresh{
   z-index: 99 !important;
 }
+
 
 .formio-error-wrapper,
 .has-error {
@@ -344,6 +372,9 @@ i.fa.fa-question-circle.text-muted {
     right: 100%;
   }
   .dashboard-icon-dropdown{
+    margin-bottom: 5px;
+  }
+  .dasboard-icon-dropdown{
     margin-bottom: 5px;
   }
   .task-dropdown-icon{

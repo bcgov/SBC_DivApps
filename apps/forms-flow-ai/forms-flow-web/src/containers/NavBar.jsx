@@ -1,20 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
+import React from "react";
+import {Navbar, Dropdown, Container, Nav, NavDropdown} from "react-bootstrap";
 import {Link, useLocation} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import UserService from "../services/UserService";
-import {
-  getUserRoleName, 
-  getUserRolePermission, 
-  getUserInsightsPermission
-} from "../helper/user";
+import {getUserRoleName, getUserRolePermission, getUserInsightsPermission} from "../helper/user";
+
 import createURLPathMatchExp from "../helper/regExp/pathMatch";
 import { useTranslation } from "react-i18next";
-
 import "./styles.scss";
-import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME, STAFF_DESIGNER, MULTITENANCY_ENABLED,} from "../constants/constants";
+import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME, STAFF_DESIGNER} from "../constants/constants";
 import ServiceFlowFilterListDropDown from "../components/ServiceFlow/filter/ServiceTaskFilterListDropDown";
-import { push } from "connected-react-router";
+import {push} from "connected-react-router";
 import i18n from "../resourceBundles/i18n";
 import { setLanguage } from "../actions/languageSetAction";
 import { updateUserlang } from "../apiManager/services/userservices";
@@ -35,8 +31,6 @@ const NavBar = React.memo(() => {
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const formTenant = useSelector((state)=>state.form?.form?.tenantKey);
   const baseUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
-
-
   /**
    * For anonymous forms the only way to identify the tenant is through the
    * form data with current implementation. To redirect to the correact tenant
@@ -44,7 +38,6 @@ const NavBar = React.memo(() => {
    */
 
   const [loginUrl, setLoginUrl] = useState(baseUrl);
-
   const selectLanguages = useSelector((state) => state.user.selectLanguages);
   const dispatch = useDispatch();
   const logoPath = "/logo.svg";
@@ -60,7 +53,6 @@ const NavBar = React.memo(() => {
   );
   const appName = getAppName();
   const { t } = useTranslation();
-
   useEffect(()=>{
     if(!isAuthenticated && formTenant && MULTITENANCY_ENABLED){ 
       setLoginUrl(`/tenant/${formTenant}/`);
@@ -79,7 +71,6 @@ const NavBar = React.memo(() => {
     dispatch(setLanguage(selectedLang));
     dispatch(updateUserlang(selectedLang));
   };
-
   const logout = () => {
     dispatch(push(baseUrl));
     UserService.userLogout();
@@ -88,6 +79,7 @@ const NavBar = React.memo(() => {
   const goToTask = () => {
     dispatch(push(`${baseUrl}task`));
   };
+
   return (
     <header>
       <Navbar collapseOnSelect expand="lg" className="topheading-border-bottom" fixed="top">
@@ -98,7 +90,7 @@ const NavBar = React.memo(() => {
             </div>
           </Nav>*/}
           <Navbar.Brand className="d-flex" >
-            <Link to={`${baseUrl}`}>
+            <Link to="/">
               <img
                 className="img-fluid"
                 src={logoPath}
@@ -122,14 +114,14 @@ const NavBar = React.memo(() => {
             </Link>
           </Navbar.Brand>*/}
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-         { isAuthenticated ? 
+          {isAuthenticated?
             <Navbar.Collapse id="responsive-navbar-nav" className="navbar-nav">
             <Nav id="main-menu-nav" className="mr-auto">
               <Nav.Link eventKey="1" as={Link} to={`${baseUrl}form`}  className={`main-nav nav-item ${
                 pathname.match(createURLPathMatchExp("form", baseUrl)) ? "" : "inactive-tab"
               }`}>  
                 <i
-                  className={`fa fa-wpforms fa-lg mr-2
+                  className={`fa fa-wpforms fa-lg
                       ${pathname.match(createURLPathMatchExp("form", baseUrl)) ? "active-tab-text" : ""}
                   `}
                 >
@@ -142,12 +134,12 @@ const NavBar = React.memo(() => {
                   {t("Forms")}
                 </span>
               </Nav.Link>
-              {getUserRolePermission(userRoles, STAFF_DESIGNER) ? (
-                <Nav.Link eventKey="10" as={Link} to={`${baseUrl}admin`}  className={`main-nav nav-item ${
+              {(getUserRolePermission(userRoles, STAFF_DESIGNER)) ?
+                (<Nav.Link eventKey="10" as={Link} to={`${baseUrl}admin`}  className={`main-nav nav-item ${
                   pathname.match(createURLPathMatchExp("admin", baseUrl)) ? "" : "inactive-tab"
                 }`}>
                   <i
-                    className={`fa fa-user-circle-o fa-lg mr-2
+                    className={`fa fa-list-alt fa-fw fa-lg
                         ${pathname.match(createURLPathMatchExp("admin", baseUrl)) ? "active-tab-text" : ""}`
                     }
                   >
@@ -160,28 +152,10 @@ const NavBar = React.memo(() => {
                     {t("Admin")}
                   </span>
                 </Nav.Link>)
-                :null}
+                :null
+              }
 
-              {getUserRolePermission(userRoles, STAFF_DESIGNER) ? (
-                <Nav.Link
-                  as={Link}
-                  to={`${baseUrl}processes`}
-                  className={`main-nav nav-item ${
-                    pathname.match(
-                      createURLPathMatchExp("processes", baseUrl)
-                    )
-                      ? "active-tab"
-                      : ""
-                  }`}
-                >
-                  <i className="fa fa-cogs fa-lg fa-fw mr-2" />
-                  {t("Processes")}
-                </Nav.Link>
-              ) : null}                              
-
-              {showApplications ? (
-                getUserRolePermission(userRoles, STAFF_REVIEWER) ||  
-                getUserRolePermission(userRoles, CLIENT)) ?
+              {showApplications?(getUserRolePermission(userRoles, STAFF_REVIEWER) ||  getUserRolePermission(userRoles, CLIENT)) ?
                 <Nav.Link eventKey="2" as={Link} to={`${baseUrl}application`}  className={`main-nav nav-item ${
                   pathname.match(createURLPathMatchExp("application", baseUrl)) ? "" : "inactive-tab"
                 }`}> 
@@ -212,139 +186,52 @@ const NavBar = React.memo(() => {
                 null}*/}
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
-                <NavDropdown
-                  title={
-                      <span className="white-text">
-                        <img
+                (<Nav.Link eventKey="11" as={Link} to={`${baseUrl}task`}  className={`main-nav nav-item ${
+                  pathname.match(createURLPathMatchExp("task", baseUrl)) ? "" : "inactive-tab"
+                }`}>
+                  <img
                           className={`task-dropdown-icon
                                       ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "active-tab-dropdown" : "inactive-tab"}`
                                     }
                           src="/webfonts/fa-solid_list.svg"
                           alt="Task Icon"
                         /> 
-                        <span
-                          className={`tab-text-padding 
-                                    ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "active-tab-text" : ""}
-                          `}
-                        >
-                            {t("Tasks")}
-                        </span>
-                      </span>
-                  }
-                  id="task-dropdown"
-                  className={`main-nav nav-item taskDropdown
-                            ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "" : "inactive-tab"}`
-                  }
-                  onClick={goToTask}
-                >
-                  <ServiceFlowFilterListDropDown/>
-              </NavDropdown>:null}
+                  <span 
+                    className={`tab-text-padding 
+                                ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "active-tab-text" : ""}`
+                              }
+                  >
+                   {t("Tasks")}
+                  </span>
+                </Nav.Link>)
+                :null
+              }
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
-                <NavDropdown 
-                  title={
-                  <span className="white-text">
-                    <i 
+              (<Nav.Link eventKey="11" as={Link} to={`${baseUrl}task`}  className={`main-nav nav-item ${
+                pathname.match(createURLPathMatchExp("task", baseUrl)) ? "" : "inactive-tab"
+              }`}>
+                 <i 
                       class={`fa fa-tachometer fa-2 dashboard-icon-dropdown
                       ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) || pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "active-tab-text" : ""}
                       `}
                       aria-hidden="true"
                     >     
                     </i>
-                    <span
-                      className={`tab-text-padding 
-                      ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) || pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "active-tab-text" : ""}
-                          `}
-                    >
-                      {t("Dashboards")}
-                    </span>
-                  </span>
-                  }
-                  id="dashboard-dropdown"
-                  className={`main-nav nav-item 
-                              ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) || pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "" : "inactive-tab-dropdown"}`
-                  }
+                <span 
+                  className={`tab-text-padding 
+                  ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) || pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "active-tab-text" : ""}`
+                            }
                 >
-                  <NavDropdown.Item
-                    eventKey="3"
-                    as={Link}
-                    to={`${baseUrl}metrics`}
-                    className={`main-nav nav-item 
-                    ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) ? "dropdown-option-selected" : ""}`
-                    }
-                  >
-                    <i
-                      class={`fa fa-pie-chart dashboard-dropdown-options black-text
-                      ${pathname.match(createURLPathMatchExp("metrics", baseUrl)) ? "dropdown-option-selected" : ""}
-                      `}
-                      aria-hidden="true"
-                    >
-                    </i>
-                    <span className={`${pathname.match(createURLPathMatchExp("metrics", baseUrl)) ? "dropdown-option-selected" : "black-text"}`}>
-                    {t("Metrics")}
-                    </span>
-                  </NavDropdown.Item>
-                  {
-                    getUserInsightsPermission() &&
-                    <NavDropdown.Item
-                      eventKey="4"
-                      as={Link} to={`${baseUrl}insights`}
-                      className={`main-nav nav-item 
-                      ${pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "dropdown-option-selected" : ""}
-                      `}
-                    >
-                      <i
-                        class={`fa fa-lightbulb-o dashboard-dropdown-options
-                        ${pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "dropdown-option-selected" : "black-text"}
-                        `}
-                        aria-hidden="true"
-                      ></i>
-                      <span className={`${pathname.match(createURLPathMatchExp("insights", baseUrl)) ? "dropdown-option-selected" : "black-text"}`}>
-                        {t("Insights")}
-                      </span>
-                    </NavDropdown.Item>
-                  }
-                </NavDropdown>:null}
+                 {t("Dashboards")}
+                </span>
+              </Nav.Link>)
+              :null
+              }
             </Nav>
-
-            <Nav className="ml-lg-auto mr-auto px-lg-0 px-3">
-                {selectLanguages.length === 1 ? (
-                  selectLanguages.map((e, i) => {
-                    return (
-                      <>
-                        <i className="fa fa-globe fa-lg mr-1 mt-1" />
-                        <h4 key={i}>{e.name}</h4>
-                      </>
-                    );
-                  })
-                ) : (
-                  <NavDropdown
-                    title={
-                      <>
-                        <i className="fa fa-globe fa-lg mr-2" />
-                        {lang ? lang : "LANGUAGE"}
-                      </>
-                    }
-                    id="basic-nav-dropdown"
-                  >
-                    {selectLanguages.map((e, index) => (
-                      <NavDropdown.Item
-                        key={index}
-                        onClick={() => {
-                          handleOnclick(e.name);
-                        }}
-                      >
-                        {e.value}{" "}
-                      </NavDropdown.Item>
-                    ))}
-                  </NavDropdown>
-                )}
-              </Nav>
-
             <Nav className="ml-auto">
-              {/* <Dropdown alignRight>
-                  <Dropdown.Toggle id="dropdown-basic" as="div"> */}
-                <NavDropdown id="dropdown-basic" as="div"  menuAlign="right">
+              <Dropdown alignRight>
+                <Dropdown.Toggle id="dropdown-basic" as="div">
                   <span className="mr-1">
                       <img
                         className="img-xs rounded-circle"
@@ -355,16 +242,17 @@ const NavBar = React.memo(() => {
                       <span id="username" className="d-none d-lg-inline-block">
                       {user?.name || user?.preferred_username || ""}
                   </span>
-              
-                  <NavDropdown.Item disabled eventKey="5"> {user?.name || user?.preferred_username || ""}<br/>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item disabled eventKey="5"> {user?.name || user?.preferred_username || ""}<br/>
                     <i className="fa fa-users fa-fw"/>
-                    <b>{getUserRoleName(userRoles)}</b></NavDropdown.Item>
-                  <NavDropdown.Divider/>
-                  <NavDropdown.Item eventKey="6" as={Link} onClick ={logout}><i className="fa fa-sign-out fa-fw"/> {t("Logout")}{" "}</NavDropdown.Item>
-                </NavDropdown>
-            </Nav>
-
-          </Navbar.Collapse>:<Link to={loginUrl} className="btn btn-primary">Login</Link>}
+                    <b>{getUserRoleName(userRoles)}</b></Dropdown.Item>
+                  <Dropdown.Divider/>
+                  <Dropdown.Item eventKey="6" as={Link} onClick ={logout}><i className="fa fa-sign-out fa-fw"/> Logout</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              </Nav>
+          </Navbar.Collapse>:<Link to="/" className="btn btn-primary">Login</Link>}
         </Container>
       </Navbar>
     </header>
