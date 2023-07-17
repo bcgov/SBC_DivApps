@@ -7,8 +7,6 @@ import {Link} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MULTITENANCY_ENABLED } from "../../../constants/constants";
 
-export default ServiceFlowFilterListDropDown;
-
 
 const ServiceFlowFilterListDropDown = React.memo(() => {
   const dispatch= useDispatch();
@@ -68,3 +66,5 @@ const ServiceFlowFilterListDropDown = React.memo(() => {
     </>
   );
 });
+
+export default ServiceFlowFilterListDropDown;
