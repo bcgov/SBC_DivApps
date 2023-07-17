@@ -8,7 +8,7 @@ import {getUserRoleName, getUserRolePermission, getUserInsightsPermission} from 
 import createURLPathMatchExp from "../helper/regExp/pathMatch";
 import { useTranslation } from "react-i18next";
 import "./styles.scss";
-import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME, STAFF_DESIGNER} from "../constants/constants";
+import {CLIENT, STAFF_REVIEWER, APPLICATION_NAME, STAFF_DESIGNER, MULTITENANCY_ENABLED} from "../constants/constants";
 import ServiceFlowFilterListDropDown from "../components/ServiceFlow/filter/ServiceTaskFilterListDropDown";
 import {push} from "connected-react-router";
 import i18n from "../resourceBundles/i18n";
