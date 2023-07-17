@@ -26,6 +26,7 @@ const NavBar = React.memo(() => {
   const location = useLocation();
   const { pathname } = location;
   const user = useSelector((state) => state.user.userDetail);
+  const lang = useSelector((state) => state.user.lang);
   const userRoles = useSelector((state) => state.user.roles);
   const showApplications= useSelector((state) => state.user.showApplications);
   const applicationTitle = useSelector(
@@ -34,6 +35,7 @@ const NavBar = React.memo(() => {
   const tenantKey = useSelector((state) => state.tenants?.tenantId);
   const formTenant = useSelector((state)=>state.form?.form?.tenantKey);
   const baseUrl = MULTITENANCY_ENABLED ? `/tenant/${tenantKey}/` : "/";
+
 
   /**
    * For anonymous forms the only way to identify the tenant is through the
