@@ -189,13 +189,15 @@ const NavBar = React.memo(() => {
                 (<Nav.Link eventKey="11" as={Link} to={`${baseUrl}task`}  className={`main-nav nav-item ${
                   pathname.match(createURLPathMatchExp("task", baseUrl)) ? "" : "inactive-tab"
                 }`}>
-                  <img
+                  {/* <img
                           className={`task-dropdown-icon
                                       ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "active-tab-dropdown" : "inactive-tab"}`
                                     }
                           src="/webfonts/fa-solid_list.svg"
                           alt="Task Icon"
-                        /> 
+                        />  */}
+                        <i class="fa fa-sharp fa-solid fa-list-ul fa-fw fa-lg
+                        active-tab-text"></i>
                   <span 
                     className={`tab-text-padding 
                                 ${pathname.match(createURLPathMatchExp("task", baseUrl)) ? "active-tab-text" : ""}`
