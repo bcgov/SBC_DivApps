@@ -1,3 +1,4 @@
+
  /* istanbul ignore file */
  import {httpGETRequest, httpPOSTRequest, httpPUTRequest, httpPOSTRequestWithHAL } from "../httpRequestHandler";
  import API from "../endpoints";
@@ -36,29 +37,22 @@
            let responseData = res.data;
            const _embedded = responseData['_embedded']; // data._embedded.task is where the task list is.
            if (!_embedded || !_embedded['task'] || !responseData['count']) {
-               if (responseData['count'] !== undefined && responseData['count'] === 0) {
-                    const tasks = []
-                    dispatch(setBPMTaskCount(0));
-                    dispatch(setBPMTaskList(tasks));
-                    dispatch(setBPMTaskLoader(false));
-                    done(null, tasks);
-               } else {
-                    // Display error if the necessary values are unavailable.
-                    console.log("Error", res);
-                    dispatch(serviceActionError(res));
-                    dispatch(setBPMTaskLoader(false));
-               }
+             console.log("Error", res);
+             dispatch(setBPMTaskList([]));
+             dispatch(setBPMTaskCount(0));
+             dispatch(serviceActionError(res));
+             dispatch(setBPMTaskLoader(false));
            } else {
              const taskListFromResponse = _embedded['task']; // Gets the task array
              const taskCount = {
                count: responseData['count']
              };
              let taskData = taskListFromResponse;
-             if(taskIdToRemove){
-               console.log("task----",taskIdToRemove);
+             if (taskIdToRemove) {
+               console.log("task----", taskIdToRemove);
                //if the list has the task with taskIdToRemove remove that task and decrement
-               if(taskListFromResponse.find((task)=>task.id===taskIdToRemove)){
-                 taskData=taskListFromResponse.filter( (task)=>task.id!==taskIdToRemove);
+               if (taskListFromResponse.find((task) => task.id === taskIdToRemove)) {
+                 taskData = taskListFromResponse.filter((task) => task.id !== taskIdToRemove);
                  taskCount['count']--; // Count has to be decreased since one task id is removed.
                }
              }
@@ -69,12 +63,16 @@
            }
          } else {
            console.log("Error", res);
+           dispatch(setBPMTaskList([]));
+           dispatch(setBPMTaskCount(0));
            dispatch(serviceActionError(res));
            dispatch(setBPMTaskLoader(false));
          }
        })
        .catch((error) => {
          console.log("Error", error);
+         dispatch(setBPMTaskList([]));
+         dispatch(setBPMTaskCount(0));
          dispatch(serviceActionError(error));
          dispatch(setBPMTaskLoader(false));
          done(error);
@@ -94,6 +92,7 @@
          } else {
            console.log("Error", res);
            dispatch(serviceActionError(res));
+           dispatch(setBPMProcessList([]));
            //dispatch(setBPMTaskLoader(false));
          }
        })
@@ -139,11 +138,11 @@
    //let getReviewerUserListApi = `${API.GET_BPM_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
    if(searchType && query){
      //getReviewerUserListApi = `${getReviewerUserListApi}&${searchType}=%${query||""}%`
-     paramData[searchType]=`%${query}%`;
+     paramData[searchType] = `${query}`;
    }
  
    return (dispatch) => {
-     httpGETRequest(API.GET_BPM_USER_LIST, paramData, UserService.getToken())
+     httpGETRequest(API.GET_API_USER_LIST, paramData, UserService.getToken())
        .then((res) => {
          if (res.data) {
            dispatch(setBPMUserList(res.data));
@@ -217,7 +216,10 @@
            let taskDetail=responses[0].data;
            if(responses[1]?.data){
              let taskDetailUpdates = responses[1]?.data;
-             taskDetail = {...taskDetail,...taskDetailVariableDataFormatter(taskDetailUpdates)};
+             taskDetail = {
+              ...taskDetailVariableDataFormatter(taskDetailUpdates),
+              ...taskDetail,
+            };
            }
  
            dispatch(setBPMTaskDetail(taskDetail));
@@ -445,4 +447,3 @@
        });
    };
  };
- 
