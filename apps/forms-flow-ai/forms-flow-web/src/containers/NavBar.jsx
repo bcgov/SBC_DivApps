@@ -210,8 +210,8 @@ const NavBar = React.memo(() => {
               }
 
               {getUserRolePermission(userRoles, STAFF_REVIEWER) ?
-              (<Nav.Link eventKey="11" as={Link} to={`${baseUrl}task`}  className={`main-nav nav-item ${
-                pathname.match(createURLPathMatchExp("task", baseUrl)) ? "" : "inactive-tab"
+              (<Nav.Link eventKey="3" as={Link} to={`${baseUrl}metrics`}  className={`main-nav nav-item ${
+                pathname.match(createURLPathMatchExp("metrics", baseUrl)) ? "" : "inactive-tab"
               }`}>
                  <i 
                       class={`fa fa-tachometer fa-2 dashboard-icon-dropdown
