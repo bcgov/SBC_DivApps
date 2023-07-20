@@ -10,25 +10,20 @@ RUN apt-get update \
 RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 
 # RUN cp /bpm/forms-flow-bpm/pom.xml /tmp/pom.xml
-# RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
-# COPY ./pom.xml /tmp/pom.xml
-# COPY ./pom-default.xml /tmp/pom-default.xml
-COPY pom*.xml /tmp/
-COPY settings-docker.xml /usr/share/maven/ref/
-# COPY ./settings-docker.xml /usr/share/maven/ref/
+RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+COPY ./pom-docker.xml /tmp/pom.xml
 
 WORKDIR /tmp/
 
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
 RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
-RUN mvn -s /usr/share/maven/ref/settings-docker.xml package -P default
 
 ARG CUSTOM_SRC_DIR=src/
 
 # Override these files they have custom changes in the sbc_divapps directory
 COPY ./${CUSTOM_SRC_DIR}/  /tmp/${CUSTOM_SRC_DIR}/
-# RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
+RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
 
