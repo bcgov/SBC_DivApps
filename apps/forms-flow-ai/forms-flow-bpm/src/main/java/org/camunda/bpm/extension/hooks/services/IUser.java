@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.identity.User;
 import org.camunda.bpm.engine.task.IdentityLink;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -19,6 +20,9 @@ import java.util.Set;
  */
 public interface IUser {
 
+    @Autowired
+    private UserService userService;
+
     default String getName(DelegateExecution execution, String userId) {
         User user = getUser(execution, userId);
         return user.getFirstName()+" "+user.getLastName();
@@ -30,8 +34,9 @@ public interface IUser {
     }
 
     default User getUser(DelegateExecution execution, String userId) {
-        userId = execution.getVariable("provider_idir_userid").toString();
-        return execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
+        // userId = execution.getVariable("provider_idir_userid").toString();
+        // return execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
+        return userService.searchUserByAttribute("userid", userId);
     }
 
     default String getDefaultAddresseName() {
