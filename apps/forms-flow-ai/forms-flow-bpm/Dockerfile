@@ -13,21 +13,21 @@ RUN git clone -b ${FORMIO_SOURCE_REPO_BRANCH} ${FORMIO_SOURCE_REPO_URL} /bpm/
 # RUN cp /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
 # COPY ./pom.xml /tmp/pom.xml
 # COPY ./pom-default.xml /tmp/pom-default.xml
-COPY pom*.xml /tmp/
+COPY pom*.xml /app/
 COPY settings-docker.xml /usr/share/maven/ref/
 # COPY ./settings-docker.xml /usr/share/maven/ref/
 
-WORKDIR /tmp/
+WORKDIR /app/
 
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
-RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
+RUN cp -r /bpm/forms-flow-bpm/src/ /app/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package -P default
 
 ARG CUSTOM_SRC_DIR=src/
 
 # Override these files they have custom changes in the sbc_divapps directory
-COPY ./${CUSTOM_SRC_DIR}/  /tmp/${CUSTOM_SRC_DIR}/
+COPY ./${CUSTOM_SRC_DIR}/  /app/${CUSTOM_SRC_DIR}/
 # RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
@@ -45,9 +45,9 @@ EXPOSE 8080
 RUN test ! -d /app && mkdir /app || :
 # Add spring boot application
 RUN mkdir -p /app
-COPY --from=MAVEN_TOOL_CHAIN /tmp/target/forms-flow-bpm.jar ./app
+COPY --from=MAVEN_TOOL_CHAIN /app/target/forms-flow-bpm.jar ./app
 RUN chmod a+rwx -R /app
 WORKDIR /app
-VOLUME /tmp
+VOLUME /app
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
 # ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dpolyglot.js.nashorn-compat=true", "-Dpolyglot.engine.WarnInterpreterOnly=false", "-jar","/app/forms-flow-bpm.jar"]
