@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: meabase
+  name: metabase
   annotations:
     description: ""
     tags: metabase,java

@@ -2,11 +2,14 @@ package org.camunda.bpm.extension.commons.connector.support;
 
 import static org.junit.Assert.assertEquals;
 
+import org.camunda.bpm.extension.commons.ro.req.IRequest;
+import org.camunda.bpm.extension.commons.ro.res.IResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -17,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,47 +31,47 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 class ApplicationAccessHandlerTest {
 
-   @InjectMocks
-   private ApplicationAccessHandler applicationAccessHandler;
+      @InjectMocks
+      private ApplicationAccessHandler applicationAccessHandler;
 
-   @Mock
-   private WebClient unAuthenticatedWebClient;
+      @Mock
+      private WebClient unAuthenticatedWebClient;
 
-   @Mock
-   private OAuth2RestTemplate oAuth2RestTemplate;
+      @Mock
+      private OAuth2RestTemplate oAuth2RestTemplate;
 
-   /**
-    * This test perform a positive test over ApplicationAccessHandler
-    * This  will validate the response entity is Success
-    */
-   @Test
-   public void testExchangeSuccess() {
-      final String apiUrl = "http://localhost:5000/api/application/123";
-      WebClient.RequestBodyUriSpec  requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
-      when(unAuthenticatedWebClient.method(any(HttpMethod.class)))
-            .thenReturn(requestBodyUriSpec);
-      when(requestBodyUriSpec.uri(anyString()))
-            .thenReturn(requestBodyUriSpec);
-      when(requestBodyUriSpec.accept(any(MediaType.class)))
-            .thenReturn(requestBodyUriSpec);
-      when(requestBodyUriSpec.header(anyString(), anyString()))
-            .thenReturn(requestBodyUriSpec);
-      OAuth2AccessToken oAuth2AccessToken = mock(OAuth2AccessToken.class);
-      when(oAuth2RestTemplate.getAccessToken())
-            .thenReturn(oAuth2AccessToken);
-      when(requestBodyUriSpec.headers(any(Consumer.class)))
-            .thenReturn(requestBodyUriSpec);
-      WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
-      when(requestBodyUriSpec.body(any(Mono.class), any(Class.class)))
-            .thenReturn(requestHeadersSpec);
-      WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
-      when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-      Mono<ResponseEntity<String>> response = Mono.just(ResponseEntity.ok("Success"));
-      when(responseSpec.toEntity(String.class))
-            .thenReturn(response);
+      /**
+       * This test perform a positive test over ApplicationAccessHandler
+       * This will validate the response entity is Success
+       */
+      @Test
+      public void testExchangeSuccess() {
+            final String apiUrl = "http://localhost:5000/api/application/123";
+            WebClient.RequestBodyUriSpec requestBodyUriSpec = mock(WebClient.RequestBodyUriSpec.class);
+            when(unAuthenticatedWebClient.method(any(HttpMethod.class)))
+                        .thenReturn(requestBodyUriSpec);
+            when(requestBodyUriSpec.uri(anyString()))
+                        .thenReturn(requestBodyUriSpec);
+            when(requestBodyUriSpec.accept(any(MediaType.class)))
+                        .thenReturn(requestBodyUriSpec);
+            when(requestBodyUriSpec.header(anyString(), anyString()))
+                        .thenReturn(requestBodyUriSpec);
+            OAuth2AccessToken oAuth2AccessToken = mock(OAuth2AccessToken.class);
+            when(oAuth2RestTemplate.getAccessToken())
+                        .thenReturn(oAuth2AccessToken);
+            when(requestBodyUriSpec.headers(any(Consumer.class)))
+                        .thenReturn(requestBodyUriSpec);
+            WebClient.RequestHeadersSpec requestHeadersSpec = mock(WebClient.RequestHeadersSpec.class);
+            when(requestBodyUriSpec.body(any(Mono.class), any(Class.class)))
+                        .thenReturn(requestHeadersSpec);
+            WebClient.ResponseSpec responseSpec = mock(WebClient.ResponseSpec.class);
+            when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+            Mono<ResponseEntity<String>> response = Mono.just(ResponseEntity.ok("Success"));
+            when(responseSpec.toEntity(String.class))
+                        .thenReturn(response);
 
-      ResponseEntity<String> data = applicationAccessHandler.exchange(apiUrl, HttpMethod.GET, "{}");
-      assertEquals(data.getBody(), "Success");
-   }
+            ResponseEntity<String> data = applicationAccessHandler.exchange(apiUrl, HttpMethod.GET, "{}");
+            assertEquals(data.getBody(), "Success");
+      }
 
 }
