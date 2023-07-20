@@ -40,8 +40,8 @@ RUN mvn -s /usr/share/maven/ref/settings-docker.xml package -P default
 FROM openjdk:17-jdk-alpine
 
 ENV JAVA_VERSION=17-ea+14
-ENV JAVA_HOME=/opt/java/openjdk \
-    PATH="/opt/java/openjdk/bin:$PATH"
+ENV JAVA_HOME=/opt/java/openjdk-17 \
+    PATH="/opt/java/openjdk-17/bin:$PATH"
 
 EXPOSE 8080
 # OpenShift has /app in the image, but it's missing when doing local development - Create it when missing
