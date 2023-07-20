@@ -128,4 +128,39 @@ public class KeycloakIdentityProviderSession
 			return groupService.requestGroupsWithoutUserId(groupQuery);
 		}
 	}
+	@Override
+	public TenantQuery createTenantQuery() {
+		return new CustomKeycloakTenantQuery(org.camunda.bpm.engine.impl.context.Context.getProcessEngineConfiguration()
+				.getCommandExecutorTxRequired());
+	}
+
+	@Override
+	public TenantQuery createTenantQuery(CommandContext commandContext) {
+		return new CustomKeycloakTenantQuery();
+	}
+
+	protected long findTenantCountByQueryCriteria(CustomKeycloakTenantQuery tenantQuery) {
+		return findTenantByQueryCriteria(tenantQuery).size();
+	}
+
+	private List<Tenant> doFindTenantByQueryCriteria(CacheableKeycloakTenantQuery tenantQuery) {
+		if (!config.isEnableMultiTenancy()) {
+			return Collections.emptyList();
+		}
+		return tenantService.requestTenantsByUserId(tenantQuery.getUserId());
+	}
+
+	protected List<Tenant> findTenantByQueryCriteria(CustomKeycloakTenantQuery tenantQuery) {
+
+		List<Tenant> allMatchingTenants = tenantQueryCache.getOrCompute(CacheableKeycloakTenantQuery.of(tenantQuery),
+				this::doFindTenantByQueryCriteria);
+
+		return allMatchingTenants;
+	}
+
+	@Override
+	public Tenant findTenantById(String id) {
+		return createTenantQuery(org.camunda.bpm.engine.impl.context.Context.getCommandContext()).tenantId(id)
+				.singleResult();
+	}
 } 

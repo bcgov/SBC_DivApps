@@ -6,13 +6,19 @@ import org.camunda.bpm.engine.impl.persistence.entity.UserEntity;
 import org.camunda.bpm.extension.keycloak.KeycloakConfiguration;
 import org.camunda.bpm.extension.keycloak.rest.KeycloakRestTemplate;
 import org.camunda.bpm.engine.identity.User;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static org.camunda.bpm.extension.keycloak.json.JsonUtil.getJsonString;
 import static org.camunda.bpm.extension.keycloak.json.JsonUtil.parseAsJsonArray;
@@ -22,35 +28,28 @@ import static org.camunda.bpm.extension.keycloak.json.JsonUtil.parseAsJsonArray;
 public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
-    private KeycloakRestTemplate restTemplate;
-    private KeycloakConfiguration keycloakConfiguration;
-    public UserService(KeycloakConfiguration keycloakConfiguration, KeycloakRestTemplate restTemplate){
-        this.restTemplate = restTemplate;
-        this.keycloakConfiguration = keycloakConfiguration;
-    }
 
+    @Autowired
+    private Keycloak keycloak;
+    @Value("${keycloak.url.realm}")
+    private String keycloakRealm;
     public User searchUserByAttribute(String attributeName, String attributeValue) {
         try {
-            ResponseEntity<String> response = restTemplate.exchange(keycloakConfiguration.getKeycloakAdminUrl()
-                            + "/users/?q="+attributeName+":"+attributeValue+"", HttpMethod.GET,
-                    String.class);
-            if (!response.getStatusCode().equals(HttpStatus.OK)) {
-                throw new IdentityProviderException(
-                        "Unable to read user data from " + keycloakConfiguration.getKeycloakAdminUrl()
-                                + ": HTTP status code " + response.getStatusCodeValue());
-            }
-            JsonArray resultList = parseAsJsonArray(response.getBody());
-            JsonObject result = resultList.get(0).getAsJsonObject();
-            UserEntity user = new UserEntity();
-            String username = getJsonString(result, "username");
-            String email = getJsonString(result, "email");
-            String firstName = getJsonString(result, "firstName");
-            String lastName = getJsonString(result, "lastName");
-            user.setId(username);
-            user.setEmail(email);
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            return user;
+            List<UserRepresentation> users = keycloak
+                    .realm(keycloakRealm)
+                    .users()
+                    .searchByAttributes(attributeName+":"+attributeValue);
+            UserRepresentation user = users.get(0);
+            UserEntity result = new UserEntity();
+            String username = user.getUsername();
+            String email = user.getEmail();
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            result.setId(username);
+            result.setEmail(email);
+            result.setFirstName(firstName);
+            result.setLastName(lastName);
+            return result;
         }catch(Exception e) {
             e.printStackTrace();
             LOG.error(e.getMessage());

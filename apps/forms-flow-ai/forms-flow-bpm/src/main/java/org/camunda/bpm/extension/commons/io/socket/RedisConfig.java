@@ -25,7 +25,6 @@ import java.util.logging.Logger;
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Configuration
-@ConditionalOnProperty(prefix = "websocket", name = "enableRedis", havingValue = "true", matchIfMissing = false)
 public class RedisConfig implements ITaskEvent {
 
     private final Logger LOGGER = Logger.getLogger(RedisConfig.class.getName());

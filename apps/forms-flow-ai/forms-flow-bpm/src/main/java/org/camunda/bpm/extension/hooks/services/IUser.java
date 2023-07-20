@@ -20,23 +20,24 @@ import java.util.Set;
  */
 public interface IUser {
 
-    @Autowired
-    private UserService userService;
-
-    default String getName(DelegateExecution execution, String userId) {
-        User user = getUser(execution, userId);
+    default String getName(DelegateExecution execution,UserService userService, String userId) {
+        User user = getUser(execution, userService, userId);
         return user.getFirstName()+" "+user.getLastName();
     }
 
-    default String getEmail(DelegateExecution execution, String userId) {
-        User user = getUser(execution, userId);
+    default String getEmail(DelegateExecution execution,UserService userService, String userId) {
+        User user = getUser(execution, userService, userId);
         return user.getEmail();
     }
 
-    default User getUser(DelegateExecution execution, String userId) {
-        // userId = execution.getVariable("provider_idir_userid").toString();
-        // return execution.getProcessEngine().getIdentityService().createUserQuery().userId(userId).singleResult();
-        return userService.searchUserByAttribute("userid", userId);
+    default User getUser(DelegateExecution execution,UserService userService, String userId) {
+        String providerIdirUserId = execution.getVariable("provider_idir_userid").toString();
+        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId).singleResult();
+        user = userService.searchUserByAttribute("userid", userId);
+        if(user == null) {
+            user = userService.searchUserByAttribute("userid", userId);
+        }
+        return user;
     }
 
     default String getDefaultAddresseName() {
