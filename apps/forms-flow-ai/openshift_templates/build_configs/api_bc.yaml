@@ -19,8 +19,8 @@ parameters:
     description: Set this to a branch name, tag or other ref of your repository if you are not using the default branch.
     value: forms-flow-api
   - name: FORMIO_SOURCE_REPO_BRANCH
-    description: AOT branch/version of firmio from which the app is built.
-    value: v4.0.5
+    description: AOT branch/version of formio from which the app is built.
+    value: v5.1.0
   - name: FORMIO_SOURCE_REPO_URL
     description: AOT formsflow git repository reference .
     value: https://github.com/AOT-Technologies/forms-flow-ai.git

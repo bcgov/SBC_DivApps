@@ -9,17 +9,6 @@ formbuilder.pipeline.service.username: ${CAMUNDA_FORMBUILDER_PIPELINE_USERNAME}
 formbuilder.pipeline.service.password: ${CAMUNDA_FORMBUILDER_PIPELINE_PASSWORD}
 formbuilder.pipeline.service.bpm-url: ${CAMUNDA_FORMBUILDER_PIPELINE_BPM_URL}
 
-spring.datasource:
-  jdbc-url: ${CAMUNDA_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-  username: ${CAMUNDA_JDBC_USER:sa}
-  password: ${CAMUNDA_JDBC_PASSWORD:sa}
-  driverClassName: ${CAMUNDA_JDBC_DRIVER:org.h2.Driver}
-  type: com.zaxxer.hikari.HikariDataSource
-  connectionTimeout: ${CAMUNDA_HIKARI_CONN_TIMEOUT:30000}
-  idleTimeout: ${CAMUNDA_HIKARI_IDLE_TIMEOUT:600000}
-  maximumPoolSize: ${CAMUNDA_HIKARI_MAX_POOLSIZE:10}
-  validationTimeout: ${CAMUNDA_HIKARI_VALID_TIMEOUT:5000}
-
 analytics.datasource:
   jdbc-url: ${CAMUNDA_JDBC_URL}
   username: ${CAMUNDA_JDBC_USER}
@@ -33,8 +22,14 @@ analytics.datasource:
 
 
 formsflow.ai:
+  forms:
+    enableCustomSubmission: ${CUSTOM_SUBMISSION_ENABLED:false}
+    custom_submission:
+      url: ${CUSTOM_SUBMISSION_URL}
   api:
     url: ${FORMSFLOW_API_URL}
+  analysis:
+    url: ${DATA_ANALYSIS_URL}
   formio:
     url: ${FORMIO_URL}
     security:
@@ -69,9 +64,9 @@ info:
   app:
     name: "Camunda"
     description: "formsflow.ai Engine"
-    version: "7.15"
+    version: "7.17"
   java:
-    version: "11"
+    version: "17"
 
 # Enable the below given block for session management of camunda. This is not required for externalised tasklist.
 #session.datasource:
@@ -85,7 +80,7 @@ info:
 #  maximumPoolSize: ${CAMUNDA_SESSION_HIKARI_MAX_POOLSIZE:10}
 #  validationTimeout: ${CAMUNDA_SESSION_HIKARI_VALID_TIMEOUT:5000}
 
-camunda.bpm:
+camunda.bpm: 
   history-level: ${CAMUNDA_BPM_HISTORY_LEVEL:none}
   authorization:
     enabled: ${CAMUNDA_AUTHORIZATION_FLAG:true}
@@ -95,7 +90,7 @@ camunda.bpm:
   webapp:
     application-path: /
     csrf:
-      enable-secure-cookie: true
+      enable-secure-cookie: ${SESSION_COOKIE_SECURE:true}
     header-security:
       content-security-policy-disabled: false
       content-security-policy-value:  base-uri 'self';
@@ -118,10 +113,13 @@ server:
   error:
     include-message: always
   port: 8080
-  servlet.context-path: /camunda
+  servlet:
+    context-path: /camunda
   session:
     cookie:
-      secure: true
+      secure: ${SESSION_COOKIE_SECURE:true}
+      max-age: 1800
+      http-only: true
 
 
 # Camunda Rest API
@@ -131,6 +129,17 @@ rest.security:
   required-audience: camunda-rest-api
 
 spring:
+  datasource:
+    jdbc-url: ${CAMUNDA_JDBC_URL:jdbc:h2:./camunda-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${CAMUNDA_JDBC_USER:sa}
+    password: ${CAMUNDA_JDBC_PASSWORD:sa}
+    driverClassName: ${CAMUNDA_JDBC_DRIVER:org.h2.Driver}
+    type: com.zaxxer.hikari.HikariDataSource
+    minimum-idle: 10
+    connectionTimeout: ${CAMUNDA_HIKARI_CONN_TIMEOUT:30000}
+    idleTimeout: ${CAMUNDA_HIKARI_IDLE_TIMEOUT:600000}
+    maximumPoolSize: ${CAMUNDA_HIKARI_MAX_POOLSIZE:10}
+    validationTimeout: ${CAMUNDA_HIKARI_VALID_TIMEOUT:5000}
   jersey:
     application-path: /engine-rest
   security:
@@ -206,4 +215,9 @@ websocket:
     host: ${WEBSOCKET_BROKER_HOST}
     port: ${WEBSOCKET_BROKER_PORT}
     passcode: ${WEBSOCKET_BROKER_PASSCODE}
+
+# disable redis
+spring.data.redis.repositories.enabled: false
+spring.autoconfigure.exclude:
+  - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 

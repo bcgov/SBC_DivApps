@@ -17,10 +17,14 @@ import org.springframework.context.event.EventListener;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-
+import javax.annotation.Resource;
 import java.util.*;
 
 import java.util.logging.Logger;
+
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.APPLICATION_STATUS;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.APPLICATION_ID;
 
 /**
  * This class intercepts all camunda task and push socket messages for web tier updates.
@@ -41,6 +45,9 @@ public class CamundaEventListener implements ITaskEvent {
 	@Value("${websocket.messageEvents}")
     private String messageEvents;
 
+    @Resource(name = "bpmObjectMapper")
+    private ObjectMapper bpmObjectMapper;
+
 
     @EventListener
     public void onTaskEventListener(DelegateTask taskDelegate) {
@@ -48,10 +55,10 @@ public class CamundaEventListener implements ITaskEvent {
         try {
 			if (isRegisteredEvent(taskDelegate.getEventName())) {
 				if(isAllowed(EventCategory.TASK_EVENT_DETAILS.name())) {
-					this.stringRedisTemplate.convertAndSend(getTopicNameForTaskDetail(),  getObjectMapper().writeValueAsString(getTaskMessage(taskDelegate)));
+					this.stringRedisTemplate.convertAndSend(getTopicNameForTaskDetail(),  bpmObjectMapper.writeValueAsString(getTaskMessage(taskDelegate)));
 				}
 				if(isAllowed(EventCategory.TASK_EVENT.name())) {
-					this.stringRedisTemplate.convertAndSend(getTopicNameForTask(),  getObjectMapper().writeValueAsString(getTaskEventMessage(taskDelegate)));
+					this.stringRedisTemplate.convertAndSend(getTopicNameForTask(),  bpmObjectMapper.writeValueAsString(getTaskEventMessage(taskDelegate)));
 				}
 			}
         } catch (JsonProcessingException e) {
@@ -85,7 +92,8 @@ public class CamundaEventListener implements ITaskEvent {
         if ("DEFAULT".equalsIgnoreCase(messageEvents)) {
             return getDefaultRegisteredEvents();
         }
-        return Arrays.asList(StringUtils.split(messageEvents,","));
+        String events = messageEvents != null ? messageEvents : "";
+        return Arrays.asList(StringUtils.split(events, ","));
     }
 
     private Map<String,Object> getVariables(DelegateTask taskDelegate) {
@@ -100,7 +108,7 @@ public class CamundaEventListener implements ITaskEvent {
     }
 
     private List<String> getElements() {
-        return new ArrayList<>(Arrays. asList("applicationId", "formUrl", "applicationStatus"));
+        return new ArrayList<>(Arrays.asList(APPLICATION_ID, FORM_URL, APPLICATION_STATUS));
     }
 
     private List<String> getDefaultRegisteredEvents() {	
@@ -108,10 +116,6 @@ public class CamundaEventListener implements ITaskEvent {
             TaskListener.EVENTNAME_UPDATE,
             TaskListener.EVENTNAME_COMPLETE
         );
-    }
-
-    private ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
     }
 
     enum EventCategory {

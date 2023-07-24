@@ -12,6 +12,7 @@ import org.camunda.bpm.extension.hooks.services.analytics.IDataPipeline;
 import org.camunda.bpm.extension.hooks.services.analytics.SimpleDBDataPipeline;
 import org.glassfish.jersey.internal.util.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.camunda.bpm.extension.hooks.services.UserService;
 
 import javax.inject.Named;
 import java.util.HashMap;
@@ -33,6 +34,10 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
 
     @Autowired
     private SimpleDBDataPipeline dbdatapipeline;
+
+    @Autowired
+    private UserService userService;
+
 
 
     private final Logger LOGGER = Logger.getLogger(AnalyticsListener.class.getName());
@@ -108,7 +113,7 @@ public class AnalyticsListener implements TaskListener, ExecutionListener, IMess
                     if (StringUtils.isNotEmpty(idir)) {
                         prcMap.put(entry.getKey(),entry.getValue());
                         if(!execution.getVariables().containsKey(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name")))  {
-                            String idirName = getName(execution, variables.get("provider_idir_userid").toString());
+                            String idirName = getName(execution, userService, variables.get("provider_idir_userid").toString());
                             execution.setVariable(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"), idirName);
                             prcMap.put(StringUtils.substringBefore(entry.getKey(), "_idir").concat("_name"),idirName);
                         }
