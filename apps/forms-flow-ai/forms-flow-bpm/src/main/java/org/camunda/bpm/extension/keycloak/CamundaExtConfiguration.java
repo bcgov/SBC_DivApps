@@ -1,7 +1,5 @@
 package org.camunda.bpm.extension.keycloak;
 
-
-
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -15,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
 
 /**
  * The Camunda Showcase Spring Boot application.
@@ -31,20 +28,22 @@ public class CamundaExtConfiguration {
     private String keycloakClientId;
     @Value("${keycloak.clientSecret}")
     private String keycloakClientSecret;
+
     /**
      * Secondary datasource.
      * This is used only for publishing data to analytics.
+     * 
      * @return
      */
     @Bean("analyticsDS")
     @ConfigurationProperties("analytics.datasource")
-    public DataSource analyticsDS(){
+    public DataSource analyticsDS() {
         return DataSourceBuilder.create().build();
     }
 
-
     /**
      * JDBC template for analytics datasource interaction.
+     * 
      * @param analyticsDS
      * @return
      */
@@ -58,15 +57,15 @@ public class CamundaExtConfiguration {
     public Properties messageBrokerProperties() {
         return new Properties();
     }
-    @Bean
-    Keycloak keycloak() {
-        return KeycloakBuilder.builder()
-                .serverUrl(keycloakUrl)
-                .realm(keycloakRealm)
-                .clientId(keycloakClientId)
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-                .clientSecret(keycloakClientSecret)
-                .build();
-    }
+    // @Bean
+    // Keycloak keycloak() {
+    // return KeycloakBuilder.builder()
+    // .serverUrl(keycloakUrl)
+    // .realm(keycloakRealm)
+    // .clientId(keycloakClientId)
+    // .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+    // .clientSecret(keycloakClientSecret)
+    // .build();
+    // }
 
 }

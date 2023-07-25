@@ -1,4 +1,5 @@
 package org.camunda.bpm.extension.hooks.services;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.camunda.bpm.engine.impl.identity.IdentityProviderException;
@@ -29,16 +30,17 @@ public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
+    @Autowired(required = false)
     private Keycloak keycloak;
     @Value("${keycloak.url.realm}")
     private String keycloakRealm;
+
     public User searchUserByAttribute(String attributeName, String attributeValue) {
         try {
             List<UserRepresentation> users = keycloak
                     .realm(keycloakRealm)
                     .users()
-                    .searchByAttributes(attributeName+":"+attributeValue);
+                    .searchByAttributes(attributeName + ":" + attributeValue);
             UserRepresentation user = users.get(0);
             UserEntity result = new UserEntity();
             String username = user.getUsername();
@@ -50,7 +52,7 @@ public class UserService {
             result.setFirstName(firstName);
             result.setLastName(lastName);
             return result;
-        }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             LOG.error(e.getMessage());
         }
