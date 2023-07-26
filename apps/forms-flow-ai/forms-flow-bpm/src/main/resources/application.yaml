@@ -100,6 +100,7 @@ camunda.bpm:
         frame-ancestors 'none';
         object-src 'none'
   job-execution:
+    enabled: true
     core-pool-size: ${CAMUNDA_JOB_CORE_POOL_SIZE:3}
     lock-time-in-millis: ${CAMUNDA_JOB_LOCK_TIME_MILLIS:300000}
     max-jobs-per-acquisition: ${CAMUNDA_JOB_MAXJOBS_PER_ACQUISITION:3}

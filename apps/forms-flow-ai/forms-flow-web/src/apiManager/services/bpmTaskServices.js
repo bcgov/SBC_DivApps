@@ -133,7 +133,7 @@
  
  export const fetchUserListWithSearch = ({searchType,query},...rest) => {
    const done = rest.length ? rest[0] : () => {};
-   const paramData={memberOfGroup:REVIEWER_GROUP};
+   const paramData={memberOfGroup: REVIEWER_GROUP};
    /*TODO search with query /user?lastNameLike=%${lastName}%&memberOfGroup=${group}*/
    //let getReviewerUserListApi = `${API.GET_BPM_USER_LIST}?memberOfGroup=${REVIEWER_GROUP}`;
    if(searchType && query){
