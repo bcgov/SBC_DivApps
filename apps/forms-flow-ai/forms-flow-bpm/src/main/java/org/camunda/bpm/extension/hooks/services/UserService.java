@@ -8,7 +8,7 @@ import org.camunda.bpm.extension.keycloak.KeycloakConfiguration;
 import org.camunda.bpm.extension.keycloak.rest.KeycloakRestTemplate;
 import org.camunda.bpm.engine.identity.User;
 // import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.idm.UserRepresentation;
+// import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
