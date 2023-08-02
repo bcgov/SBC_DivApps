@@ -2,14 +2,11 @@ package org.camunda.bpm.extension.commons.connector.support;
 
 import static org.junit.Assert.assertEquals;
 
-import org.camunda.bpm.extension.commons.ro.req.IRequest;
-import org.camunda.bpm.extension.commons.ro.res.IResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -20,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.function.Consumer;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
