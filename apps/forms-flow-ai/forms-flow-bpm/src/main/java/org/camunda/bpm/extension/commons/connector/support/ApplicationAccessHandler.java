@@ -25,46 +25,49 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Service("applicationAccessHandler")
-public class ApplicationAccessHandler extends AbstractAccessHandler {
+public class ApplicationAccessHandler implements IAccessHandler {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
+        private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
 
-    @Autowired
-    private WebClient unAuthenticatedWebClient;
+        @Autowired
+        private WebClient unAuthenticatedWebClient;
 
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
+        @Autowired
+        private OAuth2RestTemplate oAuth2RestTemplate;
 
-    public ResponseEntity<String> exchange(String url, HttpMethod method, String payload) {
+        public ResponseEntity<String> exchange(String url, HttpMethod method, String payload) {
 
-        payload = (payload == null) ? new JsonObject().toString() : payload;
+                payload = (payload == null) ? new JsonObject().toString() : payload;
 
-        ResponseEntity<String> response = unAuthenticatedWebClient.method(method).uri(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders -> httpHeaders.setBearerAuth(oAuth2RestTemplate.getAccessToken().getValue()))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(payload), String.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
+                ResponseEntity<String> response = unAuthenticatedWebClient.method(method).uri(url)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .headers(httpHeaders -> httpHeaders
+                                                .setBearerAuth(oAuth2RestTemplate.getAccessToken().getValue()))
+                                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                .body(Mono.just(payload), String.class)
+                                .retrieve()
+                                .toEntity(String.class)
+                                .block();
 
-        // ResponseEntity<String> response = entityMono.block();
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
-    }
+                // ResponseEntity<String> response = entityMono.block();
+                return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        }
 
-    public ResponseEntity<IResponse> exchange(String url, HttpMethod method, IRequest payload,
-            Class<? extends IResponse> responseClazz) {
+        public ResponseEntity<IResponse> exchange(String url, HttpMethod method, IRequest payload,
+                        Class<? extends IResponse> responseClazz) {
 
-        ResponseEntity<? extends IResponse> response = unAuthenticatedWebClient.method(method).uri(url)
-                .accept(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders -> httpHeaders.setBearerAuth(oAuth2RestTemplate.getAccessToken().getValue()))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body((payload == null ? BodyInserters.empty() : BodyInserters.fromValue(payload)))
-                .retrieve()
-                .onStatus(HttpStatus::is4xxClientError,
-                        clientResponse -> Mono.error(new HttpClientErrorException(HttpStatus.BAD_REQUEST)))
-                .toEntity(responseClazz)
-                .block();
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
-    }
+                ResponseEntity<? extends IResponse> response = unAuthenticatedWebClient.method(method).uri(url)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .headers(httpHeaders -> httpHeaders
+                                                .setBearerAuth(oAuth2RestTemplate.getAccessToken().getValue()))
+                                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                .body((payload == null ? BodyInserters.empty() : BodyInserters.fromValue(payload)))
+                                .retrieve()
+                                .onStatus(HttpStatus::is4xxClientError,
+                                                clientResponse -> Mono.error(
+                                                                new HttpClientErrorException(HttpStatus.BAD_REQUEST)))
+                                .toEntity(responseClazz)
+                                .block();
+                return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        }
 }
