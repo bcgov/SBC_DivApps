@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import org.springframework.context.annotation.Primary;
 
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
  *
  * @author sumathi.thirumani@aot-technologies.com
  */
-
+@Primary
 @Service("applicationAccessHandler")
 public class ApplicationAccessHandler extends AbstractAccessHandler implements IAccessHandler {
 
