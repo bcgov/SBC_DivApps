@@ -25,9 +25,8 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
  *
  * @author sumathi.thirumani@aot-technologies.com
  */
-@Primary
 @Service("applicationAccessHandler")
-public class ApplicationAccessHandler extends AbstractAccessHandler implements IAccessHandler {
+public class ApplicationAccessHandler implements IAccessHandler {
 
         private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
 
