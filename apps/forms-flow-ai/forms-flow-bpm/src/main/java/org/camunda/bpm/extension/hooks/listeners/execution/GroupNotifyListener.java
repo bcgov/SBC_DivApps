@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.delegate.*;
 import org.camunda.bpm.extension.hooks.services.IMessageEvent;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
