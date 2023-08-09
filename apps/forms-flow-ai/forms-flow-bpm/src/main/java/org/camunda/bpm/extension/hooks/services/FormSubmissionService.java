@@ -116,7 +116,8 @@ public class FormSubmissionService {
     public Map<String, Object> retrieveFormValues(String formUrl) throws IOException {
         Map<String, Object> fieldValues = new HashMap();
         String submission = readSubmission(formUrl);
-        System.out.println("submission: " + submission);
+        LOGGER.log(Level.INFO, "Submitted_payload" + submission);
+        // System.out.println("submission: " + submission);
         if (StringUtils.isNotEmpty(submission)) {
             JsonNode dataNode = bpmObjectMapper.readTree(submission);
             Iterator<Map.Entry<String, JsonNode>> dataElements = dataNode.findPath("data").fields();
