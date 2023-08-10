@@ -55,7 +55,7 @@ public class ApplicationAccessHandler implements IAccessHandler {
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
         }
 
-        @Override
+        // @Override
         public ResponseEntity<IResponse> exchange(String url, HttpMethod method, IRequest payload,
                         Class<? extends IResponse> responseClazz) {
 
@@ -74,10 +74,11 @@ public class ApplicationAccessHandler implements IAccessHandler {
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
         }
 
-        @Override
-        public ResponseEntity<String> exchange(String url, HttpMethod method, Map<String, Object> queryParams,
-                        IRequest payload) {
-                return null;
-        }
+        // @Override
+        // public ResponseEntity<String> exchange(String url, HttpMethod method,
+        // Map<String, Object> queryParams,
+        // IRequest payload) {
+        // return null;
+        // }
 
 }
