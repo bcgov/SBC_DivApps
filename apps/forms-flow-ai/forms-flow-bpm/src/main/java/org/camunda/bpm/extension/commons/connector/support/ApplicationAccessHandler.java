@@ -75,10 +75,9 @@ public class ApplicationAccessHandler implements IAccessHandler {
         }
 
         // @Override
-        // public ResponseEntity<String> exchange(String url, HttpMethod method,
-        // Map<String, Object> queryParams,
-        // IRequest payload) {
-        // return null;
-        // }
+        public ResponseEntity<String> exchange(String url, HttpMethod method, Map<String, Object> queryParams,
+                        IRequest payload) {
+                return null;
+        }
 
 }
