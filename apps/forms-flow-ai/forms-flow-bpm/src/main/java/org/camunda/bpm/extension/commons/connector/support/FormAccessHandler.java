@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Properties;
 
@@ -23,7 +22,6 @@ import java.util.Properties;
  * Form Access Handler.
  * This class serves as gateway for all formio interactions.
  */
-@Primary
 @Service("formAccessHandler")
 public class FormAccessHandler extends AbstractAccessHandler implements IAccessHandler {
 
