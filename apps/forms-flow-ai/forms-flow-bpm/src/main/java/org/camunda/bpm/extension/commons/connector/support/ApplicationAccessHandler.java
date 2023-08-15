@@ -26,7 +26,8 @@ import static org.springframework.security.oauth2.client.web.reactive.function.c
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Service("applicationAccessHandler")
-public class ApplicationAccessHandler implements IAccessHandler {
+public class ApplicationAccessHandler extends AbstractAccessHandler {
+        // public class ApplicationAccessHandler implements IAccessHandler {
 
         private final Logger LOGGER = LoggerFactory.getLogger(ApplicationAccessHandler.class);
 
@@ -55,7 +56,7 @@ public class ApplicationAccessHandler implements IAccessHandler {
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
         }
 
-        @Override
+        // @Override
         public ResponseEntity<IResponse> exchange(String url, HttpMethod method, IRequest payload,
                         Class<? extends IResponse> responseClazz) {
 
@@ -74,7 +75,7 @@ public class ApplicationAccessHandler implements IAccessHandler {
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
         }
 
-        @Override
+        // @Override
         public ResponseEntity<String> exchange(String url, HttpMethod method, Map<String, Object> queryParams,
                         IRequest payload) {
                 return null;
