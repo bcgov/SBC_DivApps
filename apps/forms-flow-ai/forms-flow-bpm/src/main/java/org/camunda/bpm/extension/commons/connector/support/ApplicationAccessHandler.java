@@ -37,7 +37,7 @@ public class ApplicationAccessHandler extends AbstractAccessHandler {
         @Autowired
         private OAuth2RestTemplate oAuth2RestTemplate;
 
-        @Override
+        // @Override
         public ResponseEntity<String> exchange(String url, HttpMethod method, String payload) {
 
                 payload = (payload == null) ? new JsonObject().toString() : payload;
@@ -76,9 +76,12 @@ public class ApplicationAccessHandler extends AbstractAccessHandler {
         }
 
         // @Override
-        public ResponseEntity<String> exchange(String url, HttpMethod method, Map<String, Object> queryParams,
-                        IRequest payload) {
-                return null;
-        }
+        /**
+         * public ResponseEntity<String> exchange(String url, HttpMethod method,
+         * Map<String, Object> queryParams,
+         * IRequest payload) {
+         * return null;
+         * }
+         **/
 
 }
