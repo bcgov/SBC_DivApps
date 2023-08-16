@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.extension.commons.connector.FormioTokenServiceProvider;
 import org.camunda.bpm.extension.hooks.exceptions.FormioServiceException;
 import org.camunda.bpm.extension.hooks.services.FormSubmissionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpMethod;
@@ -19,6 +19,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.Properties;
 import org.springframework.context.annotation.Primary;
+
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Form Access Handler.
