@@ -2,6 +2,8 @@ package org.camunda.bpm.extension.commons.connector;
 
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.camunda.bpm.extension.commons.connector.support.FormAccessHandler;
 import org.camunda.bpm.extension.commons.ro.req.IRequest;
 import org.camunda.bpm.extension.commons.ro.res.IResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,8 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Logger;
+//import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Http Service Invoker.
@@ -32,7 +35,9 @@ public class HTTPServiceInvoker {
     private static final String FORM_ACCESS_HANDLER = "formAccessHandler";
     private static final String CUSTOM_SUBMISSION_ACCESS_HANDLER = "CustomSubmissionAccessHandler";
 
-    private final Logger LOGGER = Logger.getLogger(HTTPServiceInvoker.class.getName());
+    // private final Logger LOGGER =
+    // Logger.getLogger(HTTPServiceInvoker.class.getName());
+    private final Logger LOGGER = LoggerFactory.getLogger(HTTPServiceInvoker.class.getName());
 
     @Autowired
     private AccessHandlerFactory accessHandlerFactory;
