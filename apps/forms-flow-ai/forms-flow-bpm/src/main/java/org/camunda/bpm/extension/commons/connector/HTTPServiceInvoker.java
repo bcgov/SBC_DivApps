@@ -2,8 +2,6 @@ package org.camunda.bpm.extension.commons.connector;
 
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.camunda.bpm.extension.commons.connector.support.FormAccessHandler;
 import org.camunda.bpm.extension.commons.ro.req.IRequest;
 import org.camunda.bpm.extension.commons.ro.res.IResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,6 @@ public class HTTPServiceInvoker {
     private static final String FORM_ACCESS_HANDLER = "formAccessHandler";
     private static final String CUSTOM_SUBMISSION_ACCESS_HANDLER = "CustomSubmissionAccessHandler";
 
-    // private final Logger LOGGER =
-    // Logger.getLogger(HTTPServiceInvoker.class.getName());
     private final Logger LOGGER = LoggerFactory.getLogger(HTTPServiceInvoker.class.getName());
 
     @Autowired
@@ -52,27 +48,10 @@ public class HTTPServiceInvoker {
         return execute(url, method, dataJson);
     }
 
-    // public ResponseEntity<String> execute(String url, HttpMethod method, String
-    // payload) {
-    // LOGGER.info("LOGGER SERVICE ID", getServiceId(url));
-    // LOGGER.info("LOGGER SERVICE PAYLOAD", payload);
-    // return accessHandlerFactory.getService(getServiceId(url)).exchange(url,
-    // method, payload);
-    // }
-
-    // public ResponseEntity<IResponse> execute(String url, HttpMethod method,
-    // IRequest payload,
-    // Class<? extends IResponse> responseClazz) {
-    // LOGGER.info("IREQUEST LOGGER SERVICE ID", getServiceId(url));
-    // LOGGER.info("IREQUEST LOGGER SERVICE PAYLOAD", payload);
-    // return accessHandlerFactory.getService(getServiceId(url)).exchange(url,
-    // method, payload, responseClazz);
-    // }
-
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
         LOGGER.info("String Service ID: {}", getServiceId(url));
         LOGGER.info("String Service Payload: {}", payload);
-        return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, String.class);
+        return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload);
     }
 
     public ResponseEntity<IResponse> execute(String url, HttpMethod method, IRequest payload,
