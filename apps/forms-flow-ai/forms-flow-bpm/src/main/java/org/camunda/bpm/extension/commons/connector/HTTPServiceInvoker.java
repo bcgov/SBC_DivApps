@@ -56,6 +56,7 @@ public class HTTPServiceInvoker {
 
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
         // LOGGER.info("String Service ID: {}", getServiceId(url));
+        LOGGER.log(Level.INFO, "StringUrl=" + url);
         LOGGER.log(Level.INFO, "String Service ID: {}" + getServiceId(url));
         LOGGER.log(Level.INFO, "String Service Payload: {}" + payload);
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload);
