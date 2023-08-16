@@ -44,7 +44,9 @@ public class HTTPServiceInvoker {
     private Properties integrationCredentialProperties;
 
     public ResponseEntity<String> execute(String url, HttpMethod method, Object payload) throws IOException {
+        LOGGER.info("StringUrl=", url);
         String dataJson = payload != null ? bpmObjectMapper.writeValueAsString(payload) : null;
+        LOGGER.info("dataJson=", dataJson);
         return execute(url, method, dataJson);
     }
 
