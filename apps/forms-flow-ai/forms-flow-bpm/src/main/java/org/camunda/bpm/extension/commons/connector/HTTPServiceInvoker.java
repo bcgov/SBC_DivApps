@@ -47,15 +47,15 @@ public class HTTPServiceInvoker {
     }
 
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
-        logger.info("LOGGER SERVICE ID", getServiceId(url));
-        logger.info("LOGGER SERVICE PAYLOAD", getServiceId(payload));
+        LOGGER.info("LOGGER SERVICE ID", getServiceId(url));
+        LOGGER.info("LOGGER SERVICE PAYLOAD", getServiceId(payload));
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload);
     }
 
     public ResponseEntity<IResponse> execute(String url, HttpMethod method, IRequest payload,
             Class<? extends IResponse> responseClazz) {
-        logger.info("IREQUEST LOGGER SERVICE ID", getServiceId(url));
-        logger.info("IREQUEST LOGGER SERVICE PAYLOAD", getServiceId(payload));
+        LOGGER.info("IREQUEST LOGGER SERVICE ID", getServiceId(url));
+        LOGGER.info("IREQUEST LOGGER SERVICE PAYLOAD", getServiceId(payload));
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, responseClazz);
     }
 
