@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.extension.commons.connector.FormioTokenServiceProvider;
 import org.camunda.bpm.extension.hooks.exceptions.FormioServiceException;
+import org.camunda.bpm.extension.hooks.services.FormSubmissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ import org.springframework.context.annotation.Primary;
 @Service("formAccessHandler")
 public class FormAccessHandler extends AbstractAccessHandler implements IAccessHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(FormAccessHandler.class.getName());
+    // private final Logger logger =
+    // LoggerFactory.getLogger(FormAccessHandler.class.getName());
+    private final Logger LOGGER = Logger.getLogger(FormAccessHandler.class.getName());
 
     static final int TOKEN_EXPIRY_CODE = 404;
 
@@ -48,18 +51,23 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
         if (response.getStatusCodeValue() == TOKEN_EXPIRY_CODE) {
             exchange(url, method, payload, formioTokenServiceProvider.getAccessToken());
         }
-        logger.info("Response code for service invocation: {}", response.getStatusCode());
+        // logger.info("Response code for service invocation: {}",
+        // response.getStatusCode());
+        LOGGER.log(Level.INFO, "Response code for service invocation: {}" + response.getStatusCode());
         return response;
     }
 
     public ResponseEntity<String> exchange(String url, HttpMethod method, String payload, String accessToken) {
 
         payload = (payload == null) ? new JsonObject().toString() : payload;
-        logger.info("HttpMethod=" + HttpMethod.PATCH.name());
-        logger.info("method.name()=" + method.name());
+        LOGGER.log(Level.INFO, "HttpMethod=" + HttpMethod.PATCH.name());
+        LOGGER.log(Level.INFO, "method.name" + method.name());
+        // logger.info("HttpMethod=" + HttpMethod.PATCH.name());
+        // logger.info("method.name()=" + method.name());
 
         if (HttpMethod.PATCH.name().equals(method.name())) {
-            logger.info("payload=" + payload);
+            LOGGER.log(Level.INFO, "payload" + payload);
+            // logger.info("payload=" + payload);
             Mono<ResponseEntity<String>> entityMono = unauthenticatedWebClient.patch()
                     .uri(url)
                     .bodyValue(payload)

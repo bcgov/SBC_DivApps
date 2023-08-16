@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.camunda.bpm.extension.commons.ro.req.IRequest;
 import org.camunda.bpm.extension.commons.ro.res.IResponse;
+import org.camunda.bpm.extension.hooks.services.FormSubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,9 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-//import java.util.logging.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Http Service Invoker.
@@ -34,7 +35,9 @@ public class HTTPServiceInvoker {
     private static final String FORM_ACCESS_HANDLER = "formAccessHandler";
     private static final String CUSTOM_SUBMISSION_ACCESS_HANDLER = "CustomSubmissionAccessHandler";
 
-    private final Logger LOGGER = LoggerFactory.getLogger(HTTPServiceInvoker.class.getName());
+    // private final Logger LOGGER =
+    // LoggerFactory.getLogger(HTTPServiceInvoker.class.getName());
+    private final Logger LOGGER = Logger.getLogger(FormSubmissionService.class.getName());
 
     @Autowired
     private AccessHandlerFactory accessHandlerFactory;
@@ -44,21 +47,24 @@ public class HTTPServiceInvoker {
     private Properties integrationCredentialProperties;
 
     public ResponseEntity<String> execute(String url, HttpMethod method, Object payload) throws IOException {
-        LOGGER.info("StringUrl=", url);
+        // LOGGER.log("StringUrl=", url);
+        LOGGER.log(Level.INFO, "StringUrl=" + url);
         String dataJson = payload != null ? bpmObjectMapper.writeValueAsString(payload) : null;
-        LOGGER.info("dataJson=", dataJson);
+        LOGGER.log(Level.INFO, "dataJson=" + dataJson);
         return execute(url, method, dataJson);
     }
 
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
-        LOGGER.info("String Service ID: {}", getServiceId(url));
-        LOGGER.info("String Service Payload: {}", payload);
+        // LOGGER.info("String Service ID: {}", getServiceId(url));
+        LOGGER.log(Level.INFO, "String Service ID: {}" + getServiceId(url));
+        LOGGER.log(Level.INFO, "String Service Payload: {}" + payload);
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload);
     }
 
     public ResponseEntity<IResponse> execute(String url, HttpMethod method, IRequest payload,
             Class<? extends IResponse> responseClazz) {
-        LOGGER.info("IRequest Service ID: {}", getServiceId(url));
+        // LOGGER.info("IRequest Service ID: {}", getServiceId(url));
+        LOGGER.log(Level.INFO, "IRequest Service ID: {}" + getServiceId(url));
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, responseClazz);
     }
 
