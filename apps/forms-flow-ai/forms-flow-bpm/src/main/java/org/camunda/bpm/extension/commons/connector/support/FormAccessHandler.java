@@ -55,6 +55,8 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
     public ResponseEntity<String> exchange(String url, HttpMethod method, String payload, String accessToken) {
 
         payload = (payload == null) ? new JsonObject().toString() : payload;
+        logger.info("HttpMethod=" + HttpMethod.PATCH.name());
+        logger.info("method.name()=" + method.name());
 
         if (HttpMethod.PATCH.name().equals(method.name())) {
             logger.info("payload=" + payload);
