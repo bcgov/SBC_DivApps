@@ -69,7 +69,7 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
         // logger.info("HttpMethod=" + HttpMethod.PATCH.name());
         // logger.info("method.name()=" + method.name());
 
-        if (HttpMethod.GET.name().equals(method.name())) {
+        if (HttpMethod.PATCH.name().equals(method.name())) {
             LOGGER.log(Level.INFO, "payload" + payload);
             // logger.info("payload=" + payload);
             Mono<ResponseEntity<String>> entityMono = unauthenticatedWebClient.patch()

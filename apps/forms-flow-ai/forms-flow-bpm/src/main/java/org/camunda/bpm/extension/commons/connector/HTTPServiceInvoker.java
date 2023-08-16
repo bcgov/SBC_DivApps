@@ -75,23 +75,26 @@ public class HTTPServiceInvoker {
     }
 
     private String getServiceId(String url) {
-
-        Boolean enableCustomSubmission = Boolean
-                .valueOf(integrationCredentialProperties.getProperty("forms.enableCustomSubmission"));
-        if (isUrlValid(url, fetchUrlFromProperty(API_URL))) {
-            return APPLICATION_ACCESS_HANDLER;
-        } else if (isUrlValid(url, fetchUrlFromProperty(BPM_URL))) {
-            return BPM_ACCESS_HANDLER;
-        } else if (isUrlValid(url, fetchUrlFromProperty(ANALYSIS_URL))) {
-            return TEXT_ANALYZER_ACCESS_HANDLER;
-        } else if (isUrlValid(url, fetchUrlFromProperty(FORMIO_URL))) {
-            if (enableCustomSubmission && StringUtils.contains(url, "/submission")) {
-                return CUSTOM_SUBMISSION_ACCESS_HANDLER;
-            } else {
-                return FORM_ACCESS_HANDLER;
-            }
+        if (StringUtils.contains(url, getProperties().getProperty("api.url"))) {
+            return "applicationAccessHandler";
         }
-        return "";
+        return "formAccessHandler";
+        // Boolean enableCustomSubmission = Boolean
+        // .valueOf(integrationCredentialProperties.getProperty("forms.enableCustomSubmission"));
+        // if (isUrlValid(url, fetchUrlFromProperty(API_URL))) {
+        // return APPLICATION_ACCESS_HANDLER;
+        // } else if (isUrlValid(url, fetchUrlFromProperty(BPM_URL))) {
+        // return BPM_ACCESS_HANDLER;
+        // } else if (isUrlValid(url, fetchUrlFromProperty(ANALYSIS_URL))) {
+        // return TEXT_ANALYZER_ACCESS_HANDLER;
+        // } else if (isUrlValid(url, fetchUrlFromProperty(FORMIO_URL))) {
+        // if (enableCustomSubmission && StringUtils.contains(url, "/submission")) {
+        // return CUSTOM_SUBMISSION_ACCESS_HANDLER;
+        // } else {
+        // return FORM_ACCESS_HANDLER;
+        // }
+        // }
+        // return "";
     }
 
     private String fetchUrlFromProperty(String key) {
