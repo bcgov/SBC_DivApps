@@ -48,7 +48,7 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
     public ResponseEntity<String> exchange(String url, HttpMethod method, String payload) {
         String accessToken = formioTokenServiceProvider.getAccessToken();
         if (StringUtils.isBlank(accessToken)) {
-            logger.info("Access token is blank. Cannot invoke service:{}", url);
+            // logger.info("Access token is blank. Cannot invoke service:{}", url);
             return null;
         }
         ResponseEntity<String> response = exchange(url, method, payload, accessToken);
