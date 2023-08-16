@@ -46,16 +46,33 @@ public class HTTPServiceInvoker {
         return execute(url, method, dataJson);
     }
 
+    // public ResponseEntity<String> execute(String url, HttpMethod method, String
+    // payload) {
+    // LOGGER.info("LOGGER SERVICE ID", getServiceId(url));
+    // LOGGER.info("LOGGER SERVICE PAYLOAD", payload);
+    // return accessHandlerFactory.getService(getServiceId(url)).exchange(url,
+    // method, payload);
+    // }
+
+    // public ResponseEntity<IResponse> execute(String url, HttpMethod method,
+    // IRequest payload,
+    // Class<? extends IResponse> responseClazz) {
+    // LOGGER.info("IREQUEST LOGGER SERVICE ID", getServiceId(url));
+    // LOGGER.info("IREQUEST LOGGER SERVICE PAYLOAD", payload);
+    // return accessHandlerFactory.getService(getServiceId(url)).exchange(url,
+    // method, payload, responseClazz);
+    // }
+
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
-        LOGGER.info("LOGGER SERVICE ID", getServiceId(url));
-        LOGGER.info("LOGGER SERVICE PAYLOAD", payload);
-        return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload);
+        LOGGER.info("Service ID: {}", getServiceId(url));
+        LOGGER.info("Service Payload: {}", payload);
+        return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, String.class);
     }
 
     public ResponseEntity<IResponse> execute(String url, HttpMethod method, IRequest payload,
             Class<? extends IResponse> responseClazz) {
-        LOGGER.info("IREQUEST LOGGER SERVICE ID", getServiceId(url));
-        LOGGER.info("IREQUEST LOGGER SERVICE PAYLOAD", payload);
+        LOGGER.info("Service ID: {}", getServiceId(url));
+        LOGGER.info("Service Payload: {}", payload);
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, responseClazz);
     }
 
