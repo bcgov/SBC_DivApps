@@ -64,15 +64,14 @@ public class HTTPServiceInvoker {
     // }
 
     public ResponseEntity<String> execute(String url, HttpMethod method, String payload) {
-        LOGGER.info("Service ID: {}", getServiceId(url));
-        LOGGER.info("Service Payload: {}", payload);
+        LOGGER.info("String Service ID: {}", getServiceId(url));
+        LOGGER.info("String Service Payload: {}", payload);
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, String.class);
     }
 
     public ResponseEntity<IResponse> execute(String url, HttpMethod method, IRequest payload,
             Class<? extends IResponse> responseClazz) {
-        LOGGER.info("Service ID: {}", getServiceId(url));
-        LOGGER.info("Service Payload: {}", payload);
+        LOGGER.info("IRequest Service ID: {}", getServiceId(url));
         return accessHandlerFactory.getService(getServiceId(url)).exchange(url, method, payload, responseClazz);
     }
 
