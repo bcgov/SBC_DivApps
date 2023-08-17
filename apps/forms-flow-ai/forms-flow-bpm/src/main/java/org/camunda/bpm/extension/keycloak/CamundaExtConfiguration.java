@@ -57,15 +57,16 @@ public class CamundaExtConfiguration {
     public Properties messageBrokerProperties() {
         return new Properties();
     }
-    // @Bean
-    // Keycloak keycloak() {
-    // return KeycloakBuilder.builder()
-    // .serverUrl(keycloakUrl)
-    // .realm(keycloakRealm)
-    // .clientId(keycloakClientId)
-    // .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-    // .clientSecret(keycloakClientSecret)
-    // .build();
-    // }
+
+    @Bean
+    Keycloak keycloak() {
+        return KeycloakBuilder.builder()
+                .serverUrl(keycloakUrl)
+                .realm(keycloakRealm)
+                .clientId(keycloakClientId)
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .clientSecret(keycloakClientSecret)
+                .build();
+    }
 
 }

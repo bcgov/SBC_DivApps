@@ -30,7 +30,7 @@ public class UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired(required = false)
+    @Autowired
     private Keycloak keycloak;
     @Value("${keycloak.url.realm}")
     private String keycloakRealm;
