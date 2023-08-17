@@ -18,7 +18,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Properties;
-import org.springframework.context.annotation.Primary;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -28,7 +27,7 @@ import java.util.logging.Logger;
  * Form Access Handler.
  * This class serves as gateway for all formio interactions.
  */
-@Primary
+
 @Service("formAccessHandler")
 public class FormAccessHandler extends AbstractAccessHandler implements IAccessHandler {
 
