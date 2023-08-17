@@ -94,7 +94,7 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
             return response;
         } else {
             return unauthenticatedWebClient.method(method)
-                    .uri(url)
+                    .uri(getDecoratedServerUrl(url))
                     .accept(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .header("x-jwt-token", accessToken)
