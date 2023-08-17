@@ -45,6 +45,10 @@ public class FormAccessHandler extends AbstractAccessHandler implements IAccessH
     @Autowired
     private FormioTokenServiceProvider formioTokenServiceProvider;
 
+    protected Properties getIntegrationCredentialProperties() {
+        return integrationCredentialProperties;
+    }
+
     public ResponseEntity<String> exchange(String url, HttpMethod method, String payload) {
         String accessToken = formioTokenServiceProvider.getAccessToken();
         if (StringUtils.isBlank(accessToken)) {
