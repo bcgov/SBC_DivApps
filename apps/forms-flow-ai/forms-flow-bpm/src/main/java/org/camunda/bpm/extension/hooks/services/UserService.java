@@ -38,7 +38,7 @@ public class UserService {
     public User searchUserByAttribute(String attributeName, String attributeValue) {
         try {
             List<UserRepresentation> users = keycloak
-                    .realm(keycloakRealm)
+                    .realm("servicebc")
                     .users()
                     .searchByAttributes(attributeName + ":" + attributeValue);
             UserRepresentation user = users.get(0);
