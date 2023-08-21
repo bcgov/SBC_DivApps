@@ -61,19 +61,12 @@ public class CamundaExtConfiguration {
     @Bean
     Keycloak keycloak() {
         return KeycloakBuilder.builder()
-                .serverUrl("https://dev.loginproxy.gov.bc.ca/auth")
-                .realm("servicebc")
-                .clientId("forms-flow-bpm")
-                .grantType("client_credentials")
-                .clientSecret("fYdhYzqQcBUQB2oRe0MuauIH4CvBmf4B")
+                .serverUrl(keycloakUrl + "/auth")
+                .realm(keycloakRealm)
+                .clientId(keycloakClientId)
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .clientSecret(keycloakClientSecret)
                 .build();
-        // return KeycloakBuilder.builder()
-        // .serverUrl(keycloakUrl)
-        // .realm(keycloakRealm)
-        // .clientId(keycloakClientId)
-        // .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
-        // .clientSecret(keycloakClientSecret)
-        // .build();
     }
 
 }

@@ -42,7 +42,7 @@ public class UserService {
             // .users()
             // .searchByAttributes(attributeName + ":" + attributeValue);
             List<UserRepresentation> users = keycloak
-                    .realm("servicebc")
+                    .realm(keycloakRealm)
                     .users()
                     .searchByUsername(attributeValue, true);
             UserRepresentation user = users.get(0);
