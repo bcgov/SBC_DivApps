@@ -24,8 +24,6 @@ import java.util.logging.Logger;
  */
 public interface IUser {
 
-    private final Logger LOGGER = Logger.getLogger(IUser.class.getName());
-
     default String getName(DelegateExecution execution, UserService userService, String userId) {
         User user = getUser(execution, userService, userId);
         return user.getFirstName() + " " + user.getLastName();
@@ -41,6 +39,7 @@ public interface IUser {
         User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId)
                 .singleResult();
         // user = userService.searchUserByAttribute("userid", userId);
+        Logger LOGGER = Logger.getLogger(IUser.class.getName());
         LOGGER.log(Level.INFO, "user" + user);
         if (user == null) {
             user = userService.searchUserByAttribute("userid", userId);
