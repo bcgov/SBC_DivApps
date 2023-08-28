@@ -12,29 +12,37 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class aimed at centralizing all user related information.
  *
- * @author sumathi.thirumani@aot-technologies.com, yichun.zhao@aot-technologies.com
+ * @author sumathi.thirumani@aot-technologies.com,
+ *         yichun.zhao@aot-technologies.com
  */
 public interface IUser {
 
-    default String getName(DelegateExecution execution,UserService userService, String userId) {
+    private final Logger LOGGER = Logger.getLogger(IUser.class.getName());
+
+    default String getName(DelegateExecution execution, UserService userService, String userId) {
         User user = getUser(execution, userService, userId);
-        return user.getFirstName()+" "+user.getLastName();
+        return user.getFirstName() + " " + user.getLastName();
     }
 
-    default String getEmail(DelegateExecution execution,UserService userService, String userId) {
+    default String getEmail(DelegateExecution execution, UserService userService, String userId) {
         User user = getUser(execution, userService, userId);
         return user.getEmail();
     }
 
-    default User getUser(DelegateExecution execution,UserService userService, String userId) {
+    default User getUser(DelegateExecution execution, UserService userService, String userId) {
         String providerIdirUserId = execution.getVariable("provider_idir_userid").toString();
-        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId).singleResult();
-        user = userService.searchUserByAttribute("userid", userId);
-        if(user == null) {
+        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId)
+                .singleResult();
+        // user = userService.searchUserByAttribute("userid", userId);
+        LOGGER.log(Level.INFO, "user" + user);
+        if (user == null) {
             user = userService.searchUserByAttribute("userid", userId);
         }
         return user;
@@ -47,7 +55,7 @@ public interface IUser {
     default List<String> getEmailsOfUnassignedTask(DelegateTask delegateTask) {
         Set<IdentityLink> identityLinks = delegateTask.getCandidates();
         List<String> emails = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(identityLinks)) {
+        if (CollectionUtils.isNotEmpty(identityLinks)) {
             for (IdentityLink entry : identityLinks) {
                 if (StringUtils.isNotEmpty(entry.getGroupId())) {
                     emails.addAll(getEmailsForGroup(delegateTask.getExecution(), entry.getGroupId()));
@@ -59,10 +67,11 @@ public interface IUser {
 
     default List<String> getEmailsForGroup(DelegateExecution execution, String groupName) {
         List<String> emails = new ArrayList<>();
-        if(StringUtils.isNotBlank(groupName)) {
-            List<User> users =  execution.getProcessEngine().getIdentityService().createUserQuery().memberOfGroup(StringUtils.trim(groupName)).list();
-            for(User entry : users) {
-                if(StringUtils.isNotEmpty(entry.getEmail())) {
+        if (StringUtils.isNotBlank(groupName)) {
+            List<User> users = execution.getProcessEngine().getIdentityService().createUserQuery()
+                    .memberOfGroup(StringUtils.trim(groupName)).list();
+            for (User entry : users) {
+                if (StringUtils.isNotEmpty(entry.getEmail())) {
                     emails.add(entry.getEmail());
                 }
             }
@@ -72,18 +81,19 @@ public interface IUser {
 
     /**
      * This adds business days to a Date object.
-     * Adapted from https://stackoverflow.com/questions/1044688/addbusinessdays-and-getbusinessdays
+     * Adapted from
+     * https://stackoverflow.com/questions/1044688/addbusinessdays-and-getbusinessdays
      *
      * @param date: The date to be changed
      * @param days: The number of days to be added
      */
     default DateTime addBusinessDays(DateTime date, int days) {
-        if (days == 0) return date;
+        if (days == 0)
+            return date;
         if (date.getDayOfWeek() == 6) {
             date = date.plusDays(2);
             days -= 1;
-        }
-        else if (date.getDayOfWeek() == 7) {
+        } else if (date.getDayOfWeek() == 7) {
             date = date.plusDays(1);
             days -= 1;
         }
@@ -95,6 +105,5 @@ public interface IUser {
         }
         return date.plusDays(extraDays);
     }
-
 
 }
