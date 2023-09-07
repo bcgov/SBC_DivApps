@@ -35,15 +35,19 @@ public interface IUser {
     }
 
     default User getUser(DelegateExecution execution, UserService userService, String userId) {
-        String providerIdirUserId = execution.getVariable("provider_idir_userid").toString();
-        User user = execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId)
-                .singleResult();
-        // user = userService.searchUserByAttribute("userid", userId);
-        Logger LOGGER = Logger.getLogger(IUser.class.getName());
+        User user = userService.searchUserByAttribute("userid", userId);
         LOGGER.log(Level.INFO, "user" + user);
-        if (user == null) {
-            user = userService.searchUserByAttribute("userid", userId);
-        }
+        // String providerIdirUserId =
+        // execution.getVariable("provider_idir_userid").toString();
+        // User user =
+        // execution.getProcessEngine().getIdentityService().createUserQuery().userId(providerIdirUserId)
+        // .singleResult();
+        // // user = userService.searchUserByAttribute("userid", userId);
+        // Logger LOGGER = Logger.getLogger(IUser.class.getName());
+        // LOGGER.log(Level.INFO, "user" + user);
+        // if (user == null) {
+        // user = userService.searchUserByAttribute("userid", userId);
+        // }
         return user;
     }
 
