@@ -36,6 +36,7 @@ public interface IUser {
 
     default User getUser(DelegateExecution execution, UserService userService, String userId) {
         User user = userService.searchUserByAttribute("userid", userId);
+        Logger LOGGER = Logger.getLogger(IUser.class.getName());
         LOGGER.log(Level.INFO, "user" + user);
         // String providerIdirUserId =
         // execution.getVariable("provider_idir_userid").toString();
