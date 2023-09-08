@@ -52,6 +52,8 @@ public class TimeoutNotifyListener extends BaseListener implements TaskListener,
                 + "|due Date=" + dueDate.toLocalDate() + "|current Date=" + currentDate.toLocalDate()
                 + "|escalation Date=" + escalateDate.toLocalDate()
                 + "|reminder Date=" + remindDate.toLocalDate());
+
+        log.info("DELEGATE_TASK_USER_BEFORE_ESCALATE:" + delegateTask.getAssignee());
         // Check if escalate first because reminder date is before escalation date
         if (currentDate.toLocalDate().equals(escalateDate.toLocalDate()) && StringUtils.isNotEmpty(escalationGroup)) {
             validateAssigneeAndNotify(delegateTask, "activity_escalation", escalationGroup);
@@ -62,7 +64,7 @@ public class TimeoutNotifyListener extends BaseListener implements TaskListener,
 
     private void validateAssigneeAndNotify(DelegateTask delegateTask, String category, String escalationGroup) {
         List<String> escalationGrpEmails = new ArrayList<>();
-        log.info("DELEGATE_TASK_USER:" + delegateTask.getAssignee());
+        log.info("DELEGATE_TASK_USER_AFTER_ESCALATE:" + delegateTask.getAssignee());
         if (StringUtils.isNotEmpty(escalationGroup)) {
             escalationGrpEmails.addAll(getEmailsForGroup(delegateTask.getExecution(), escalationGroup));
         }
