@@ -1,11 +1,9 @@
 package org.camunda.bpm.extension.hooks.listeners.task;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
@@ -64,13 +62,12 @@ public class TimeoutNotifyListener extends BaseListener implements TaskListener,
 
     private void validateAssigneeAndNotify(DelegateTask delegateTask, String category, String escalationGroup) {
         List<String> escalationGrpEmails = new ArrayList<>();
+        log.info("DELEGATE_TASK_USER:" + delegateTask.getAssignee());
         if (StringUtils.isNotEmpty(escalationGroup)) {
             escalationGrpEmails.addAll(getEmailsForGroup(delegateTask.getExecution(), escalationGroup));
         }
         if (StringUtils.isNotEmpty(delegateTask.getAssignee())) {
             User user = getUser(delegateTask.getExecution(), userService, delegateTask.getAssignee());
-            log.info("Assignee Info: " + delegateTask.getAssignee());
-            Logger.log(Level.INFO, "Assignee Info: " + delegateTask.getAssignee());
             delegateTask.getExecution().setVariable("firstname", user.getFirstName());
             delegateTask.getExecution().setVariable("lastname", user.getLastName());
             delegateTask.getExecution().setVariable("name", user.getFirstName() + " " + user.getLastName());
