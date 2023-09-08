@@ -44,7 +44,8 @@ public class UserService {
             List<UserRepresentation> users = keycloak
                     .realm(keycloakRealm)
                     .users()
-                    .searchByUsername(attributeValue, true);
+                    .searchByAttributes(attributeName + ":" + attributeValue);
+            // .searchByUsername(attributeValue, true);
             UserRepresentation user = users.get(0);
             UserEntity result = new UserEntity();
             String username = user.getUsername();
