@@ -70,7 +70,7 @@ public class TimeoutNotifyListener extends BaseListener implements TaskListener,
         if (StringUtils.isNotEmpty(delegateTask.getAssignee())) {
             User user = getUser(delegateTask.getExecution(), userService, delegateTask.getAssignee());
             log.info("Assignee Info: " + delegateTask.getAssignee());
-            LOGGER.log(Level.INFO, "Assignee Info: " + delegateTask.getAssignee());
+            Logger.log(Level.INFO, "Assignee Info: " + delegateTask.getAssignee());
             delegateTask.getExecution().setVariable("firstname", user.getFirstName());
             delegateTask.getExecution().setVariable("lastname", user.getLastName());
             delegateTask.getExecution().setVariable("name", user.getFirstName() + " " + user.getLastName());
