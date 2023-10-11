@@ -60,8 +60,10 @@ const TaskHeader = React.memo(() => {
       claimBPMTask(taskId, username, (err, response) => {
         console.log("claimBPMTaskErr", err);
         console.log("claimBPMTaskResponse", response);
+        console.log("claimBPMTaskSelectedFilter", selectedFilter);
+        console.log("claimBPMTaskSocket", SocketIOService.isConnected());
         if (!err) {
-          if (!SocketIOService.isConnected()) {
+          //if (!SocketIOService.isConnected()) {
             if (selectedFilter) {
               dispatch(getBPMTaskDetail(taskId));
               dispatch(
@@ -71,7 +73,7 @@ const TaskHeader = React.memo(() => {
             } else {
               dispatch(setBPMTaskDetailUpdating(false));
             }
-          }
+          //}
           if(selectedFilter){
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
