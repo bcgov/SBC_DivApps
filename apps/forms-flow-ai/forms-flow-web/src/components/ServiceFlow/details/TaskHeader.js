@@ -63,7 +63,7 @@ const TaskHeader = React.memo(() => {
         console.log("claimBPMTaskSelectedFilter", selectedFilter);
         console.log("claimBPMTaskSocket", SocketIOService.isConnected());
         if (!err) {
-          //if (!SocketIOService.isConnected()) {
+          if (!SocketIOService.isConnected()) {
             if (selectedFilter) {
               dispatch(getBPMTaskDetail(taskId));
               dispatch(
@@ -73,7 +73,7 @@ const TaskHeader = React.memo(() => {
             } else {
               dispatch(setBPMTaskDetailUpdating(false));
             }
-          //}
+          }
           if(selectedFilter){
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
@@ -95,12 +95,12 @@ const TaskHeader = React.memo(() => {
         // eslint-disable-next-line no-unused-vars
         updateAssigneeBPMTask(taskId, userId, (err, response) => {
           if (!err) {
-            //if (!SocketIOService.isConnected()) {
+            if (!SocketIOService.isConnected()) {
               if (selectedFilter) {
                 dispatch(getBPMTaskDetail(taskId));
                 dispatch(setBPMTaskDetailUpdating(false));
               }
-            //}
+            }
             if(selectedFilter){
               dispatch(
                 fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
@@ -123,12 +123,12 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       unClaimBPMTask(taskId, (err, response) => {
         if (!err) {
-          //if (!SocketIOService.isConnected()) {
+          if (!SocketIOService.isConnected()) {
             if (selectedFilter) {
               dispatch(getBPMTaskDetail(taskId));
               dispatch(setBPMTaskDetailUpdating(false));
             }
-          //}
+          }
           if(selectedFilter){
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
