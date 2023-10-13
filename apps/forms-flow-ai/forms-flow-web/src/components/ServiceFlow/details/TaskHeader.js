@@ -55,7 +55,7 @@ const TaskHeader = React.memo(() => {
 
   const onClaim = () => {
     dispatch(setBPMTaskDetailUpdating(true));
-
+    dispatch(
       // eslint-disable-next-line no-unused-vars
       claimBPMTask(taskId, username, (err, response) => {
         if (!err) {
@@ -74,14 +74,14 @@ const TaskHeader = React.memo(() => {
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
         }
-      });
+      }));
   };
 
   const onChangeClaim = (userId) => {
     setIsEditAssignee(false);
     if (userId && userId !== task.assignee) {
       dispatch(setBPMTaskDetailUpdating(true));
-      //dispatch(
+      dispatch(
         // eslint-disable-next-line no-unused-vars
         updateAssigneeBPMTask(taskId, userId, (err, response) => {
           if (!err) {
@@ -101,13 +101,13 @@ const TaskHeader = React.memo(() => {
           } else {
             dispatch(setBPMTaskDetailUpdating(false));
           }
-        });
+        }));
     }
   };
 
   const onUnClaimTask = () => {
     dispatch(setBPMTaskDetailUpdating(true));
-    //dispatch(
+    dispatch(
       // eslint-disable-next-line no-unused-vars
       unClaimBPMTask(taskId, (err, response) => {
         if (!err) {
@@ -127,7 +127,7 @@ const TaskHeader = React.memo(() => {
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
         }
-      });
+      }));
   };
 
   const onFollowUpDateUpdate = (followUpDate) => {
