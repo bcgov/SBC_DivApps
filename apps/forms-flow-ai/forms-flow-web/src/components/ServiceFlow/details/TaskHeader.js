@@ -59,7 +59,7 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       claimBPMTask(taskId, username, (err, response) => {
         if (!err) {
-          if (!SocketIOService.isConnected()) {
+          //if (!SocketIOService.isConnected()) {
             dispatch(getBPMTaskDetail(taskId));
         }else {
             dispatch(setBPMTaskDetailUpdating(false));
@@ -69,8 +69,7 @@ const TaskHeader = React.memo(() => {
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
             );
-          }
-           
+          //} 
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
         }
@@ -85,7 +84,7 @@ const TaskHeader = React.memo(() => {
         // eslint-disable-next-line no-unused-vars
         updateAssigneeBPMTask(taskId, userId, (err, response) => {
           if (!err) {
-            if (!SocketIOService.isConnected()) {
+            //if (!SocketIOService.isConnected()) {
               //if (selectedFilter) {
                 dispatch(getBPMTaskDetail(taskId));
               } else {
@@ -96,7 +95,7 @@ const TaskHeader = React.memo(() => {
               dispatch(
                 fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
               );
-            }
+            //}
            
           } else {
             dispatch(setBPMTaskDetailUpdating(false));
@@ -111,18 +110,18 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       unClaimBPMTask(taskId, (err, response) => {
         if (!err) {
-          if (!SocketIOService.isConnected()) {
+          //if (!SocketIOService.isConnected()) {
             //if (selectedFilter) {
               dispatch(getBPMTaskDetail(taskId));
             } else {
               dispatch(setBPMTaskDetailUpdating(false));
-          }
+            }
 
           if(selectedFilter){
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
             );
-          }
+          //}
           
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
