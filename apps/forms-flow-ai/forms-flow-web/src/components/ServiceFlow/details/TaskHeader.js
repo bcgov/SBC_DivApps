@@ -140,12 +140,12 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       updateBPMTask(taskId, updatedTask, (err, response) => {
         if (!err) {
-          if (!SocketIOService.isConnected()) {
+          //if (!SocketIOService.isConnected()) {
             dispatch(getBPMTaskDetail(taskId));
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
             );
-          }
+          //}
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
         }
@@ -164,12 +164,12 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       updateBPMTask(taskId, updatedTask, (err, response) => {
         if (!err) {
-          if (!SocketIOService.isConnected()) {
+          //if (!SocketIOService.isConnected()) {
             dispatch(getBPMTaskDetail(taskId));
             dispatch(
               fetchServiceTaskList(selectedFilter.id, firstResult, reqData)
             );
-          }
+          //}
         } else {
           dispatch(setBPMTaskDetailUpdating(false));
         }
