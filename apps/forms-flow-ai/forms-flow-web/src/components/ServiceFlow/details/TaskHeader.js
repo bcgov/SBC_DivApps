@@ -59,6 +59,8 @@ const TaskHeader = React.memo(() => {
       // eslint-disable-next-line no-unused-vars
       claimBPMTask(taskId, username, (err, response) => {
         if (!err) {
+          /* '!SocketIOService.isConnected' commented out in all blocks below as when socket is connected, details are not sent as expected. 
+          To be uncommented and used later when product team has released the fix for this issue  */
           //if (!SocketIOService.isConnected()) {
             dispatch(getBPMTaskDetail(taskId));
         }else {
