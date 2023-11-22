@@ -214,10 +214,16 @@ i.fa.fa-question-circle.text-muted {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
   .dropdown-toggle {
-    color: white !important;
+     // color: white !important;
     a {
       text-decoration: none;
     }
+  }
+  
+   // add white color for username in dropdown.toggle
+  .d-lg-inline-block {
+    display: inline-block!important;
+    color: #fff!important;
   }
   .userIcon {
     padding: 0 0 0 0;
