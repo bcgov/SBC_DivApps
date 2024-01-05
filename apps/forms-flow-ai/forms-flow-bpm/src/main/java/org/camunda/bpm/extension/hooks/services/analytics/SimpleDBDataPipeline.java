@@ -126,10 +126,6 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                 }
             }
 
-            // Remove entries if they exist becaue these fields may not exist in the
-            // destination tables
-            removeEntries(nonLobMap, "entered_by", "los_entity_key");
-
             // Non-lob objects block
             String query = getQuery(String.valueOf(nonLobMap.get("entity_key")), nonLobMap, "pid",
                     getIdentityKey(data));
@@ -153,15 +149,6 @@ public class SimpleDBDataPipeline extends AbstractDataPipeline {
                 ".", ""), " ", "");
         return StringUtils.substringBeforeLast(filename, ".") + "_" + timestampVal + "."
                 + StringUtils.substringAfterLast(filename, ".");
-    }
-
-    private void removeEntries(Map<String, Object> map, String... keysToRemove) {
-        for (String key : keysToRemove) {
-            // Remove the entry only if it exists in the map
-            if (map.containsKey(key)) {
-                map.remove(key);
-            }
-        }
     }
 
     /**
