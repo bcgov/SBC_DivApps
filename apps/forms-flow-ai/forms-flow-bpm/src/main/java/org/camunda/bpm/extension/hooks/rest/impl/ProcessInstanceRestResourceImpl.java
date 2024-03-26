@@ -38,6 +38,6 @@ public class ProcessInstanceRestResourceImpl implements ProcessInstanceRestResou
 
     @Override
     public VariableValueDto getVariable(String variableName, boolean deserializeValue, String id) {
-        return restService.getProcessInstance(id).getVariablesResource().getVariable(deserializeValue);
+        return restService.getProcessInstance(id).getVariablesResource().getVariable(variableName, deserializeValue);
     }
 }
