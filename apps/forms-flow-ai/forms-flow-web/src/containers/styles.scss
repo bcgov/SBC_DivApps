@@ -263,8 +263,14 @@
   text-decoration: none !important;
 }
 .dropdown-toggle{
-  margin-right: 1rem;
-  color: white;
+margin-right: 1rem;
+ // color: white;
+}
+
+ // add white color for username in dropdown.toggle
+.d-lg-inline-block {
+  display: inline-block!important;
+  color: #fff;
 }
 .form-icons-active:active  {
   // fill: #4d61fc !important;
@@ -321,6 +327,68 @@
   height: 23px;
   margin-bottom: 5px;
 }
+
+.button_component
+{
+  background-color: white;
+  color: black;
+  border: none;
+  padding: auto;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.head-item {
+  color: #ABABAB;
+  cursor: pointer;
+  padding-bottom: 3rem;
+}
+
+.head-active {
+  color: #212529;
+  border-bottom: 4px solid #4d61fc;
+}
+.padding-left-60 {
+  margin-left: 60px;
+}
+.padding-right-60 {
+  margin-left: -35px;
+}
+.head-rule{
+  margin-top: -10px;
+  padding-top: -10px;
+}
+
+.application-head
+{
+    font-weight: bold;
+    font-size:26px;
+    display: flex;
+}
+.application-head-details
+{
+    font-weight: bold;
+    font-size:30px;
+    margin-left: 10px !important;
+    display: inline-block;
+}
+.solid-list-icon {
+  height: 25px;
+  margin-top: 7px;
+}
+.application-text{
+  margin-left: 10px;
+}
+.application-count
+{
+    font-size: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+// Service flow custom design
 .service-bc-navbar-background {
   background: #003366;
 }
@@ -349,4 +417,18 @@
 .dropdown-menu.show {
   max-height: 300px;
   overflow-y: scroll;
+}
+
+.active-tab-dropdown {  
+  //background-color: #003366 !important;  
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+#main-menu-nav {
+  .nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: white!important;
+  }
 }

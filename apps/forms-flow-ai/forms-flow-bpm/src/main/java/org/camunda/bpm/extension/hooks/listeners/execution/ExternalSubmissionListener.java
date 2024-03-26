@@ -18,15 +18,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.annotation.Resource;
 import javax.inject.Named;
-
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.FORM_URL;
+import static org.camunda.bpm.extension.commons.utils.VariableConstants.APPLICATION_ID;
+
 /**
- * This listener supports creation of form.io submission for instances created from external system
+ * This class supports creation of submission for instances created from
+ * external system
+ * 
  * @author sumathi.thirumani@aot-technologies.com
  */
 @Named("ExternalSubmissionListener")
@@ -36,69 +41,70 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
 
     @Autowired
     private FormSubmissionService formSubmissionService;
-
+    @Resource(name = "bpmObjectMapper")
+    private ObjectMapper bpmObjectMapper;
     @Autowired
     private HTTPServiceInvoker httpServiceInvoker;
 
     private Expression formName;
 
-    /**
-     * Communicates with the form.io system to create a submission
-     * Also, if an applicationId is not available, an applicationId will be created
-     * and the same will be communicated to the form.io submission.
-     * 
-     * @param execution The current execution instance
-     */
     @Override
     public void notify(DelegateExecution execution) {
         try {
             String formUrl = getFormUrl(execution);
-            String submissionId = formSubmissionService.createSubmission(formUrl, formSubmissionService.createFormSubmissionData(execution.getVariables()));
+            String submissionId = formSubmissionService.createSubmission(formUrl,
+                    formSubmissionService.createFormSubmissionData(execution.getVariables()));
             LOGGER.info("Creating submission::" + submissionId);
-            if(StringUtils.isNotBlank(submissionId)){
-                execution.setVariable("formUrl", formUrl+"/"+submissionId);
-                if(execution.getVariable("applicationId") == null) {
+            if (StringUtils.isNotBlank(submissionId)) {
+                execution.setVariable(FORM_URL, formUrl + "/" + submissionId);
+                if (execution.getVariable("applicationId") == null) {
                     createApplication(execution, true);
-                    
+
                     // To update submissionId with applicationId
-                    formSubmissionService.updateSubmission(formUrl+"/"+submissionId, formSubmissionService.createFormSubmissionData(execution.getVariables()));
+                    formSubmissionService.updateSubmission(formUrl + "/" + submissionId,
+                            formSubmissionService.createFormSubmissionData(execution.getVariables()));
                 }
             }
-        } catch(IOException | RuntimeException ex) {
+        } catch (IOException | RuntimeException ex) {
             handleException(execution, ExceptionSource.EXECUTION, ex);
         }
     }
 
     private String getFormId(DelegateExecution execution) throws IOException {
-        String formName =  String.valueOf(this.formName.getValue(execution));
-        return formSubmissionService.getFormIdByName(httpServiceInvoker.getProperties().getProperty("formio.url")+"/"+formName);
+        String formName = String.valueOf(this.formName.getValue(execution));
+        return formSubmissionService
+                .getFormIdByName(httpServiceInvoker.getProperties().getProperty("formio.url") + "/" + formName);
     }
 
     private String getFormUrl(DelegateExecution execution) throws IOException {
-        return httpServiceInvoker.getProperties().getProperty("formio.url")+"/form/"+getFormId(execution)+"/submission";
+        return httpServiceInvoker.getProperties().getProperty("formio.url") + "/form/" + getFormId(execution)
+                + "/submission";
 
     }
 
     /**
      *
      * @param execution - DelegateExecution data
-     * @param retryOnce - If formsflow api failed to respond 201 then the application will try once again and then it fail.
+     * @param retryOnce - If formsflow api failed to respond 201 then the
+     *                  application will try once again and then it fail.
      * @throws JsonProcessingException
      */
     private void createApplication(DelegateExecution execution, boolean retryOnce) throws JsonProcessingException {
-        Map<String,Object> data = new HashMap<>();
-        String formUrl = String.valueOf(execution.getVariable("formUrl"));
-        data.put("formUrl",formUrl);
-        data.put("formId",StringUtils.substringBetween(formUrl, "/form/", "/submission/"));
-        data.put("submissionId",StringUtils.substringAfter(formUrl, "/submission/"));
-        data.put("processInstanceId",execution.getProcessInstanceId());
-        ResponseEntity<String> response = httpServiceInvoker.execute(httpServiceInvoker.getProperties().getProperty("api.url")+"/application/create", HttpMethod.POST, getObjectMapper().writeValueAsString(data));
-        if(response.getStatusCode().value() == HttpStatus.CREATED.value()) {
-            JsonNode jsonNode = getObjectMapper().readTree(response.getBody());
+        Map<String, Object> data = new HashMap<>();
+        String formUrl = String.valueOf(execution.getVariable(FORM_URL));
+        data.put(FORM_URL, formUrl);
+        data.put("formId", StringUtils.substringBetween(formUrl, "/form/", "/submission/"));
+        data.put("submissionId", StringUtils.substringAfter(formUrl, "/submission/"));
+        data.put("processInstanceId", execution.getProcessInstanceId());
+        ResponseEntity<String> response = httpServiceInvoker.execute(
+                httpServiceInvoker.getProperties().getProperty("api.url") + "/application/create", HttpMethod.POST,
+                bpmObjectMapper.writeValueAsString(data));
+        if (response.getStatusCode().value() == HttpStatus.CREATED.value()) {
+            JsonNode jsonNode = bpmObjectMapper.readTree(response.getBody());
             String applicationId = jsonNode.get("id").asText();
-            execution.setVariable("applicationId", applicationId);
+            execution.setVariable(APPLICATION_ID, applicationId);
         } else {
-            if(retryOnce) {
+            if (retryOnce) {
                 LOGGER.warn("Retrying the application create once more due to previous failure");
                 createApplication(execution, false);
             } else {
@@ -107,9 +113,4 @@ public class ExternalSubmissionListener extends BaseListener implements Executio
             }
         }
     }
-
-    private ObjectMapper getObjectMapper(){
-        return new ObjectMapper();
-    }
-
 }
