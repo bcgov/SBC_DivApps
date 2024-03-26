@@ -34,7 +34,7 @@ public interface ProcessInstanceRestResource extends RestResource {
                         @PathParam("id") String id);
 
         @GET
-        @Path("/{id}/variable/{variableName}")
+        @Path("/{id}/variables/{variableName}")
         @Produces(MediaType.APPLICATION_JSON)
         VariableValueDto getVariable(
                         @PathParam("variableName") String variableName,
